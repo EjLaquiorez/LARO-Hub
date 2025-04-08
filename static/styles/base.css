@@ -1,0 +1,11 @@
+@font-face {
+    font-family: 'AmericanCaptain';
+    src: url('fonts/AmericanCaptain.ttf') format('woff2')
+  }
+
+body {
+    align-content: center;
+    text-align: center;
+    background-color: #fada39;
+    font-family: AmericanCaptain;
+}

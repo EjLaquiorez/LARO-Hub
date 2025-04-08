@@ -1,0 +1,117 @@
+@font-face {
+    font-family: 'AmericanCaptain';
+    src: url('fonts/AmericanCaptain.ttf') format('woff2')
+  }
+
+#laro-title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    color: white;
+    font-size: 12rem;
+}
+
+.fade-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+    z-index: 1;
+    pointer-events: none;
+  }
+
+#show-password-container {
+    width: 80%;
+    background-color: transparent;
+    text-align: right;
+    margin: auto;
+}
+
+#show-password-btn {
+    cursor: pointer;
+    background-color: transparent;
+    font-family: sans-serif;
+    font-size: 12px;
+    margin: auto;
+    width: fit-content;
+}
+
+.container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(220, 220, 220, 0.7);
+    height: fit-content;
+    width: 95%;
+    max-width: 450px;
+    max-height: 300px;
+    margin: auto;
+    border-radius: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    z-index: 2;
+    font-family: sans-serif;
+}
+
+.container input {
+    width: 80%;
+    height: fit-content;
+    font-size: 16px;
+    padding: 4px;
+    margin: auto;
+    margin: 5px;
+    color: grey;
+    background-color: rgb(71, 71, 71);
+    border: none;
+    border-radius: 3px;
+}
+
+.container button {
+    height: fit-content;
+    width: 30%;
+    border: none;
+    background-color: #fada39;
+    font-size: 20px;
+    color: black;
+    padding: 2px;
+    margin: auto;
+    margin: 10px;
+    border-radius: 3px;
+    font-family: AmericanCaptain;
+}
+
+.container button:hover {
+    background-color: #eccd36;
+}
+
+.container img {
+    width: 30px;
+    margin-top: 10px;
+}
+
+.container a {
+    margin: 4px;
+}
+
+#forgot-password {
+    margin: auto;
+    width: fit-content;
+    margin-bottom: 15px;
+    color: black;
+    font-family: sans-serif;
+    text-decoration: none;
+}
+
+#switch-form {
+    position: relative;
+    color: white;
+    background-color: transparent;
+    border: none;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    z-index: 4;
+    margin: 10px;
+}

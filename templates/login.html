@@ -1,0 +1,41 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        if (localStorage.getItem("currentUser")) {
+            window.location.replace("index.html")
+        }
+    </script>
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/login.css">
+    <script src="scripts/login.js"></script>
+    <title>Login</title>
+</head>
+<body>
+    <div id="laro-title">LARO</div>
+    <div class="fade-overlay"></div>
+    <div class="container" id="container">
+        <form id="login-form" action="">
+            <input type="email" name="email" id="email" placeholder="Email" required>
+            
+            <input type="password" name="password" id="password" placeholder="Password" required>
+            <div id="show-password-container">
+                <button type="button" id="show-password-btn">Show Password</button>
+            </div>
+            
+            
+
+            <button type="submit">LOGIN</button>
+        </form>
+        <a href="" id="forgot-password">forgot password?</a>
+        <div>Log-in via: </div>
+        <div id="external-icons">
+            <a href=""><img src="img/facebook.png" alt=""></a>
+            <a href=""><img src="img/google.png" alt=""></a>
+            <a href=""><img src="img/discord.png" alt=""></a>
+        </div>
+    </div>
+    <button id="switch-form">Register Here</button>
+</body>
+</html>
