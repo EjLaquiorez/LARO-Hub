@@ -1,171 +1,154 @@
+# LARO-Hub 🌾🌐
+
+## 📖 Overview
+**LARO-Hub** is the central web platform for managing and organizing all operations of the **LARO** basketball matchmaking ecosystem. It serves as the administrative and organizational hub, allowing team captains, players, and admins to oversee team creation, match scheduling, user activity, and analytics — all in one browser-based dashboard.
+
+Whether you're managing your team’s stats, scheduling a friendly match, or overseeing matchmaking behavior across the platform, **LARO-Hub** puts everything at your fingertips.
+
 ---
 
-```markdown
-# LARO-Web 🏀
-
-## 🌐 Project Overview
-**LARO** is a web-based basketball matchmaking platform designed to connect players with teams and schedule games effortlessly. This browser-accessible solution includes player matchmaking, team management, and game invitations with details such as date, time, and location.
-
 ## 🛠️ Tech Stack
-- **Frontend:** HTML, CSS, JavaScript
-- **Backend:** Django (Python) with SQLite
-- **Version Control:** Git & GitHub
-- **UI/UX Design:** Photoshop
-- **Authentication:** Django Auth & OAuth2
-- **API Documentation:** Swagger (via Django REST Framework)
 
-## 📂 Repository Structure
+| Layer       | Technology                          |
+|-------------|--------------------------------------|
+| **Frontend**| HTML, CSS, JavaScript                |
+| **Backend** | Django (Python)                      |
+| **Database**| SQLite (for dev), PostgreSQL (for prod) |
+| **Auth**    | Django Auth, OAuth2                  |
+| **Docs**    | Swagger via Django REST Framework    |
+| **Version Control** | Git & GitHub                 |
+
+---
+
+## 📂 Directory Structure
 ```
-LARO-Web/
-├── laro/           # Django project files
-├── matchmaking/    # Django app for matchmaking features
-├── static/         # CSS, JS, and images
-├── templates/      # HTML templates
-└── docs/           # Documentation (Gantt chart, diagrams, etc.)
+LARO-Hub/
+├── laro_hub/         # Django project settings
+├── core/             # Main app: dashboards, scheduling, matchmaking
+├── static/           # CSS, JS, images
+├── templates/        # HTML templates
+├── docs/             # UML diagrams, ERD, system specs
+└── README.md         # Project documentation
 ```
+
+---
 
 ## 🚀 Getting Started
 
-### Prerequisites
-- [Python](https://www.python.org/downloads/)
-- [Django](https://www.djangoproject.com/)
-- Git installed
+### 🔧 Prerequisites
+- Python 3.10+
+- Django 4+
+- Git
+- SQLite (default) or PostgreSQL for production
 
-### Setup Instructions
-
-1. **Clone the repository:**
+### ⚙️ Installation
+1. **Clone the repository**
    ```bash
-   git clone https://github.com/EjLaquiorez/LARO-Web.git
-   cd LARO-Web
+   git clone https://github.com/EjLaquiorez/LARO-Hub.git
+   cd LARO-Hub
    ```
 
-2. **Set up a virtual environment:**
+2. **Set up virtual environment**
    ```bash
    python -m venv env
-   source env/bin/activate  # On Windows use `env\Scripts\activate`
+   source env/bin/activate  # Windows: env\Scripts\activate
    pip install -r requirements.txt
    ```
 
-3. **Database setup (SQLite):**
+3. **Configure Environment Variables**
+   ```bash
+   cp .env.example .env
+   # Add SECRET_KEY, DEBUG, DATABASE_URL, etc.
+   ```
+
+4. **Run migrations**
    ```bash
    python manage.py migrate
    ```
 
-4. **Run the development server:**
+5. **Start the development server**
    ```bash
    python manage.py runserver
    ```
 
-5. **Access the app:**
-   Open your browser and go to `http://127.0.0.1:8000/`
-
-6. **API Documentation (Swagger):**
-   Visit `http://127.0.0.1:8000/api-docs/` (if enabled)
+6. **Access the app**
+   - Visit: `http://127.0.0.1:8000/`
+   - Swagger API Docs: `http://127.0.0.1:8000/api-docs/`
 
 ---
 
-## 🌳 Branching Strategy
+## 🔑 Key Features
 
-We follow a structured Git branching strategy to maintain clean, manageable development across frontend and backend layers.
+- 🢑🧽 **User & Team Management**  
+  Create, update, and monitor users, team rosters, and player activity.
 
-### 🗂️ Main Branches
-- `main`: Stable, production-ready code *(No direct commits)*
-- `develop`: Merges completed features from all branches
+- 🗓️ **Game Scheduling Dashboard**  
+  Schedule games, invite teams, manage time slots and locations.
 
-### 🏗️ Layer Branches
+- 📊 **Matchmaking Analytics**  
+  View trends, engagement stats, and game history.
 
-| Branch        | Purpose                                  |
-|---------------|------------------------------------------|
-| `frontend`    | HTML/CSS/JS-based UI and user interactions |
-| `backend`     | Django server-side logic and APIs        |
+- 🔐 **Secure Login System**  
+  Django-based authentication system with session or token support.
 
-### 🛠️ Feature Branches
+- 🗺️ **Interactive Map Integration**  
+  View nearby courts and match venues (planned).
+
+---
+
+## 📌 Branching Convention
+
+Follows the same Git branching as `LARO-Web`, using:
+
 ```
-<layer>/feature/<feature-name>
-```
-
-#### 📌 Examples:
-- `frontend/feature/login-signup`
-- `backend/feature/matchmaking-api`
-
-### 🐛 Bugfix Branches
-```
-<layer>/bugfix/<bug-description>
-```
-
-### 🚑 Hotfix Branches
-```
-hotfix/<hotfix-description>
-```
-
-### 🚀 Release Branches
-```
-release/<version>
+develop
+├── frontend/feature/<feature-name>
+├── backend/feature/<feature-name>
+└── release/<version>
 ```
 
 ---
 
-## ✍️ Commit Message Guidelines
+## 🧪 Development Tips
 
-Use this format:
+- Keep HTML templates organized under `templates/`.
+- Use `{% include %}` and `{% block %}` in Django templates for layout reuse.
+- Static files (CSS/JS) go under `static/`.
+- Test with `python manage.py test` before pushing major updates.
+
+---
+
+## ✍️ Commit Message Format
+
 ```
-<type>(<scope>): <description>
+<type>(<scope>): <short description>
 ```
 
-### ✅ Types:
+#### Types:
 - `feat` – New features
 - `fix` – Bug fixes
 - `docs` – Documentation
-- `style` – Code formatting
-- `refactor` – Code restructuring
-- `test` – Testing-related changes
-- `chore` – Maintenance, dependencies, configs
-
-### 📝 Examples:
-- `feat(invite): add game scheduling interface`
-- `fix(auth): correct session timeout issue`
-- `docs(readme): update project setup instructions`
+- `style` – UI/style changes
+- `refactor` – Code cleanup or structure changes
+- `test` – Adding or updating tests
+- `chore` – Tooling or dependency updates
 
 ---
 
-## 🔄 Contribution Workflow
+## 👥 Contributors
 
-1. **Clone the repo & create your feature branch:**
-   ```bash
-   git checkout -b backend/feature/game-scheduling
-   ```
+| Name              | Role                |
+|-------------------|---------------------|
+| Earl Laquiorez    | Project Manager     |
+| [Your Team Names] | [Roles e.g. Dev, QA, Docs] |
 
-2. **Make your changes and commit:**
-   ```bash
-   git commit -m "feat(game): implement backend game scheduling logic"
-   ```
-
-3. **Push and open a Pull Request:**
-   ```bash
-   git push origin backend/feature/game-scheduling
-   ```
-
----
-
-## 📅 Project Management
-
-- Tasks are tracked on **GitHub Projects**.
-- Issues are categorized using labels like: `feature`, `bug`, `enhancement`, etc.
-
----
-
-## 📢 Contact & Support
-
-For questions or feedback, open an [Issue](https://github.com/EjLaquiorez/LARO-Web/issues) or reach out through our team communication channel.
+Want to contribute? See `CONTRIBUTING.md`!
 
 ---
 
 ## 📄 License
-
 This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-🚀 *Now playable from your browser – LARO Web!* 🏀
-```
-
+## 🚀 Play Better. Play Together. With LARO-Hub. 🌾
