@@ -47,7 +47,6 @@
     height: fit-content;
     width: 95%;
     max-width: 450px;
-    max-height: 300px;
     margin: auto;
     border-radius: 10px;
     padding-top: 20px;
@@ -60,13 +59,13 @@
     width: 80%;
     height: fit-content;
     font-size: 16px;
-    padding: 4px;
+    padding: 7px;
     margin: auto;
     margin: 5px;
     color: grey;
     background-color: rgb(71, 71, 71);
     border: none;
-    border-radius: 3px;
+    border-radius: 5px;
 }
 
 .container button {
@@ -85,6 +84,10 @@
 
 .container button:hover {
     background-color: #eccd36;
+}
+
+#error-msg {
+    color: red;
 }
 
 .container img {
