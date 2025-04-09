@@ -1,5 +1,10 @@
 document.addEventListener("DOMContentLoaded", (e) => {
 
+    const token = localStorage.getItem("access");
+    if (token && isTokenValid(token)) {
+        window.location.replace("index.html");
+    }
+
     let showPasswordBtn = document.getElementById("show-password-btn")
     let switchButton = document.getElementById("switch-form")
 
@@ -256,6 +261,28 @@ document.addEventListener("DOMContentLoaded", (e) => {
         }
     }
 
+    function isTokenValid(token) {
+        const payload = parseJwt(token);
+        if (!payload) return false;
+        const now = Math.floor(Date.now() / 1000);
+        return payload.exp > now;
+    }
+
+    function parseJwt(token) {
+        try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(
+                atob(base64).split('').map(c =>
+                    '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+                ).join('')
+            );
+            return JSON.parse(jsonPayload);
+        } catch (e) {
+            return null;
+        }
+    }
+
     function showPassword(mode) {
         if (mode == 0) {
             let passwordInput = document.getElementById("password")
@@ -306,7 +333,14 @@ document.addEventListener("DOMContentLoaded", (e) => {
         })
             .then(response => {
                 if (!response.ok) {
-                    errorMsg.textContent = "Invalid credentials"
+                    if (response.status == 400) {
+                        errorMsg.textContent = "Invalid credentials"
+                    }
+
+                    else {
+                        errorMsg.textContent = "Error code: ", response.status
+                    }
+                    
                     throw new Error("Invalid credentials")
                 }
 
@@ -314,7 +348,13 @@ document.addEventListener("DOMContentLoaded", (e) => {
             })
             .then(data => {
                 console.log("Login successful: ", data)
-                localStorage.setItem("authTokens", JSON.stringify(data.tokens))
+                if (data.tokens && data.user) {
+                    localStorage.setItem("access", data.tokens.access);
+                    localStorage.setItem("refresh", data.tokens.refresh);
+                    localStorage.setItem("user", JSON.stringify(data.user));
+                
+                    window.location.href = "index.html";
+                  }
             })
             .catch(error => console.error(error))
     })
