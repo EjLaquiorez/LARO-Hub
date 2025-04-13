@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import User
 from .serializers import UserSerializer
@@ -266,58 +267,15 @@ class RegisterView(APIView):
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class LoginView(APIView):
-    """
-    Handles user authentication:
-    POST: Authenticates user credentials and creates a session
-    Required fields: email, password
-    Returns: User details on successful login
-    """
-    permission_classes = [AllowAny]
-
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            required=['email', 'password'],
-            properties={
-                'email': openapi.Schema(type=openapi.TYPE_STRING, description='User email'),
-                'password': openapi.Schema(type=openapi.TYPE_STRING, description='User password'),
-            }
-        ),
-        responses={
-            200: openapi.Response('Login successful', openapi.Schema(
-                type=openapi.TYPE_OBJECT,
-                properties={
-                    'user': openapi.Schema(type=openapi.TYPE_OBJECT),
-                    'tokens': openapi.Schema(
-                        type=openapi.TYPE_OBJECT,
-                        properties={
-                            'refresh': openapi.Schema(type=openapi.TYPE_STRING),
-                            'access': openapi.Schema(type=openapi.TYPE_STRING),
-                        }
-                    )
-                }
-            )),
-            401: 'Invalid credentials'
-        },
-        operation_description="Login with email and password"
-    )
-    def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
-        user = authenticate(email=email, password=password)
-        
-        if user is not None:
-            refresh = RefreshToken.for_user(user)
-            serializer = UserSerializer(user)
-            return Response({
-                'user': serializer.data,
-                'tokens': {
-                    'refresh': str(refresh),
-                    'access': str(refresh.access_token),
-                }
-            }, status=status.HTTP_200_OK)
-        return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+class LoginView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == 200:
+            return response
+        return Response(
+            {'detail': 'Invalid credentials'},
+            status=status.HTTP_401_UNAUTHORIZED
+        )
 
 class LogoutView(APIView):
     """

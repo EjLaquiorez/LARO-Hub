@@ -30,30 +30,28 @@ function parseJwt(token) {
     const refreshToken = localStorage.getItem("refresh");  
   
     if (!refreshToken) {
-      window.location.href = "login.html";  
-      return;
+        window.location.href = "/login/";  // Absolute path
+        return;
     }
   
-    
-    fetch("http://localhost:8000/api/token/refresh/", {  
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ refresh: refreshToken })
+    fetch("/api/token/refresh/", {  
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ refresh: refreshToken })
     })
     .then(response => response.json())
     .then(data => {
-      if (data.access) {
-        localStorage.setItem("access", data.access);  
-      } else {
-        
-        window.location.href = "login.html";
-      }
+        if (data.access) {
+            localStorage.setItem("access", data.access);  
+        } else {
+            window.location.href = "/login/";  // Absolute path
+        }
     })
     .catch(error => {
-      console.error('Error refreshing token:', error);
-      window.location.href = "login.html";  
+        console.error('Error refreshing token:', error);
+        window.location.href = "/login/";  // Changed from "login.html" to "/login/"
     });
   }
   
@@ -62,7 +60,7 @@ function parseJwt(token) {
     const token = localStorage.getItem("access");
   
     if (!token) {
-      window.location.href = "login.html";  
+      window.location.href = "/login/";  
       return;
     }
   
@@ -74,5 +72,4 @@ function parseJwt(token) {
     refreshAccessToken();
   }
   
-  requireAuth();  
-  
+  requireAuth();
