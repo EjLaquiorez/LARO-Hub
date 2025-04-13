@@ -72,7 +72,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
             formContainer.innerHTML = `
                 <div id="error-msg"></div>
                 <form id="register-form" action="{% url 'api:register' %}" method="POST">
-                    {% csrf_token %}
                     <input type="text" name="firstname" id="firstname" placeholder="First Name" required>
                     <input type="text" name="middlename" id="middlename" placeholder="Middle Name">
                     <input type="text" name="lastname" id="lastname" placeholder="Last Name" required>
