@@ -15,13 +15,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.contrib.auth import views as auth_views
+from django.urls import path, re_path ,include
 from rest_framework_simplejwt.views import TokenRefreshView
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
+from django.views.generic import TemplateView
+from django.conf import settings
+from django.conf.urls.static import static
 
 # Swagger settings
 swagger_settings = {
@@ -73,10 +77,15 @@ class LoginView(APIView):
 # URL Patterns
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include("API.urls")),
+    path('', TemplateView.as_view(template_name='index.html'), name='home'),
+    path('login/', TemplateView.as_view(template_name='login.html'), name='login'),
+    path('dashboard/', TemplateView.as_view(template_name='dashboard.html'), name='dashboard'),
+    
+    # API endpoints
+    path('api/', include('API.urls')),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     
     # Swagger URLs
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

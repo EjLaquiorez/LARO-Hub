@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{% static 'scripts/usercheck.js' %}" defer></script>
+    <title>LARO Hub</title>
+</head>
+<body>
+    <script>
+        // Check if user is logged in
+        if (localStorage.getItem('access_token')) {
+            window.location.href = "{% url 'dashboard' %}";
+        } else {
+            window.location.href = "{% url 'login' %}";
+        }
+    </script>
+</body>
+</html>
