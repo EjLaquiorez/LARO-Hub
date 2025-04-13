@@ -1,0 +1,394 @@
+@font-face {
+    font-family: 'AmericanCaptain';
+    src: url('fonts/AmericanCaptain.ttf') format('woff2');
+}
+
+body {
+    background-color: black;
+    display: flex;
+    flex-direction: column;  /* Stack the content vertically */
+    justify-content: flex-start;  /* Align content to the top */
+    align-items: center;
+    margin: 0px;
+    height: 100vh;  /* Ensure the body takes the full height of the viewport */
+}
+
+.containerProfile {
+    background-color: #fada39;
+    border-radius: 22px;
+    height: 50px;
+    width: 30%;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;  /* Ensure the items inside the container are in a row */
+    justify-content: space-between;  /* Space between the arrow and profile */
+    align-items: center;  /* Vertically center items */
+    padding: 0 10px;  /* Add horizontal padding */
+}
+
+.containerProfile i {
+    order: 0;  /* Ensure the arrow comes first */
+    margin-left: 5px;
+    font-size: 30px;  /* Base font size for desktop */
+}
+
+.containerProfile h3 {
+    font-size: 45px;  /* Base font size for desktop */
+    font-weight: lighter;
+    font-family: AmericanCaptain;
+    margin: 0;  /* Remove margin for better alignment */
+    margin-right: 30px;
+    padding-left: 10px;  /* Space between the profile and the arrow */
+    color: black;  /* Make sure the text color is visible */
+}
+
+.containerUser {
+    position: relative;
+    background-color: gray;
+    border-radius: 20px;
+    height: 110px;
+    width: auto;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 20px;
+}
+
+.containerUser img {
+    border-radius: 20px;
+    height: 100px;
+    width: 100px;
+    margin: 10px;
+    margin-left: 8px;
+    justify-content: center;
+    align-items: center;
+    order: 0;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6); /* this is the outer shadow */
+    
+}
+
+.containerUser h4 {
+    font-weight: lighter;
+    font-family: AmericanCaptain;
+    font-size: 40px;
+    color: white;
+    margin-bottom: -1px;
+}
+
+.containerUser p {
+    font-weight: lighter;
+    font-family: AmericanCaptain;
+    color: white;
+    font-size: 12px;
+    margin-top: 0px;
+    
+}
+
+.userDetails {
+    margin: 10pxpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 70px;
+}
+
+.userDetails h4 {
+    margin: 0px;
+    gap: 4px;
+}
+.userDetails h4 {
+    margin: 0px;
+}
+.userDetailsCol {
+    margin-right: -1px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.widgetsUser {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: -10px;
+}
+
+.widgetsUser .iconFollow {
+    margin-bottom: 1px;
+    height: 26px;
+    width: auto;
+    background-color: #fada39;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 10px;
+}
+
+.widgetsUser i, .widgetsUser h5 {
+    align-items: center;
+    padding: 0 10px;
+
+}
+
+.widgetsUsersColumn{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 2px;
+}
+
+.widgetsUsersColumn div {
+    padding: 1px;
+    margin: 2px;
+    margin-top: 2px;
+    height: 26px;
+    width: auto;
+    background-color: #fada39;
+    border-radius: 10px;
+}
+
+.editprofile {
+    position: absolute;
+    top: 130px;
+    right: 30px;
+    background-color: #fada39;
+    border-radius: 10px;
+    padding: 5px 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-family: AmericanCaptain;
+    font-size: 14px;
+    color: black;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.iconFollow {
+    font-family: AmericanCaptain;
+}
+
+.userStats {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.userRole {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.userRole p {
+    color: white;
+    font-size: 20px;
+    font-family: AmericanCaptain;
+    margin-bottom: 2px;
+    margin-left: 8px;
+    
+}
+
+.containerRole {
+    background-color: gray;
+    height: auto;
+    width: auto;
+    border-radius: 10px;
+    
+}
+
+.containerRole h2{
+    color: white;
+    font-family: AmericanCaptain;
+    font-size: 40px;
+    margin: 10px;
+    margin-bottom: 5px;
+    padding-top: 0px;
+    
+}
+
+.skillLevel {
+    height: auto;
+    width: 260px;
+    background-color: #fada39;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 10px;
+    margin-right: 18px;
+    margin-bottom: 10px;
+
+    
+}
+
+.skillLevel i {
+    background-color: white;
+    height: 10px;
+    width: 13px;
+    border-radius: 3px;
+    margin: 2px;
+    margin-right: 5px;
+    
+}
+
+.skillLevel p {
+    color: black;
+    font-family: AmericanCaptain;
+    margin: 2px;
+    margin-left: 5px;
+    margin-right: 10px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-size: auto;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.userInfo h2 {
+    color: white;
+    font-family: AmericanCaptain;
+    font-size: 20px;
+    margin-left: 22px;
+
+}
+
+.containerInfo{
+    background-color: gray;
+    height: auto;
+    width: 180px;
+    border-radius: 14px;
+    margin-left: 14px;
+}
+
+.containerInfo div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.containerInfo hr {
+    color: white;
+    border: none;
+    height: 2px;
+    width: auto;
+}
+
+.containerInfo p {
+    color: white;
+    font-family: AmericanCaptain;
+    font-size: 30px;
+    margin: -6px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.userHistory {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.userHistory h4 {
+    color: white;
+    font-family: AmericanCaptain;
+    font-size: 30px;
+    margin-bottom: 1px;
+}
+.containerHistory {
+    background-color: gray;
+    height: auto;
+    width: auto;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: visible;
+}
+
+.mostRecent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 100px;
+    margin-top: 10px;
+    
+}
+
+.mostRecent p {
+    color: white;
+    font-family: AmericanCaptain;
+    font-size: 20px;
+    margin-bottom: -1px;
+    margin-right: 10px;
+
+}
+
+.mostRecent i {
+    margin-right: 200px;
+    font-size: 20px;
+    color: white;
+}
+
+.highligthHistory {
+    background-color: white;
+    height: 65px;
+    width: 482px;
+    border-radius: 20px;
+    margin: 10px;
+    margin-bottom: 25px;
+    
+}
+
+.itemHistory {
+    background-color: white;
+    height: 65px;
+    width: 460px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+
+}
+/* Media Query for smaller screens (tablets and mobile) */
+@media (max-width: 768px) {
+    .containerProfile {
+        width: 100%;  /* Full width for smaller screens */
+        height: 40px;  /* Slightly smaller height */
+        padding: 0 15px;  /* Increase padding for smaller screens */
+    }
+
+    .containerProfile i {
+        font-size: 24px;  /* Smaller icon size for mobile */
+    }
+
+    .containerProfile h3 {
+        font-size: 35px;  /* Smaller text for mobile */
+        margin-right: 15px;  /* Less margin on the right */
+    }
+}
+
+/* Media Query for mobile screens */
+@media (max-width: 480px) {
+    .containerProfile {
+        flex-direction: column;  /* Stack the elements vertically on mobile */
+        justify-content: center;  /* Center content vertically */
+        align-items: center;  /* Align items in the center */
+        height: auto;  /* Auto height for better stacking */
+    }
+
+    .containerProfile i {
+        font-size: 20px;  /* Even smaller icon for mobile */
+        margin-bottom: 10px;  /* Space between icon and text */
+    }
+
+    .containerProfile h3 {
+        font-size: 30px;  /* Smaller text size for mobile */
+        padding-left: 0;  /* Remove extra padding */
+    }
+}
