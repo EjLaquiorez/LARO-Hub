@@ -43,6 +43,7 @@ body {
 }
 
 .containerUser {
+    position: relative;
     background-color: gray;
     border-radius: 20px;
     height: 180px;
@@ -51,6 +52,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-right: 20px;
 }
 
 .containerUser img {
@@ -118,6 +120,22 @@ body {
     align-items: center;
     padding: 0 10px;
 
+}
+
+.editprofile {
+    position: absolute;
+    top: 130px;
+    right: 30px;
+    background-color: #fada39;
+    border-radius: 10px;
+    padding: 5px 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-family: AmericanCaptain;
+    font-size: 14px;
+    color: black;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .iconFollow {
@@ -243,7 +261,6 @@ body {
     margin-left: 10px;
     margin-right: 10px;
 }
-
 .userHistory {
     display: flex;
     flex-direction: column;
@@ -265,6 +282,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: visible;
 }
 
 .mostRecent {
