@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
     const token = localStorage.getItem("access");
     if (token && isTokenValid(token)) {
-        window.location.replace("/");
+        window.location.replace("index.html");
     }
 
     let showPasswordBtn = document.getElementById("show-password-btn")
@@ -71,24 +71,29 @@ document.addEventListener("DOMContentLoaded", (e) => {
         else {
             formContainer.innerHTML = `
                 <div id="error-msg"></div>
-                <form id="register-form" action="{% url 'api:register' %}" method="POST">
-                    <input type="text" name="firstname" id="firstname" placeholder="First Name" required>
-                    <input type="text" name="middlename" id="middlename" placeholder="Middle Name">
-                    <input type="text" name="lastname" id="lastname" placeholder="Last Name" required>
-                    <input type="email" name="email" id="email" placeholder="Email" required>
-                    <input type="password" name="password" id="password" placeholder="Password" required>
-                    <input type="password" name="confirm-password" id="confirm-password" placeholder="Confirm Password" required>
-                    <div id="show-password-container">
-                        <button type="button" id="show-password-btn">Show Password</button>
-                    </div>
-                    <button type="submit">REGISTER</button>
-                </form>
-                <div>Register via: </div>
-                <div id="external-icons">
-                    <a href=""><img src="../static/img/facebook.png" alt=""></a>
-                    <a href=""><img src="../static/img/google.png" alt=""></a>
-                    <a href=""><img src="../static/img/discord.png" alt=""></a>
-                </div>`
+                <form id="register-form" action="">
+                <input type="text" name="firstname" id="firstname" placeholder="First Name" required>
+
+                <input type="text" name="middlename" id="middlename" placeholder="Middle Name">
+
+                <input type="text" name="lastname" id="lastname" placeholder="Last Name" required>
+
+                <input type="email" name="email" id="email" placeholder="Email" required>
+
+                <input type="password" name="password" id="password" placeholder="Password" required>
+
+                <input type="password" name="confirm-password" id="confirm-password" placeholder="Confirm Password" required>
+                <div id="show-password-container">
+                    <button type="button" id="show-password-btn">Show Password</button>
+                </div>
+                <button type="submit">REGISTER</button>
+            </form>
+            <div>Register via: </div>
+            <div id="external-icons">
+                <a href=""><img src="../static/img/facebook.png" alt=""></a>
+                <a href=""><img src="../static/img/google.png" alt=""></a>
+                <a href=""><img src="../static/img/discord.png" alt=""></a>
+            </div>`
 
             switchButton.onclick = () => {
                 switchForm(0)
@@ -214,11 +219,10 @@ document.addEventListener("DOMContentLoaded", (e) => {
                 else {
                     
                     console.log("Password is valid. Submitting form...")
-                    fetch("api/register/", {
+                    fetch("http://127.0.0.1:8000/register/", {
                         method: "POST",
                         headers: {
-                            "Content-Type": "application/json",
-                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                            "Content-Type": "application/json"
                         },
         
                         body: JSON.stringify(
@@ -240,13 +244,13 @@ document.addEventListener("DOMContentLoaded", (e) => {
                             return response.json()
                         })
                         .then(data => {
-                            console.log("Successfully created an account: ", data);
-                            errorMsg.style.color = "green";
-                            errorMsg.textContent = "Account successfully created!";
+                            console.log("Successfully created an account: ", data)
+                            errorMsg.style.color = "green"
+                            errorMsg.textContent = "Account successfully created!"
 
                             setTimeout(() => {
-                                window.location.href = "/login/";  // Use proper URL path
-                            }, 2000);
+                                window.location.replace("login.html")
+                            }, 2000)
                         })
                         .catch(error => console.error(error))
         
@@ -309,39 +313,52 @@ document.addEventListener("DOMContentLoaded", (e) => {
         }
     }
 
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const formData = new FormData(e.target);
-        
-        try {
-            const response = await fetch('/api/login/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                },
-                body: JSON.stringify({
-                    email: formData.get('email'),
-                    password: formData.get('password')
-                })
-            });
-    
-            const data = await response.json();
-            
-            if (response.ok) {
-                // Store tokens
-                localStorage.setItem('access_token', data.access);
-                localStorage.setItem('refresh_token', data.refresh);
-                // Redirect to home page
-                window.location.href = '/';  // Changed from /dashboard/ to /
-            } else {
-                document.getElementById('error-msg').textContent = data.detail || 'Login failed';
-            }
-        } catch (error) {
-            document.getElementById('error-msg').textContent = 'An error occurred';
+    document.getElementById("login-form").addEventListener("submit", (e) => {
+        e.preventDefault()
+        const email = document.getElementById("email").value
+        const password = document.getElementById("password").value
+        const errorMsg = document.getElementById("error-msg")
+
+        if (!isValidEmail(email)) {
+            errorMsg.textContent += "Invalid email format"
         }
-    });
+        
+        fetch("http://127.0.0.1:8000/login/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+
+            body: JSON.stringify({ email, password})
+        })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status == 400) {
+                        errorMsg.textContent = "Invalid credentials"
+                    }
+
+                    else {
+                        errorMsg.textContent = "Error code: ", response.status
+                    }
+                    
+                    throw new Error("Invalid credentials")
+                }
+
+                return response.json()
+            })
+            .then(data => {
+                console.log("Login successful: ", data)
+                if (data.tokens && data.user) {
+                    localStorage.setItem("access", data.tokens.access);
+                    localStorage.setItem("refresh", data.tokens.refresh);
+                    localStorage.setItem("user", JSON.stringify(data.user));
+                
+                    window.location.href = "index.html";
+                  }
+            })
+            .catch(error => console.error(error))
+    })
+
     
 
     function isValidEmail(email) {
