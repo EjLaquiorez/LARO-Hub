@@ -96,6 +96,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     # Add basketball-specific fields
     height = models.DecimalField(max_digits=4, decimal_places=1, null=True, blank=True)
+    weight = models.DecimalField(max_digits=4, decimal_places=1, null=True, blank=True)
     position = models.CharField(max_length=20, blank=True)
     experience_level = models.CharField(max_length=20, blank=True)
 
