@@ -6,15 +6,16 @@
     <link rel="stylesheet" href="../static/styles/dashboard.css">
     <script src="../static/scripts/usercheck.js"></script>
     <script src="../static/scripts/dashboard.js"></script>
+    <script src="../static/scripts/notifications.js"></script>
     <title>Dashboard</title>
 </head>
-<body>
+<body class="bg-dark text-white">
     <div class="container" id="container">
         <div class="navbar">
             <div id="title">Laro™</div>
             <div id="nav-icons">
                 <a href=""><img src="../static/img/home.png" alt=""></a>
-                <a href=""><img src="../static/img/bell.png" alt=""></a>
+                <a href="#" id="openGameModal"><img src="../static/img/bell.png"></a>
                 <a href=""><img src="../static/img/profile.png" alt=""></a>
             </div>
         </div>
@@ -39,6 +40,9 @@
             <p id="location-name">Brgy. Palumco</p>
             <p>Nearby Courts</p>
         </div>
+
     </div>
+
+    
 </body>
 </html>
