@@ -1,0 +1,164 @@
+@font-face {
+    font-family: 'AmericanCaptain';
+    src: url('fonts/AmericanCaptain.ttf') format('woff2');
+}
+
+.userHistory {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.userHistory h4 {
+    color: white;
+    font-family: AmericanCaptain;
+    font-size: 30px;
+    margin-bottom: 1px;
+}
+.containerHistory {
+    background-color: gray;
+    height: auto;
+    width: auto;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: visible;
+}
+
+.mostRecent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 100px;
+    margin-top: 10px;
+    
+}
+
+.mostRecent p {
+    color: white;
+    font-family: AmericanCaptain;
+    font-size: 20px;
+    margin-bottom: -1px;
+    margin-right: 10px;
+
+}
+
+.mostRecent i {
+    margin-right: 200px;
+    font-size: 20px;
+    color: white;
+}
+
+.itemHistory {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: white;
+    height: 65px;
+    width: 460px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+
+}
+
+.itemHistory .left {
+    color: black;
+    font-size: 20px;
+    font-family: AmericanCaptain;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.itemsHistory .label {
+    color: black;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.itemHistory .date, .itemHistory .location {
+    font-size: 15px;
+    margin: 0px;
+    line-height: 1;
+}
+
+.itemHistory .resultStat {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    line-height: 1.4;
+    
+}
+
+.itemHistory .resultStat .trophy {
+    font-size: 30px;
+}
+
+.itemHistory .resultStat .result {
+    color: black;
+    font-size: 10px;
+    font-family: AmericanCaptain;
+}
+
+.itemHistoryMostRecent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: white;
+    height: 65px;
+    width: 482px;
+    border-radius: 20px;
+    margin: 10px;
+    margin-bottom: 25px;
+}
+
+.itemHistoryMostRecent .left {
+    color: black;
+    font-size: 20px;
+    font-family: AmericanCaptain;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.itemHistoryMostRecent .label {
+    color: black;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.itemHistoryMostRecent .date, .itemHistoryMostRecent .location {
+    font-size: 15px;
+    margin: 0px;
+    line-height: 1;
+}
+
+.itemHistoryMostRecent .resultStat{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    line-height: 1.4;
+}
+
+.itemHistoryMostRecent .resultStat .trophy {
+    font-size: 30px;
+}
+
+.itemHistoryMostRecent .resultStat .result {
+    color: black;
+    font-size: 10px;
+    font-family: AmericanCaptain;
+}

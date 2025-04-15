@@ -276,8 +276,8 @@ body {
 }
 .containerHistory {
     background-color: gray;
-    height: 600px;
-    width: 490px;
+    height: auto;
+    width: auto;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
@@ -314,6 +314,7 @@ body {
     height: 65px;
     width: 470px;
     border-radius: 20px;
+    margin: 10px;
     margin-bottom: 25px;
 }
 

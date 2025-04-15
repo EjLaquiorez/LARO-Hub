@@ -11,6 +11,7 @@
 
 
     <link rel="stylesheet" href="../static/styles/profile.css">
+    <link rel="stylesheet" href="../static/styles/historyformat.css">
 </head>
 <body>
     <div class="containerProfile">
@@ -83,38 +84,17 @@
 
     <div class="userHistory">
         <h4>HISTORY</h4>
-        <div class="containerHistory">
-            <div class="mostRecent">
-                <p>MOST RECENT</p>
-                <i class="fas fa-angle-up"></i>
-            </div>
-            
-            <div class="highligthHistory">
-
-            </div>
-
-            <div class="itemHistory">
-
-            </div>
-
-            <div class="itemHistory">
-
-            </div>
-
-            <div class="itemHistory">
-
-            </div>
-
-            <div class="itemHistory">
-
-            </div>
-
-            <div class="itemHistory">
-
-            </div>
-
+        <div class="containerHistory" id="containerHistory">
+          <div class="mostRecent">
+            <p>MOST RECENT</p>
+            <i class="fas fa-angle-up"></i>
+          </div>
+          <!-- Initial items to be replaced -->
+          <!-- They will be generated dynamically -->
         </div>
-    </div>
+      </div>
+
+      <script src="../static/scripts/history.js"></script>
     
 </body>
 </html>
