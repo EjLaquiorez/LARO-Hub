@@ -105,6 +105,11 @@ body {
     color: white;
 }
 
+#nearby-courts-section button{
+    background-color: #fada39;
+    font-family: AmericanCaptain;
+}
+
 #sport-section .row{
    display: flex;
    flex-direction: row;

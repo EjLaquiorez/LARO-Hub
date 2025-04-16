@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/styles/base.css">
+    <link rel="stylesheet" href="../static/styles/invitation.css">
+    <script src="../static/scripts/usercheck.js"></script>
+    <script src="../static/scripts/invitation.js"></script>
+    <title>Invite</title>
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="navbar">
+            <button class="btn" onclick="window.location.replace('dashboard.html')" ><i class="bi bi-arrow-left" ></i></button>
+            <div id="title">Invitation</div>
+        </div>
+        <div id="location">
+            <div>
+                <p>Start Invitation</p>
+            </div>
+            <img src="../static/img/palumco.jpg" alt="">
+            <button class="btn" onclick="window.location.replace('invitation.html')">Change Location</button>
+            <p id="location-name">Brgy. Palumco</p>
+        </div>
+        <div id="form-container">
+            <form action="" id="invitation-form">
+                <div class="row">
+                    <div class="col">
+                        <input type="date" name="invitation-date" id="invitation-date">
+                    </div>
+                    <div class="col">
+                        <input type="time" name="invitation-time" id="invitation-time">
+                    </div>
+                        
+                        
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <select name="game-type" id="game-type">
+                            <option value="" disabled selected hidden>Type of Game</option>
+                            <option value="">Basketball</option>
+                            <option value="">Volleyball</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <input type="text" name="event-name" id="event-name" placeholder="Event Name" required>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col">
+                        <textarea name="event-notes" id="event-notes" placeholder="Message/Notes"></textarea>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="row">
+                            <button>Sharing Options</button>
+                        </div>
+                        <div class="row">
+                            <button>Invite Players</button>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <button type="submit">Send Invite</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
