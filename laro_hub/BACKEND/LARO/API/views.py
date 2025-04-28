@@ -9,8 +9,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from .models import User
-from .serializers import UserSerializer
+from .models import User, Game, Team, Court
+from .serializers import UserSerializer, GameMatchSerializer
+from datetime import datetime
 
 # CRUD Operations for User Management
 class UserCreate(APIView):
@@ -350,4 +351,198 @@ class LogoutView(APIView):
             return Response({'message': 'Successfully logged out'}, status=status.HTTP_200_OK)
         except Exception:
             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+
+class GameMatchView(APIView):
+    """
+    Handles game match operations:
+    POST: Create a new game match
+    GET: List all game matches
+    PUT: Update a game match
+    DELETE: Remove a game match
+    """
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['date', 'time', 'location', 'game_type', 'team1', 'team2', 'court'],
+            properties={
+                'date': openapi.Schema(type=openapi.TYPE_STRING, format='date', description='Game date (YYYY-MM-DD)'),
+                'time': openapi.Schema(type=openapi.TYPE_STRING, format='time', description='Game time (HH:MM)'),
+                'location': openapi.Schema(type=openapi.TYPE_STRING, description='Game location'),
+                'game_type': openapi.Schema(type=openapi.TYPE_STRING, enum=['3v3', '5v5', 'casual', 'competitive']),
+                'team1': openapi.Schema(type=openapi.TYPE_INTEGER, description='Team 1 ID'),
+                'team2': openapi.Schema(type=openapi.TYPE_INTEGER, description='Team 2 ID'),
+                'court': openapi.Schema(type=openapi.TYPE_INTEGER, description='Court ID')
+            }
+        ),
+        responses={
+            201: 'Game match created successfully',
+            400: 'Invalid data',
+            404: 'Team or court not found'
+        }
+    )
+    def post(self, request):
+        try:
+            # Validate teams exist
+            team1 = Team.objects.get(id=request.data.get('team1'))
+            team2 = Team.objects.get(id=request.data.get('team2'))
+            court = Court.objects.get(id=request.data.get('court'))
+
+            # Create game match
+            game = Game.objects.create(
+                date=request.data.get('date'),
+                time=request.data.get('time'),
+                location=request.data.get('location'),
+                game_type=request.data.get('game_type'),
+                team1=team1,
+                team2=team2,
+                court=court,
+                status='pending'
+            )
+
+            return Response({
+                'message': 'Game match created successfully',
+                'game_id': game.id,
+                'teams': f"{team1.team_name} vs {team2.team_name}",
+                'schedule': f"{game.date} at {game.time}",
+                'location': game.location,
+                'type': game.game_type
+            }, status=status.HTTP_201_CREATED)
+
+        except Team.DoesNotExist:
+            return Response({'error': 'One or both teams not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Court.DoesNotExist:
+            return Response({'error': 'Court not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                'status',
+                openapi.IN_QUERY,
+                description="Filter by game status (pending/completed/cancelled)",
+                type=openapi.TYPE_STRING,
+                required=False
+            ),
+            openapi.Parameter(
+                'game_type',
+                openapi.IN_QUERY,
+                description="Filter by game type (3v3/5v5/casual/competitive)",
+                type=openapi.TYPE_STRING,
+                required=False
+            )
+        ],
+        responses={
+            200: GameMatchSerializer(many=True),
+            401: 'Unauthorized'
+        }
+    )
+    def get(self, request):
+        """
+        Get list of game matches with optional filters
+        """
+        # Get query parameters
+        status = request.query_params.get('status')
+        game_type = request.query_params.get('game_type')
+        
+        # Start with all games
+        games = Game.objects.all().order_by('-date', '-time')
+        
+        # Apply filters if provided
+        if status:
+            games = games.filter(status=status)
+        if game_type:
+            games = games.filter(game_type=game_type)
+            
+        # Serialize the data
+        serializer = GameMatchSerializer(games, many=True)
+        
+        return Response({
+            'count': games.count(),
+            'results': serializer.data
+        }, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'date': openapi.Schema(type=openapi.TYPE_STRING, format='date'),
+                'time': openapi.Schema(type=openapi.TYPE_STRING, format='time'),
+                'location': openapi.Schema(type=openapi.TYPE_STRING),
+                'game_type': openapi.Schema(type=openapi.TYPE_STRING, enum=['3v3', '5v5', 'casual', 'competitive']),
+                'team1': openapi.Schema(type=openapi.TYPE_INTEGER),
+                'team2': openapi.Schema(type=openapi.TYPE_INTEGER),
+                'court': openapi.Schema(type=openapi.TYPE_INTEGER),
+                'status': openapi.Schema(type=openapi.TYPE_STRING, enum=['pending', 'completed', 'cancelled'])
+            }
+        ),
+        responses={
+            200: 'Game match updated successfully',
+            404: 'Game match not found',
+            400: 'Invalid data'
+        }
+    )
+    def put(self, request, game_id):
+        """Update an existing game match"""
+        try:
+            game = Game.objects.get(id=game_id)
+            
+            # Update fields if provided
+            if 'date' in request.data:
+                game.date = request.data['date']
+            if 'time' in request.data:
+                game.time = request.data['time']
+            if 'location' in request.data:
+                game.location = request.data['location']
+            if 'game_type' in request.data:
+                game.game_type = request.data['game_type']
+            if 'status' in request.data:
+                game.status = request.data['status']
+            
+            # Update team references if provided
+            if 'team1' in request.data:
+                team1 = Team.objects.get(id=request.data['team1'])
+                game.team1 = team1
+            if 'team2' in request.data:
+                team2 = Team.objects.get(id=request.data['team2'])
+                game.team2 = team2
+            if 'court' in request.data:
+                court = Court.objects.get(id=request.data['court'])
+                game.court = court
+            
+            game.save()
+            
+            return Response({
+                'message': 'Game match updated successfully',
+                'game_id': game.id,
+                'teams': f"{game.team1.team_name} vs {game.team2.team_name}",
+                'schedule': f"{game.date} at {game.time}",
+                'location': game.location,
+                'type': game.game_type,
+                'status': game.status
+            }, status=status.HTTP_200_OK)
+
+        except Game.DoesNotExist:
+            return Response({'error': 'Game match not found'}, status=status.HTTP_404_NOT_FOUND)
+        except (Team.DoesNotExist, Court.DoesNotExist):
+            return Response({'error': 'Team or court not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    @swagger_auto_schema(
+        responses={
+            204: 'Game match deleted successfully',
+            404: 'Game match not found'
+        }
+    )
+    def delete(self, request, game_id):
+        """Delete a game match"""
+        try:
+            game = Game.objects.get(id=game_id)
+            game.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Game.DoesNotExist:
+            return Response({'error': 'Game match not found'}, status=status.HTTP_404_NOT_FOUND)
 
