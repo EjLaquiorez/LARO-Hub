@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, Game, Team, Court
 
 class UserSerializer(serializers.ModelSerializer):
     """
@@ -67,3 +67,25 @@ class UserSerializer(serializers.ModelSerializer):
             password = validated_data.pop('password')
             instance.set_password(password)
         return super().update(instance, validated_data)
+
+class TeamSerializer(serializers.ModelSerializer):
+    captain_name = serializers.CharField(source='captain.get_full_name', read_only=True)
+    
+    class Meta:
+        model = Team
+        fields = ['id', 'team_name', 'captain_name']
+
+class CourtSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Court
+        fields = ['id', 'name', 'location']
+
+class GameMatchSerializer(serializers.ModelSerializer):
+    team1 = TeamSerializer(read_only=True)
+    team2 = TeamSerializer(read_only=True)
+    court = CourtSerializer(read_only=True)
+    
+    class Meta:
+        model = Game
+        fields = ['id', 'date', 'time', 'location', 'game_type', 
+                 'team1', 'team2', 'status', 'court']
