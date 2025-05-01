@@ -1,266 +1,211 @@
-document.addEventListener("DOMContentLoaded", (e) => {
+document.addEventListener("DOMContentLoaded", () => {
+    const loginForm = document.getElementById("login-form");
+    const googleLoginButton = document.querySelector(".google-login");
+    const signupLink = document.querySelector(".signup-text a");
 
+    // Redirect if token exists and is valid
     const token = localStorage.getItem("access");
     if (token && isTokenValid(token)) {
         window.location.replace("index.html");
     }
 
-    let showPasswordBtn = document.getElementById("show-password-btn")
-    let switchButton = document.getElementById("switch-form")
+    // Handle login form submission
+    loginForm.addEventListener("submit", (event) => {
+        event.preventDefault(); // Prevent default form submission
 
-    switchButton.onclick = () => {
-        switchForm(1)
-    }
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const errorMsg = document.createElement("p");
+        errorMsg.style.color = "red";
 
-    showPasswordBtn.onclick = () => {
-        if (showPasswordBtn.textContent == "Show Password") {
-            showPasswordBtn.textContent = "Hide Password"
-            showPassword(0)
+        // Validate email and password
+        if (!isValidEmail(email)) {
+            displayError("Invalid email format.", loginForm);
+            return;
         }
 
-        else {
-            showPasswordBtn.textContent = "Show Password"
-            hidePassword(0)
-        }
-        
-    }
-
-    function switchForm(value) {
-        let formContainer = document.getElementById("container")
-        if (value == 0) {
-            formContainer.innerHTML = `
-            <div id="error-msg"></div>
-            <form id="login-form" action="">
-            <input type="email" name="email" id="email" placeholder="Email" required>
-            <input type="password" name="password" id="password" placeholder="Password" required>
-            <div id="show-password-container">
-                <button type="button" id="show-password-btn">Show Password</button>
-            </div>
-            <button type="submit">LOGIN</button>
-        </form>
-        <a href="" id="forgot-password">forgot password?</a>
-        <div>Log-in via: </div>
-        <div id="external-icons">
-            <a href=""><img src="../static/img/facebook.png" alt=""></a>
-            <a href=""><img src="../static/img/google.png" alt=""></a>
-            <a href=""><img src="../static/img/discord.png" alt=""></a>
-        </div>`
-
-            switchButton.onclick = () => {
-                switchForm(1)
-            }
-
-            showPasswordBtn = document.getElementById("show-password-btn")
-
-            showPasswordBtn.onclick = () => {
-                if (showPasswordBtn.textContent == "Show Password") {
-                    showPasswordBtn.textContent = "Hide Password"
-                    showPassword(0)
-                }
-        
-                else {
-                    showPasswordBtn.textContent = "Show Password"
-                    hidePassword(0)
-                }
-                
-            }
-
-            switchButton.textContent = `Register Here`
+        if (!password) {
+            displayError("Password cannot be empty.", loginForm);
+            return;
         }
 
-        else {
-            formContainer.innerHTML = `
-                <div id="error-msg"></div>
-                <form id="register-form" action="">
-                <input type="text" name="firstname" id="firstname" placeholder="First Name" required>
-
-                <input type="text" name="middlename" id="middlename" placeholder="Middle Name">
-
-                <input type="text" name="lastname" id="lastname" placeholder="Last Name" required>
-
-                <input type="email" name="email" id="email" placeholder="Email" required>
-
-                <input type="password" name="password" id="password" placeholder="Password" required>
-
-                <input type="password" name="confirm-password" id="confirm-password" placeholder="Confirm Password" required>
-                <div id="show-password-container">
-                    <button type="button" id="show-password-btn">Show Password</button>
-                </div>
-                <button type="submit">REGISTER</button>
-            </form>
-            <div>Register via: </div>
-            <div id="external-icons">
-                <a href=""><img src="../static/img/facebook.png" alt=""></a>
-                <a href=""><img src="../static/img/google.png" alt=""></a>
-                <a href=""><img src="../static/img/discord.png" alt=""></a>
-            </div>`
-
-            switchButton.onclick = () => {
-                switchForm(0)
-            }
-
-            showPasswordBtn = document.getElementById("show-password-btn")
-
-            showPasswordBtn.onclick = () => {
-                if (showPasswordBtn.textContent == "Show Password") {
-                    showPasswordBtn.textContent = "Hide Password"
-                    showPassword(1)
-                }
-        
-                else {
-                    showPasswordBtn.textContent = "Show Password"
-                    hidePassword(1)
-                }
-                
-            }
-
-            switchButton.textContent = `Already have an account?`
-
-            document.getElementById("register-form").addEventListener("submit", (e) => {
-                e.preventDefault()
-            
-                const firstName = document.getElementById("firstname").value.toLowerCase()
-                const middleName = document.getElementById("middlename").value.toLowerCase()
-                const lastname = document.getElementById("lastname").value.toLowerCase()
-                const email = document.getElementById("email").value
-                const password = document.getElementById("password").value
-                const confirmPassword = document.getElementById("confirm-password").value
-                const errorMsg = document.getElementById("error-msg")
-                const errors = []
-            
-                const fullName = (firstName + middleName + lastname).replace(/\s+/g, "")
-                const restrictedPatterns = ["12345", "qwerty", "password"] 
-            
-                function isValidEmail(email) {
-                    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-                }
-            
-                function isPalindrome(str) {
-                    return str === str.split("").reverse().join("")
-                }
-            
-                function hasConsecutiveChars(str, limit) {
-                    let count = 1
-                    for (let i = 1; i < str.length; i++) {
-                        if (str[i] === str[i - 1]) {
-                            count++
-                            if (count > limit) return true
-                        } else {
-                            count = 1
-                        }
+        // Simulate login process (replace with actual API call)
+        fetch("http://127.0.0.1:8000/login/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    if (response.status === 400) {
+                        displayError("Invalid credentials.", loginForm);
+                    } else {
+                        displayError(`Error code: ${response.status}`, loginForm);
                     }
-                    return false
+                    throw new Error("Login failed");
                 }
-            
-                function hasFiveConsecutiveFromName(pw, name) {
-                    for (let i = 0; i <= name.length - 5; i++) {
-                        const sequence = name.substring(i, i + 5)
-                        if (pw.toLowerCase().includes(sequence)) return true
-                    }
-                    return false
-                }
-            
-                const specialCharCount = (password.match(/[^A-Za-z0-9]/g) || []).length
-            
-                if (!isValidEmail(email)) {
-                    errors.push("Invalid email format")
-                }
-            
-                if (confirmPassword !== password) {
-                    errors.push("Passwords do not match")
-                }
-            
-                if (password.length < 15) {
-                    errors.push("Password should have at least 15 characters")
-                }
-            
-                if (specialCharCount < 2) {
-                    errors.push("Password must include at least 2 special characters")
-                }
-            
-                if (!/^[A-Za-z]/.test(password)) {
-                    errors.push("Password must start with a letter")
-                }
-            
-                if (!/[A-Z]/.test(password)) {
-                    errors.push("Password must contain at least 1 uppercase letter")
-                }
-            
-                if (!/[a-z]/.test(password)) {
-                    errors.push("Password must contain at least 1 lowercase letter")
-                }
-            
-                if (!/[0-9]/.test(password)) {
-                    errors.push("Password must contain at least 1 number")
-                }
-            
-                if (isPalindrome(password)) {
-                    errors.push("Password must not be a palindrome")
-                }
-            
-                if (hasConsecutiveChars(password, 2)) {
-                    errors.push("Password must not contain any character more than 2 times consecutively")
-                }
-            
-                if (hasFiveConsecutiveFromName(password, fullName)) {
-                    errors.push("Password must not have 5 consecutive characters from your name")
-                }
-            
-                for (const pattern of restrictedPatterns) {
-                    if (password.toLowerCase().includes(pattern)) {
-                        errors.push(`Password must not contain restricted pattern: ${pattern}`)
-                    }
-                }
-            
-                if (errors.length > 0) {
-                    errorMsg.textContent = errors.join(", ")
-                }
-        
-                else {
-                    
-                    console.log("Password is valid. Submitting form...")
-                    fetch("http://127.0.0.1:8000/register/", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-        
-                        body: JSON.stringify(
-                            {
-                                "firstname": firstName,
-                                "lastname": lastname,
-                                "middlename": middleName,
-                                "email": email,
-                                "password": password
-                              }
-                        )
-                    })
-                        .then(response => {
-                            if (!response.ok) {
-                                errorMsg.textContent = "Email already in use"
-                                throw new Error("Unable to create new user")
-                            }
-        
-                            return response.json()
-                        })
-                        .then(data => {
-                            console.log("Successfully created an account: ", data)
-                            errorMsg.style.color = "green"
-                            errorMsg.textContent = "Account successfully created!"
-
-                            setTimeout(() => {
-                                window.location.replace("login.html")
-                            }, 2000)
-                        })
-                        .catch(error => console.error(error))
-        
-                }
-            
-                
+                return response.json();
             })
-        }
+            .then((data) => {
+                console.log("Login successful:", data);
+                if (data.tokens && data.user) {
+                    localStorage.setItem("access", data.tokens.access);
+                    localStorage.setItem("refresh", data.tokens.refresh);
+                    localStorage.setItem("user", JSON.stringify(data.user));
+                    window.location.href = "index.html";
+                }
+            })
+            .catch((error) => console.error(error));
+    });
+
+    // Handle Google login button click
+    googleLoginButton.addEventListener("click", () => {
+        // Simulate Google login process (replace with actual Google OAuth logic)
+        console.log("Google login clicked");
+        alert("Redirecting to Google login...");
+    });
+
+    // Handle signup link click
+    signupLink.addEventListener("click", (event) => {
+        event.preventDefault();
+        switchToRegisterForm();
+    });
+
+    // Utility function to validate email format
+    function isValidEmail(email) {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
     }
 
+    // Utility function to display error messages
+    function displayError(message, form) {
+        const errorMsg = document.getElementById("error-msg") || document.createElement("p");
+        errorMsg.id = "error-msg";
+        errorMsg.style.color = "red";
+        errorMsg.textContent = message;
+        form.prepend(errorMsg);
+    }
+
+    // Switch to registration form
+    function switchToRegisterForm() {
+        const container = document.querySelector(".form-container");
+        container.innerHTML = `
+            <h1>REGISTER</h1>
+            <form id="register-form">
+                <input type="text" id="firstname" name="firstname" placeholder="First Name" required>
+                <input type="text" id="lastname" name="lastname" placeholder="Last Name" required>
+                <input type="email" id="email" name="email" placeholder="Email" required>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
+                <button type="submit">REGISTER</button>
+                <p class="signup-text">Already have an account? <a href="#">Log-In</a></p>
+            </form>
+        `;
+
+        const registerForm = document.getElementById("register-form");
+        const loginLink = document.querySelector(".signup-text a");
+
+        // Handle registration form submission
+        registerForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const firstname = document.getElementById("firstname").value.trim();
+            const lastname = document.getElementById("lastname").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const confirmPassword = document.getElementById("confirm-password").value.trim();
+
+            const errors = [];
+
+            if (!isValidEmail(email)) {
+                errors.push("Invalid email format.");
+            }
+
+            if (password !== confirmPassword) {
+                errors.push("Passwords do not match.");
+            }
+
+            if (password.length < 8) {
+                errors.push("Password must be at least 8 characters long.");
+            }
+
+            if (errors.length > 0) {
+                displayError(errors.join(" "), registerForm);
+                return;
+            }
+
+            // Simulate registration process (replace with actual API call)
+            fetch("http://127.0.0.1:8000/register/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ firstname, lastname, email, password }),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        displayError("Registration failed. Email may already be in use.", registerForm);
+                        throw new Error("Registration failed");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log("Registration successful:", data);
+                    alert("Account created successfully! Redirecting to login...");
+                    switchToLoginForm();
+                })
+                .catch((error) => console.error(error));
+        });
+
+        // Handle login link click
+        loginLink.addEventListener("click", (event) => {
+            event.preventDefault();
+            switchToLoginForm();
+        });
+    }
+
+    // Switch back to login form
+    function switchToLoginForm() {
+        const container = document.querySelector(".form-container");
+        container.innerHTML = `
+            <h1>WELCOME!</h1>
+            <form id="login-form">
+                <input type="email" id="email" name="email" placeholder="EMAIL" required>
+                <input type="password" id="password" name="password" placeholder="PASSWORD" required>
+                <p class="forgot-password"><a href="#">forgot password?</a></p>
+                <p class="or-text"> ━━━━━━━or━━━━━━━</p>
+                <button type="button" class="google-login">
+                    Login with Google
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48" style="vertical-align: middle; margin-left: 8px;">
+                        <path fill="#4285F4" d="M24 9.5c3.54 0 6.7 1.22 9.17 3.22l6.85-6.85C34.6 2.7 29.6 0 24 0 14.8 0 6.9 5.4 3.3 13.3l7.98 6.2C13.7 14.1 18.3 9.5 24 9.5z"/>
+                        <path fill="#34A853" d="M46.5 24c0-1.6-.15-3.1-.43-4.6H24v9h12.7c-.55 3-2.2 5.5-4.7 7.2l7.2 5.6c4.2-3.9 6.6-9.6 6.6-16.2z"/>
+                        <path fill="#FBBC05" d="M10.3 28.5c-.5-1.5-.8-3.1-.8-4.7s.3-3.2.8-4.7l-7.98-6.2C.8 18.3 0 21 0 24s.8 5.7 2.3 8.9l7.98-6.2z"/>
+                        <path fill="#EA4335" d="M24 48c6.5 0 12-2.1 16-5.7l-7.2-5.6c-2 1.3-4.5 2-7 2-5.7 0-10.3-4.6-10.3-10.3 0-1.7.5-3.3 1.3-4.7l-7.98-6.2C6.9 33.6 14.8 39 24 39z"/>
+                    </svg>
+                </button>
+                <button type="submit">LOG-IN</button>
+                <p class="signup-text">Don't have an Account? <a href="#">Sign-Up</a></p>
+            </form>
+        `;
+
+        const loginForm = document.getElementById("login-form");
+        const signupLink = document.querySelector(".signup-text a");
+
+        // Reattach event listeners
+        loginForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            // Handle login logic here
+        });
+
+        signupLink.addEventListener("click", (event) => {
+            event.preventDefault();
+            switchToRegisterForm();
+        });
+    }
+
+    // Utility function to check token validity
     function isTokenValid(token) {
         const payload = parseJwt(token);
         if (!payload) return false;
@@ -268,102 +213,21 @@ document.addEventListener("DOMContentLoaded", (e) => {
         return payload.exp > now;
     }
 
+    // Utility function to parse JWT
     function parseJwt(token) {
         try {
-            const base64Url = token.split('.')[1];
-            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const base64Url = token.split(".")[1];
+            const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
             const jsonPayload = decodeURIComponent(
-                atob(base64).split('').map(c =>
-                    '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-                ).join('')
+                atob(base64)
+                    .split("")
+                    .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+                    .join("")
             );
             return JSON.parse(jsonPayload);
         } catch (e) {
             return null;
         }
     }
-
-    function showPassword(mode) {
-        if (mode == 0) {
-            let passwordInput = document.getElementById("password")
-            passwordInput.type = "text"
-        }
-
-        else {
-            let passwordInput = document.getElementById("password")
-            let confirmPasswordInput = document.getElementById("confirm-password")
-
-            passwordInput.type = "text"
-            confirmPasswordInput.type = "text"
-        }
-    }
-
-    function hidePassword(mode) {
-        if (mode == 0) {
-            let passwordInput = document.getElementById("password")
-            passwordInput.type = "password"
-        }
-
-        else {
-            let passwordInput = document.getElementById("password")
-            let confirmPasswordInput = document.getElementById("confirm-password")
-
-            passwordInput.type = "password"
-            confirmPasswordInput.type = "password"
-        }
-    }
-
-    document.getElementById("login-form").addEventListener("submit", (e) => {
-        e.preventDefault()
-        const email = document.getElementById("email").value
-        const password = document.getElementById("password").value
-        const errorMsg = document.getElementById("error-msg")
-
-        if (!isValidEmail(email)) {
-            errorMsg.textContent += "Invalid email format"
-        }
-        
-        fetch("http://127.0.0.1:8000/login/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-
-            body: JSON.stringify({ email, password})
-        })
-            .then(response => {
-                if (!response.ok) {
-                    if (response.status == 400) {
-                        errorMsg.textContent = "Invalid credentials"
-                    }
-
-                    else {
-                        errorMsg.textContent = "Error code: ", response.status
-                    }
-                    
-                    throw new Error("Invalid credentials")
-                }
-
-                return response.json()
-            })
-            .then(data => {
-                console.log("Login successful: ", data)
-                if (data.tokens && data.user) {
-                    localStorage.setItem("access", data.tokens.access);
-                    localStorage.setItem("refresh", data.tokens.refresh);
-                    localStorage.setItem("user", JSON.stringify(data.user));
-                
-                    window.location.href = "index.html";
-                  }
-            })
-            .catch(error => console.error(error))
-    })
-
-    
-
-    function isValidEmail(email) {
-        let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailPattern.test(email);
-    }
-})
+});
 

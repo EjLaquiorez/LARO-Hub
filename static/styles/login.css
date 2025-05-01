@@ -33,7 +33,6 @@ body::before {
     position: relative;
 }
 
-
 .background-text {
     position: absolute;
     bottom: 80px;
@@ -47,7 +46,6 @@ body::before {
     font-family: 'American Captain', sans-serif;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
-
 
 .background-text2 {
     position: absolute;
@@ -63,10 +61,6 @@ body::before {
     font-family: 'American Captain', sans-serif;
 }
 
-
-
-
-
 /* Container for photo and form */
 .container {
     display: flex;
@@ -79,14 +73,6 @@ body::before {
     padding-right: 40px;
     position: relative;
     z-index: 2; /* ensures it's on top of both texts */
-}
-
-/* Side photo styling */
-.side-photo img {
-    width: 300px;
-    height: auto;
-    border-radius: 20px;
-    box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
 }
 
 /* Form container styling */
@@ -105,7 +91,7 @@ body::before {
     text-align: center;
 }
 
-/* Heading (Welcome) */
+/* Heading (Welcome or Register) */
 .form-container h1 {
     margin-left: 80px; /* Increased from 60px to 80px to shift it right */
     margin-bottom: 20px;
@@ -116,20 +102,10 @@ body::before {
     margin-right: 10px;
 }
 
-/* Labels */
-.form-container label {
-    display: block;
-    text-align: left;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #555;
-    font-size: 0.9rem;
-    font-family: 'American Captain', sans-serif; /* Apply font here */
-}
-
 /* Inputs */
 .form-container input[type="email"],
-.form-container input[type="password"] {
+.form-container input[type="password"],
+.form-container input[type="text"] {
     width: 100%;
     padding: 25px 15px;
     margin-bottom: 20px;
@@ -144,31 +120,10 @@ body::before {
 }
 
 .form-container input[type="email"]:focus,
-.form-container input[type="password"]:focus {
+.form-container input[type="password"]:focus,
+.form-container input[type="text"]:focus {
     border-color: #AD2831;
     outline: none;
-}
-
-/* Forgot password link */
-.form-container p a {
-    font-size: 0.85rem;
-    color: #666;
-    text-decoration: none;
-    
-}
-
-.forgot-password {
-    text-align: right;
-    display: block;
-    margin: 0;
-    margin-left: auto;
-    font-weight: 600;
-    color: #666;
-    background: white;
-}
-
-.form-container p a:hover {
-    text-decoration: underline;
 }
 
 /* Buttons */
@@ -184,7 +139,7 @@ body::before {
     transition: background-color 0.3s ease;
 }
 
-/* Log-in button */
+/* Log-in and Register button */
 .form-container button[type="submit"] {
     background-color: #AD2831;
     color: #DCDCDC;
@@ -217,12 +172,11 @@ body::before {
     color: black;
 }
 
-/* Sign-up link */
+/* Sign-up and Log-in link */
 .form-container p:last-child a {
     color: #AD2831;
     font-weight: 600;
     text-decoration: none;
-    
 }
 
 .form-container p:last-child a:hover {
@@ -232,90 +186,9 @@ body::before {
 .signup-text {
     margin-left: 50px;
 }
+
 /* Responsive styles */
-
-@media (max-width: 1450px) and (min-width: 600px) {
-    .background-text {
-        display: none;
-    }
-
-    .form-container {
-        width: 450px;
-        padding: 20px 50px 30px 50px;
-    }
-
-    .form-container h1 {
-        font-size: 2.5rem;
-        margin-left: 60px;
-    }
-
-    .side-photo img {
-        width: 250px;
-    }
-    .form-container input[type="email"],
-    .form-container input[type="password"] {
-        width: 90%;
-        padding: 25px 20px; /* Increased left padding from 10px to 20px */
-        font-size: 0.9rem;
-        border-radius: 25px;
-        border: 1px solid #ccc;
-        background-color: #DCDCDC;
-    }
-    
-    .form-container input::placeholder {
-        font-size: 0.8rem;
-        color: #777;
-        letter-spacing: 1px;
-    }
-    /* Log-in button */
-.form-container button[type="submit"] {
-    background-color: #AD2831;
-    color: #DCDCDC;
-    width: 50%;
-    margin-left: 5px;
-    margin-right: auto;
-}
-
-/* Google login button */
-.form-container button.google-login {
-    background-color: #DCDCDC;
-    color: black;
-    margin-left: 10px;
-    width: 80%;
-}
-
-    
-}
-
 @media (max-width: 768px) {
-    body {
-        flex-direction: column;
-        justify-content: center;
-        padding-right: 0;
-        background-size: cover;
-        background-position: center;
-    }
-
-    .container {
-        flex-direction: column;
-        padding: 20px;
-        height: auto;
-        gap: 20px;
-        width: 80%;
-    }
-
-    .background-text {
-        .background-text {
-            display: none;
-        }
-    }
-
-    .background-text2 {
-        font-size: 80vw;
-    }
-    .background-text {
-        display: none;
-    }
     .form-container {
         width: 90%;
         padding: 50px 20px;
@@ -327,55 +200,33 @@ body::before {
         text-align: center;
     }
 
-    .side-photo img {
-        width: 80%;
-    }
     .form-container input[type="email"],
-    .form-container input[type="password"] {
+    .form-container input[type="password"],
+    .form-container input[type="text"] {
         width: 90%;
-        padding: 25px 20px; /* Increased left padding from 10px to 20px */
+        padding: 25px 20px;
         font-size: 0.9rem;
         border-radius: 25px;
         border: 1px solid #ccc;
         background-color: #DCDCDC;
     }
-    
-    .form-container input::placeholder {
-        font-size: 0.8rem;
-        color: #777;
-        letter-spacing: 1px;
-    }
-    /* Log-in button */
-.form-container button[type="submit"] {
-    background-color: #AD2831;
-    color: #DCDCDC;
-    width: 50%;
-    margin-left: 5px;
-    margin-right: auto;
-}
 
-/* Google login button */
-.form-container button.google-login {
-    background-color: #DCDCDC;
-    color: black;
-    margin-left: 10px;
-    width: 80%;
+    .form-container button[type="submit"] {
+        width: 50%;
+        margin-left: 5px;
+        margin-right: auto;
+    }
+
+    .form-container button.google-login {
+        width: 80%;
+    }
 }
 
 @media (max-width: 480px) {
-    .background-text {
-        display: none;
-    }
-
     .form-container input[type="email"],
-    .form-container input[type="password"] {
+    .form-container input[type="password"],
+    .form-container input[type="text"] {
         padding: 15px;
-    }
-    .form-container input::placeholder {
-        font-size: 0.8rem;
-        color: #777;
-        font-family: 'American Captain', sans-serif;
-        letter-spacing: 1px;
     }
 
     .form-container button {
@@ -385,27 +236,25 @@ body::before {
     .form-container h1 {
         font-size: 2.8rem;
     }
+
     .form-container {
         width: 50%;
         padding: 30px 20px;
     }
 }
-@media (max-width: 320px) {
-    .background-text {
-        display: none;
-    }
 
+@media (max-width: 320px) {
     .form-container h1 {
         font-size: 2.5rem;
     }
 
     .form-container input[type="email"],
-    .form-container input[type="password"] {
+    .form-container input[type="password"],
+    .form-container input[type="text"] {
         padding: 10px;
     }
 
     .form-container button {
         padding: 8px 0;
     }
-}
 }
