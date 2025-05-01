@@ -66,6 +66,12 @@ body::before {
     text-shadow: 15px 6px 20px rgba(0, 0, 0, 0.8);
 }
 
+.logo a {
+    text-decoration: none; /* Removes underline */
+    color: inherit; /* Inherits the color of the parent element */
+    font-size: inherit; /* Inherits the font size of the parent element */
+}
+
 .navbar .search-bar {
     display: flex;
     align-items: center;
@@ -168,9 +174,9 @@ body::before {
     background-color: #181717;
     margin-left: 7.5rem;
     border-radius: 1.875rem;
-    padding: 1.875rem 3.125rem;
+    padding: 2.875rem 3.125rem;
     font-family: 'American Captain', sans-serif;
-    font-size: 2rem;
+    font-size: 3rem;
     letter-spacing: 2.7px;
     border: none;
     cursor: pointer;
