@@ -3,7 +3,6 @@ body {
     position: relative; /* Required for positioning the pseudo-element */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #ffc925;
-
     margin: 0;
     padding: 0;
     display: flex;
@@ -21,8 +20,7 @@ body::before {
     background-repeat: no-repeat;
     background-position: calc(10% + 20px) 1%;
     background-size: 1400px;
-    z-index: -1; /* Above .background-text2 */
-    opacity: 0.9; /* Optional: darken slightly */
+    z-index: 1; /* Above .background-text2 */
     margin-top: 60px; /* Optional: adjust to fit your design */
     mix-blend-mode: multiply; /* Optional: blend with background */
     
@@ -246,7 +244,9 @@ body::before {
     margin-left: auto;
 }
 /* Invite Button */
-
+.upcoming-game, .invite ,.quick-join,.change-sport{
+    z-index: 1;
+}
 /* Responsive Styles */
 @media (max-width: 1200px) {
     .dashboard {
