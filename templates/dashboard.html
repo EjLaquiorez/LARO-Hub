@@ -17,8 +17,8 @@
             <input type="text" placeholder="Search Laro">
         </div>
         <ul class="nav-links">
-            <li><a href="#">BOOKING</a></li>
-            <li><a href="#">NOTIFICATIONS</a></li>
+            <li><a href="booking.html">BOOKING</a></li>
+            <li><a href="notifications.html">NOTIFICATIONS</a></li>
             <li><a href="myprofile.html">PROFILE</a></li>
         </ul>
     </nav>
@@ -26,14 +26,38 @@
     <!-- Main Content -->
     <div class="dashboard">
         <div class="left-panel">
-            <button class="btn nearby-courts" onclick="window.location.href='nearby-courts.html'">Nearby Courts</button>
+            <button class="btn nearby-courts">Nearby Courts</button>
         </div>
         <div class="right-panel">
-            <button class="btn quick-join" onclick="window.location.href='quick-join.html'">Quick Join</button>
-            <button class="btn upcoming-game" onclick="window.location.href='upcoming-games.html'">Upcoming Game<br><span>MARCH 25</span></button>
-            <button class="btn invite" onclick="window.location.href='invite.html'">Invite</button>
-            <button class="btn change-sport" onclick="window.location.href='change-sport.html'">Change Sport</button>
+            <button class="btn quick-join">Quick Join</button>
+            <button class="btn upcoming-game">Upcoming Game<br><span>MARCH 25</span></button>
+            <button class="btn invite">Invite</button>
+            <button class="btn change-sport">Change Sport</button>
         </div>
     </div>
+
+    <!-- Upcoming Game Popup -->
+    <div id="upcoming-game-popup" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <h2>Upcoming Schedules</h2>
+            <ul class="schedule-list">
+                <!-- Schedules will be dynamically populated here -->
+            </ul>
+            <button id="close-popup" class="btn">Close</button>
+        </div>
+    </div>
+
+    <!-- Nearby Courts Popup -->
+    <div id="nearby-courts-popup" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <h2>Nearby Courts</h2>
+            <ul class="courts-list">
+                <!-- Courts will be dynamically populated here -->
+            </ul>
+            <button id="close-nearby-popup" class="btn">Close</button>
+        </div>
+    </div>
+
+    <script src="../static/scripts/dashboard.js"></script>
 </body>
 </html>
