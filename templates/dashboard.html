@@ -1,50 +1,36 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="../static/styles/base.css">
     <link rel="stylesheet" href="../static/styles/dashboard.css">
-    <script src="../static/scripts/usercheck.js"></script>
-    <script src="../static/scripts/dashboard.js"></script>
-    <script src="../static/scripts/notifications.js"></script>
-
     <title>Dashboard</title>
 </head>
-<body class="bg-dark text-white">
-    <div class="container" id="container">
-        <div class="navbar">
-            <div id="title">Laro™</div>
-            <div id="nav-icons">
-                <a href=""><img src="../static/img/home.png" alt=""></a>
-                <a href="#" id="openGameModal"><img src="../static/img/bell.png"></a>
-                <a href="myprofile.html"><img src="../static/img/profile.png" alt=""></a>
-            </div>
+<body>
+    <!-- Navigation Bar -->
+    <div class="background-text2">LARO</div>
+    <nav class="navbar">
+        <div class="logo">LARO</div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search Laro">
         </div>
-        <div id="sport-section">
-            <div class="row">
-                <p>Basketball</p>
-                <button>Change Sport</button>
-            </div>
-            <div class="row">
-                <img src="../static/img/basketball.jpg" alt="">
-            </div>
+        <ul class="nav-links">
+            <li><a href="#">BOOKING</a></li>
+            <li><a href="#">NOTIFICATIONS</a></li>
+            <li><a href="#">PROFILE</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="dashboard">
+        <div class="left-panel">
+            <button class="btn nearby-courts">Nearby Courts</button>
         </div>
-        <div id="quick-join-section">
-            <p>Quick Join</p>
-            <button onclick="window.location.replace('quickjoin.html')">Find Game</button>
-        </div>
-        <div id="upcoming-games-section">
-            <button>Your upcoming games</button>
-        </div>
-        <div id="nearby-courts-section">
-            <img src="../static/img/palumco.jpg" alt="">
-            <p id="location-name">Brgy. Palumco</p>
-            <p>Nearby Courts</p>
-            <button onclick="window.location.replace('invitation.html')">Invite</button>
+        <div class="right-panel">
+            <button class="btn quick-join">Quick Join</button>
+            <button class="btn upcoming-game">Upcoming Game<br><span>MARCH 25</span></button>
+            <button class="btn invite">Invite</button>
+            <button class="btn change-sport">Change Sport</button>
         </div>
     </div>
 </body>

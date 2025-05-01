@@ -1,134 +1,297 @@
-@font-face {
-    font-family: 'AmericanCaptain';
-    src: url('fonts/AmericanCaptain.ttf') format('woff2')
-  }
-
-
+/* General body styles */
 body {
-    background-color: #FFC925;
+    position: relative; /* Required for positioning the pseudo-element */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffc925;
+
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100vh;
+    padding-right: 120px;
+    overflow: hidden;
+}
+body::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('../img/login-photo.png');
+    background-repeat: no-repeat;
+    background-position: calc(10% + 20px) 1%;
+    background-size: 1400px;
+    z-index: -1; /* Above .background-text2 */
+    opacity: 0.9; /* Optional: darken slightly */
+    margin-top: 60px; /* Optional: adjust to fit your design */
+    mix-blend-mode: multiply; /* Optional: blend with background */
+    
 }
 
-.container {
-    width: 92%;
-    height: 92%;
-    padding: 4%;
+.background-text2 {
+    position: absolute;
+    top: 56%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 60vw;
+    font-weight: 1000;
+    color: rgba(240, 230, 146, 0.4); /* Try 0.2 or even 0.3 to test */
+    z-index: -1;
+    pointer-events: none;
+    white-space: nowrap;
+    font-family: 'American Captain', sans-serif;
 }
 
+/* Navigation Bar */
 .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
     display: flex;
-    flex-direction: row;
-    background-color: #fada39;
-    border-radius: 20px;
-}
-
-.navbar #title {
-    width: auto;
-    height: fit-content;
-    font-size: 25px;
-    text-align: left;
-    padding: 5px;
-    padding-left: 10px;
-}
-
-.navbar #nav-icons {
-    width: 100%;
-    align-content: center;
-    text-align: right;
-}
-
-.navbar img {
-    width: 1.5rem;
-    margin-right: 20px;
-}
-
-#sport-section {
-    padding-left: 10%;
-    padding-right: 10%;
-}
-
-#sport-section img{
-    width: 100%;
-    max-height: 70px;
-    border-radius: 20px;
-    object-fit: cover;
-    object-position: center;
-}
-
-#quick-join-section {
-    padding-left: 10%;
-    padding-right: 10%;
-}
-
-#quick-join-section p{
-    color: white;
-}
-
-
-#quick-join-section button{
-    margin-bottom: 10px;
-    padding: 10px;
-    color: rgb(213, 79, 79);
-    font-family: AmericanCaptain;
-    font-size: 30px;
-    max-width: 50%;
-    border-radius: 20px;
-}
-
-#upcoming-games-section {
-    padding-left: 10%;
-    padding-right: 10%;
-}
-
-#upcoming-games-section button{
-    margin-bottom: 10px;
-    padding: 10px;
-    font-family: AmericanCaptain;
-    max-width: 50%;
-    font-size: 20px;
-    border-radius: 20px;
-}
-
-#nearby-courts-section {
-    padding-left: 10%;
-    padding-right: 10%;
-}
-
-#nearby-courts-section img{
-    width: 100%;
-    max-height: 200px;
-    border-radius: 20px;
-    object-fit: cover;
-    object-position: center;
-}
-
-#nearby-courts-section p{
-    color: white;
-}
-
-#nearby-courts-section button{
-    background-color: #fada39;
-    font-family: AmericanCaptain;
-}
-
-#sport-section .row{
-   display: flex;
-   flex-direction: row;
-}
-
-#sport-section p{
-    font-size: 20px;
-    display: flex;
-    flex-direction: row;
-    color: white;
-    width: 100%;
-    padding: auto;
- }
-
- #sport-section button{
-    border: none;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 2px; /* Reduced padding makes navbar smaller */
     background-color: transparent;
-    color: white;
-    text-align: left;
-    font-size: 12px;
+    color: #fff;
+    box-shadow: none;
+}
+
+
+.navbar .logo {
+    font-size: 4.8rem;
+    font-weight: 5;
+    font-family: 'American Captain', sans-serif;
+    margin-left:  80px;
+    text-shadow: 15px 6px 20px rgba(0, 0, 0, 0.8);
+}
+
+.navbar .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-family: 'American Captain', sans-serif;
+    font-size: 2rem;
+    text-shadow: 15px 6px 20px rgba(0, 0, 0, 0.8);
+    padding: 5px 10px;
+    border-radius: 50px;
+    background-color: #fff;
+}
+
+.navbar .search-bar input {
+    padding: 12px 45px 12px 40px; /* increased right padding for icon */
+    border-radius: 20px;
+    border: none;
+    font-size: 1.2rem;
+    outline: none;
+    background: url('../img/search-icon.png') no-repeat right 15px center;
+    background-size: 20px 20px;
+    font-family: 'American Captain', sans-serif;
+    font-style: normal;
+    letter-spacing: 1.7px;
+}
+
+.navbar .search-bar button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    
+}
+
+.navbar .nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 90px;
+    font-family: 'cocogoose', sans-serif;
+    margin-right: 140px; /* shifted left by reducing margin */
+    font-size: 1.8rem;
+    text-shadow: 15px 6px 20px rgba(0, 0, 0, 0.8);
+    letter-spacing: 0px;
+    
+}
+
+.navbar .nav-links li a {
+    color: #fff;
+    text-decoration: none;
     font-weight: bold;
- }
+    transition: color 0.3s ease;
+}
+
+.navbar .nav-links li a:hover {
+    color: #FFC925;
+}
+
+/* Dashboard Layout */
+.dashboard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-grow: 1;
+    padding: 20px;
+    gap: 20px;
+}
+
+/* Panels */
+.left-panel, .right-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.left-panel {
+    flex: 1;
+    align-items: flex-start;
+}
+
+
+.right-panel {
+    flex: 1;
+    align-items: flex-end;
+}
+
+/* Buttons */
+.btn {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    text-align: center;
+    color: #fff;
+}
+
+.nearby-courts {
+    background-color: #181717;
+    margin-left: 120px;
+    border-radius: 30px;
+    padding: 30px 50px;
+    font-family: 'American Captain', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 2.7px;
+
+}
+
+.upcoming-game{
+
+    background-color: #AD2831;
+    margin-left: 10px;
+    border-radius: 50px;
+    padding: 30px 50px;
+    font-family: 'American Captain', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 2.7px;
+    text-align: center;
+    margin-top: 60px;
+    margin-inline-end: 90px;
+
+    
+}
+.quick-join {
+    background-color: #AD2831;
+    margin-left: 10px;
+    border-radius: 50px;
+    padding: 30px 50px;
+    font-family: 'American Captain', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 2.7px;
+    text-align: center;
+    margin-top: 80px;
+    margin-inline-end: 260px;
+
+}
+.invite {
+
+    background-color: #AD2831;
+    margin-left: 10px;
+    border-radius: 50px;
+    padding: 30px 50px;
+    font-family: 'American Captain', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 2.7px;
+    text-align: center;
+    margin-top: 60px;
+    margin-inline-end: 340px;
+
+    
+}
+.change-sport {
+    background-color: transparent;
+    color: #fff;
+    font-family: 'American Captain', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 2.7px;
+    text-align: center;
+    margin-top: 20px;
+    text-shadow: #181717 0px 0px 10px;
+    margin-inline-end: 430px;
+    margin-top: 100px;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+/* Upcoming Game Button */
+.upcoming-game span {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: normal;
+    margin-top: 5px;
+    margin-left: auto;
+}
+/* Invite Button */
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+    .dashboard {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+
+    .left-panel, .center-panel, .right-panel {
+        align-items: center;
+    }
+
+    .navbar .search-bar input {
+        width: 150px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .navbar .search-bar input {
+        width: 100%;
+    }
+
+    .dashboard {
+        gap: 20px;
+    }
+
+    .btn {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar .logo {
+        font-size: 1.5rem;
+    }
+
+    .btn {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+}
+}
