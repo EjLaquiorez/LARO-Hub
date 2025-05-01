@@ -60,6 +60,15 @@ body::before {
     white-space: nowrap;
     font-family: 'American Captain', sans-serif;
 }
+.forgot-password {
+    text-align: right;
+    display: block;
+    margin: 0;
+    margin-left: auto;
+    font-weight: 600;
+    color: #666;
+    background: white;
+}
 
 /* Container for photo and form */
 .container {
@@ -188,6 +197,11 @@ body::before {
 }
 
 /* Responsive styles */
+@media (max-width: 1480px) {
+    .background-text {
+        display: none; /* Hide the background text */
+    }
+}
 @media (max-width: 768px) {
     .form-container {
         width: 90%;
@@ -219,6 +233,9 @@ body::before {
 
     .form-container button.google-login {
         width: 80%;
+    }
+    .background-text {
+        display: none; /* Hide the background text on smaller screens */
     }
 }
 
