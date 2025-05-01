@@ -251,6 +251,7 @@ body::before {
 /* Invite Button */
 .upcoming-game, .invite ,.quick-join,.change-sport, .nearby-courts {
     z-index: 1;
+    box-shadow: #181717 10px 12px 15px;
 }
 
 .btn span {
