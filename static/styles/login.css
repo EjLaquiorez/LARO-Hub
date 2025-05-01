@@ -1,120 +1,411 @@
-@font-face {
-    font-family: 'AmericanCaptain';
-    src: url('fonts/AmericanCaptain.ttf') format('woff2')
-  }
-
-#laro-title {
+/* General body styles */
+body {
+    position: relative; /* Required for positioning the pseudo-element */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #FFC925;
+    background-image: url('../img/login-photo2.png');
+    background-repeat: no-repeat;
+    background-position: calc(10% + 20px) center;
+    background-size: 1310px;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100vh;
+    padding-right: 120px;
+    overflow: hidden;
+}
+body::before {
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    color: white;
-    font-size: 12rem;
+    height: 100%;
+    background-color: #5c490f;
+    opacity: 0.6; /* Adjust the opacity as needed */
+    z-index: 0;
 }
-
-.fade-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
-    z-index: 1;
-    pointer-events: none;
-  }
-
-#show-password-container {
-    width: 80%;
-    background-color: transparent;
-    text-align: right;
-    margin: auto;
-}
-
-#show-password-btn {
-    cursor: pointer;
-    background-color: transparent;
-    font-family: sans-serif;
-    font-size: 12px;
-    margin: auto;
-    width: fit-content;
-}
-
+.background-text,
 .container {
+    z-index: 1;
     position: relative;
+}
+
+
+.background-text {
+    position: absolute;
+    bottom: 80px;
+    left: 100px;
+    font-size: 400px;
+    font-weight: 700; /* fixed */
+    color: #DCDCDC;
+    z-index: 1; /* in front of watermark but behind form */
+    pointer-events: none;
+    white-space: nowrap;
+    font-family: 'American Captain', sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+
+.background-text2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 60vw;
+    font-weight: 1000;
+    color: rgba(220, 220, 220, 0.4); /* Try 0.2 or even 0.3 to test */
+    z-index: -1;
+    pointer-events: none;
+    white-space: nowrap;
+    font-family: 'American Captain', sans-serif;
+}
+
+
+
+
+
+/* Container for photo and form */
+.container {
     display: flex;
-    flex-direction: column;
-    background-color: rgba(220, 220, 220, 0.7);
-    height: fit-content;
-    width: 95%;
-    max-width: 450px;
-    margin: auto;
-    border-radius: 10px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    z-index: 2;
-    font-family: sans-serif;
-}
-
-.container input {
-    width: 80%;
-    height: fit-content;
-    font-size: 16px;
-    padding: 7px;
-    margin: auto;
-    margin: 5px;
-    color: grey;
-    background-color: rgb(71, 71, 71);
-    border: none;
-    border-radius: 5px;
-}
-
-.container button {
-    height: fit-content;
-    width: 30%;
-    border: none;
-    background-color: #fada39;
-    font-size: 20px;
-    color: black;
-    padding: 2px;
-    margin: auto;
-    margin: 10px;
-    border-radius: 3px;
-    font-family: AmericanCaptain;
-}
-
-.container button:hover {
-    background-color: #eccd36;
-}
-
-#error-msg {
-    color: red;
-}
-
-.container img {
-    width: 30px;
-    margin-top: 10px;
-}
-
-.container a {
-    margin: 4px;
-}
-
-#forgot-password {
-    margin: auto;
-    width: fit-content;
-    margin-bottom: 15px;
-    color: black;
-    font-family: sans-serif;
-    text-decoration: none;
-}
-
-#switch-form {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    height: 100vh;
+    padding-left: 40px;
+    padding-right: 40px;
     position: relative;
-    color: white;
-    background-color: transparent;
-    border: none;
+    z-index: 2; /* ensures it's on top of both texts */
+}
+
+/* Side photo styling */
+.side-photo img {
+    width: 300px;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+}
+
+/* Form container styling */
+.form-container {
+    background: white;
+    padding: 10px 70px 30px 60px;
+    border-radius: 50px;
+    box-shadow: 8px 0 15px rgba(0,0,0,0.6);
+    width: 400px;
+    margin-right: 0;
+}
+
+.form-container > *:not(.forgot-password) {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+/* Heading (Welcome) */
+.form-container h1 {
+    margin-left: 80px; /* Increased from 60px to 80px to shift it right */
+    margin-bottom: 20px;
+    font-size: 3rem;
+    font-weight: 100;
+    color: black;
+    font-family: 'American Captain', sans-serif; /* Apply font here */
+    margin-right: 10px;
+}
+
+/* Labels */
+.form-container label {
+    display: block;
+    text-align: left;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+    font-family: 'American Captain', sans-serif; /* Apply font here */
+}
+
+/* Inputs */
+.form-container input[type="email"],
+.form-container input[type="password"] {
+    width: 100%;
+    padding: 25px 15px;
+    margin-bottom: 20px;
+    border: 1.5px solid #ccc;
+    border-radius: 30px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    background-color: #DCDCDC;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-container input[type="email"]:focus,
+.form-container input[type="password"]:focus {
+    border-color: #AD2831;
+    outline: none;
+}
+
+/* Forgot password link */
+.form-container p a {
+    font-size: 0.85rem;
+    color: #666;
+    text-decoration: none;
+    
+}
+
+.forgot-password {
+    text-align: right;
+    display: block;
+    margin: 0;
+    margin-left: auto;
+    font-weight: 600;
+    color: #666;
+    background: white;
+}
+
+.form-container p a:hover {
     text-decoration: underline;
-    text-underline-offset: 4px;
-    z-index: 4;
-    margin: 10px;
+}
+
+/* Buttons */
+.form-container button {
+    width: 100%;
+    padding: 20px 0;
+    margin: 15px 0;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Log-in button */
+.form-container button[type="submit"] {
+    background-color: #AD2831;
+    color: #DCDCDC;
+    width: 60%;
+    margin-left: 50px;
+    margin-right: auto;
+}
+
+.form-container button[type="submit"]:hover {
+    background-color: #e6b31f;
+}
+
+/* Google login button */
+.form-container button.google-login {
+    background-color: #DCDCDC;
+    color: black;
+    margin-left: 20px;
+}
+
+.form-container button.google-login:hover {
+    background-color: #7a1a21;
+}
+
+/* "or" text */
+.or-text {
+    margin: 0;
+    padding: 0;
+    margin-left: 50px;
+    font-weight: 600;
+    color: black;
+}
+
+/* Sign-up link */
+.form-container p:last-child a {
+    color: #AD2831;
+    font-weight: 600;
+    text-decoration: none;
+    
+}
+
+.form-container p:last-child a:hover {
+    text-decoration: underline;
+}
+
+.signup-text {
+    margin-left: 50px;
+}
+/* Responsive styles */
+
+@media (max-width: 1450px) and (min-width: 600px) {
+    .background-text {
+        display: none;
+    }
+
+    .form-container {
+        width: 450px;
+        padding: 20px 50px 30px 50px;
+    }
+
+    .form-container h1 {
+        font-size: 2.5rem;
+        margin-left: 60px;
+    }
+
+    .side-photo img {
+        width: 250px;
+    }
+    .form-container input[type="email"],
+    .form-container input[type="password"] {
+        width: 90%;
+        padding: 25px 20px; /* Increased left padding from 10px to 20px */
+        font-size: 0.9rem;
+        border-radius: 25px;
+        border: 1px solid #ccc;
+        background-color: #DCDCDC;
+    }
+    
+    .form-container input::placeholder {
+        font-size: 0.8rem;
+        color: #777;
+        letter-spacing: 1px;
+    }
+    /* Log-in button */
+.form-container button[type="submit"] {
+    background-color: #AD2831;
+    color: #DCDCDC;
+    width: 50%;
+    margin-left: 5px;
+    margin-right: auto;
+}
+
+/* Google login button */
+.form-container button.google-login {
+    background-color: #DCDCDC;
+    color: black;
+    margin-left: 10px;
+    width: 80%;
+}
+
+    
+}
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+        justify-content: center;
+        padding-right: 0;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .container {
+        flex-direction: column;
+        padding: 20px;
+        height: auto;
+        gap: 20px;
+        width: 80%;
+    }
+
+    .background-text {
+        .background-text {
+            display: none;
+        }
+    }
+
+    .background-text2 {
+        font-size: 80vw;
+    }
+    .background-text {
+        display: none;
+    }
+    .form-container {
+        width: 90%;
+        padding: 50px 20px;
+    }
+
+    .form-container h1 {
+        margin-left: 0;
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    .side-photo img {
+        width: 80%;
+    }
+    .form-container input[type="email"],
+    .form-container input[type="password"] {
+        width: 90%;
+        padding: 25px 20px; /* Increased left padding from 10px to 20px */
+        font-size: 0.9rem;
+        border-radius: 25px;
+        border: 1px solid #ccc;
+        background-color: #DCDCDC;
+    }
+    
+    .form-container input::placeholder {
+        font-size: 0.8rem;
+        color: #777;
+        letter-spacing: 1px;
+    }
+    /* Log-in button */
+.form-container button[type="submit"] {
+    background-color: #AD2831;
+    color: #DCDCDC;
+    width: 50%;
+    margin-left: 5px;
+    margin-right: auto;
+}
+
+/* Google login button */
+.form-container button.google-login {
+    background-color: #DCDCDC;
+    color: black;
+    margin-left: 10px;
+    width: 80%;
+}
+
+@media (max-width: 480px) {
+    .background-text {
+        display: none;
+    }
+
+    .form-container input[type="email"],
+    .form-container input[type="password"] {
+        padding: 15px;
+    }
+    .form-container input::placeholder {
+        font-size: 0.8rem;
+        color: #777;
+        font-family: 'American Captain', sans-serif;
+        letter-spacing: 1px;
+    }
+
+    .form-container button {
+        padding: 10px 0;
+    }
+
+    .form-container h1 {
+        font-size: 2.8rem;
+    }
+    .form-container {
+        width: 50%;
+        padding: 30px 20px;
+    }
+}
+@media (max-width: 320px) {
+    .background-text {
+        display: none;
+    }
+
+    .form-container h1 {
+        font-size: 2.5rem;
+    }
+
+    .form-container input[type="email"],
+    .form-container input[type="password"] {
+        padding: 10px;
+    }
+
+    .form-container button {
+        padding: 8px 0;
+    }
+}
 }
