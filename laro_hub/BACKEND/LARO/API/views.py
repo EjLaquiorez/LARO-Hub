@@ -9,6 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
+
 from .models import User, Game, Team, Court
 from .serializers import UserSerializer, GameMatchSerializer
 from datetime import datetime
@@ -545,4 +546,25 @@ class GameMatchView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Game.DoesNotExist:
             return Response({'error': 'Game match not found'}, status=status.HTTP_404_NOT_FOUND)
+        
 
+@swagger_auto_schema(
+    method='get',
+    manual_parameters=[
+        openapi.Parameter(
+            'Authorization',
+            openapi.IN_HEADER,
+            description="Token format: Bearer <token>",
+            type=openapi.TYPE_STRING,
+            required=True
+        )
+    ],
+    responses={200: UserSerializer},
+    security=[{'Bearer': []}],
+    operation_description="Get the currently authenticated user's profile"
+)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def current_user_view(request):
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data)
