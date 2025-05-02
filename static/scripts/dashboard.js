@@ -75,4 +75,16 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".btn.change-sport").addEventListener("click", () => {
         window.location.href = "change-sport.html";
     });
+
+    // Highlight current page in navigation
+    const navLinks = document.querySelectorAll(".nav-links a");
+    const currentPage = window.location.pathname.split("/").pop();
+
+    navLinks.forEach((link) => {
+        if (link.getAttribute("href") === currentPage) {
+            link.classList.add("active");
+        } else {
+            link.classList.remove("active");
+        }
+    });
 });

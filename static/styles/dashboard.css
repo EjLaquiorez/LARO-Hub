@@ -57,6 +57,12 @@ body::before {
     box-shadow: none;
 }
 
+.nav-links a.active {
+    text-decoration: underline !important; /* Underline the active link */
+    font-weight: bold; /* Make the active link bold */
+    color: #FFC925 !important; /* Highlight the active link with a distinct color */
+    transition: color 0.3s ease; /* Smooth transition for color changes */
+}
 
 .navbar .logo {
     font-size: 4.8rem;
@@ -114,6 +120,7 @@ body::before {
     font-size: 1.8rem;
     text-shadow: 15px 6px 20px rgba(0, 0, 0, 0.8);
     letter-spacing: 0px;
+    
     
 }
 
