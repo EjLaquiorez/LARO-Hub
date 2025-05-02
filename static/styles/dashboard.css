@@ -1,3 +1,17 @@
+@font-face {
+    font-family: 'American Captain';
+    src: url('fonts/AmericanCaptain.ttf'); 
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'cocogoose';
+    src: url('fonts/Cocogoose_trial.otf'); 
+    font-weight: normal;
+    font-style: normal;
+}
+
 /* General body styles */
 body {
     position: relative; /* Required for positioning the pseudo-element */

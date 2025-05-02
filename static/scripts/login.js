@@ -88,6 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
         form.prepend(errorMsg);
     }
 
+
     // Switch to registration form
     function switchToRegisterForm() {
         const container = document.querySelector(".form-container");
@@ -99,6 +100,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 <input type="email" id="email" name="email" placeholder="Email" required>
                 <input type="password" id="password" name="password" placeholder="Password" required>
                 <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
+                <div style="margin: 8px 0;">
+                    <input type="checkbox" id="show-password" onclick="togglePasswordVisibility()">
+                    <label for="show-password">Show Password</label>
+                </div>
                 <button type="submit">REGISTER</button>
                 <p class="signup-text">Already have an account? <a href="#">Log-In</a></p>
             </form>
@@ -174,6 +179,10 @@ document.addEventListener("DOMContentLoaded", () => {
             <form id="login-form">
                 <input type="email" id="email" name="email" placeholder="EMAIL" required>
                 <input type="password" id="password" name="password" placeholder="PASSWORD" required>
+                <div style="margin: 8px 0;">
+                    <input type="checkbox" id="show-password" onclick="togglePasswordVisibility()">
+                    <label for="show-password">Show Password</label>
+                </div>
                 <p class="forgot-password"><a href="#">forgot password?</a></p>
                 <p class="or-text"> ━━━━━━━or━━━━━━━</p>
                 <button type="button" class="google-login">
@@ -230,4 +239,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 });
+
+function togglePasswordVisibility() {
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirm-password");
+
+    if (passwordInput) {
+        passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+    }
+
+    if (confirmPasswordInput) {
+        confirmPasswordInput.type = confirmPasswordInput.type === "password" ? "text" : "password";
+    }
+}
 

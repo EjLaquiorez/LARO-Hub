@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/styles/profile.css">
-    <title>Dashboard</title>
+    <script src="../static/scripts/usercheck.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>My Profile</title>
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -24,38 +26,83 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="dashboard">
-        <div class="left-panel">
-            <button class="btn nearby-courts">PROFILE</button>
-        </div>
-        <div class="right-panel">
-            <button class="btn quick-join">HISTORY</button>
-        </div>
-    </div>
+    <div class="myprofile">
+        <div class="profile-card">
+            <div class="left-panel">
+                <div class="icon-row">
+                    <img src="../static/img/kai-sotto.jpg" id="profile-icon" alt="profile-icon">
+                </div>
+                <div class="name-row">
+                    <p id="full-name">Kai Sutto</p>
+                    <p id="username">@GinulayAngMunggo</p>
+                </div>
+                
+                <div class="bio-row">
+                    <p>Basketball is my game.</p>
+                </div>
+                <div class="hr"></div>
+                <div class="stat-row">
+                    <ul>
+                        <li>AGE - 21</li>
+                        <li>HEIGHT - 5'11"</li>
+                        <li>WEIGHT - 90 kg</li>
+                        <li>GENDER - MALE</li>
+                    </ul>
+                </div>
+                
 
-    <!-- Upcoming Game Popup -->
-    <div id="upcoming-game-popup" class="popup-overlay" style="display: none;">
-        <div class="popup-content">
-            <h2>Upcoming Schedules</h2>
-            <ul class="schedule-list">
-                <!-- Schedules will be dynamically populated here -->
-            </ul>
-            <button id="close-popup" class="btn">Close</button>
+            </div>
+            <div class="right-panel">
+                <div class="followers-row">
+                    <div class="follow-col">
+                        <p class="count">20</p>
+                        <p>followers</p>
+                    </div>
+                    <div class="follow-col">
+                        <p class="count">14</p>
+                        <p>following</p>
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <button class="edit-btn">EDIT PROFILE</button>
+                </div>
+                <div class="sport-chart">
+                    <canvas id="donutChart"></canvas>
+                </div>
+                <div class="sport-row">
+                    <p>BASKETBALL</p>
+                </div>
+                <div class="position-row">
+                    <p>POINT GUARD</p>
+                </div>
+            </div>
+            
         </div>
-    </div>
-
-    <!-- Nearby Courts Popup -->
-    <div id="nearby-courts-popup" class="popup-overlay" style="display: none;">
-        <div class="popup-content">
-            <h2>Nearby Courts</h2>
-            <ul class="courts-list">
-                <!-- Courts will be dynamically populated here -->
-            </ul>
-            <button id="close-nearby-popup" class="btn">Close</button>
+        <div class="game-history">
+            <p>HISTORY</p>
+            <div class="history-list">
+                <p>MOST RECENT</p>
+                <div class="list-item"></div>
+                <div class="list-item"></div>
+                <div class="list-item"></div>
+                <div class="list-item"></div>
+                <div class="list-item"></div>
+                <div class="list-item"></div>
+                <div class="list-item"></div>
+                <div class="list-item"></div>
+                <div class="list-item"></div>
+                <div class="list-item"></div>
+                <div class="list-item"></div>
+                <div class="list-item"></div>
+                <div class="list-item"></div>
+                <div class="list-item"></div>
+                <div class="list-item"></div>
+            </div>
         </div>
     </div>
 
     <!-- JavaScript -->
-    <script src="../static/scripts/dashboard.js"></script>
+    <script src="../static/scripts/profile.js"></script>
+    <script src="../static/scripts/donutChart.js"></script>
 </body>
 </html>
