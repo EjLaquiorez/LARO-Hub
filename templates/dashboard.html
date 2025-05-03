@@ -81,13 +81,14 @@
                 <div class="map-container">
                     <div id="map"></div>
                 </div>
+            </div>
 
             <!-- Court Info Sidebar -->
             <div id="court-info-tab" class="court-info collapsed">
                 <button class="close-tab" onclick="toggleCourtInfo()">×</button>
                 <div class="court-image-container">
                     <img id="court-image" src="" alt="Court Image" />
-                    <div class="info-container">
+                    <div class="info-container" style="position: absolute; top: 10px; left: 10px; z-index: 10;">
                         <div class="barangay-name" id="barangay-name"></div>
                         <div class="court-name" id="court-name"></div>
                     </div>

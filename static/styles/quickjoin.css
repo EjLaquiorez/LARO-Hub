@@ -198,10 +198,10 @@
 .court-name {
     font-size: 1rem;
     color: #666;
-    margin-top: -15px;
+    margin-top: 5px;
     position: absolute;
     top: 45px;
-    left: 10px;
+    left: 15px;
     z-index: 10;
     background: rgba(255, 255, 255, 0.9);
     padding: 4px 10px;
@@ -242,12 +242,11 @@
 }
 
 .scheduled-games li {
-    margin: -11.5rem 0;
-    margin-left: 17rem;
-    padding: 8rem;
-    background: #6e6c6c;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background: #FFF;
     border: 1px solid #E0E0E0;
-    border-radius: 10px;
+    border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
