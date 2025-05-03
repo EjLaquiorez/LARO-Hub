@@ -177,10 +177,35 @@
 
 .court-image-container img {
     width: 100%;
-    max-width: 400px; /* Increased max-width for larger images */
+    max-width: 250px; /* Increased max-width for larger images */
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    
+}
+
+.barangay-name {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.court-name {
+    font-size: 1rem;
+    color: #666;
+    margin-top: -15px;
+    position: absolute;
+    top: 45px;
+    left: 10px;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 4px 10px;
+    border-radius: 6px;
 }
 
 .info-container {
@@ -217,11 +242,12 @@
 }
 
 .scheduled-games li {
-    margin: 0.5rem 0;
-    padding: 0.5rem;
-    background: #FFF;
+    margin: -11.5rem 0;
+    margin-left: 17rem;
+    padding: 8rem;
+    background: #6e6c6c;
     border: 1px solid #E0E0E0;
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
