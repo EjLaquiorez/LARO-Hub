@@ -181,6 +181,7 @@ function switchToLoginForm() {
     `;
 
     attachLoginFormEvents(); // Reattach login logic after rendering
+    attachPasswordToggleEvents(); 
 }
 
 function togglePasswordVisibility() {

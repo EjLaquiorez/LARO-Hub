@@ -116,6 +116,7 @@ input:focus {
 }
 
 /* Password Field with Toggle */
+
 .password-container {
     position: relative;
     display: flex;
@@ -230,4 +231,11 @@ button.google-login:hover {
     .form-container h1 {
         font-size: 1.8rem;
     }
+}
+.forgot-password {
+    text-align: right; /* Aligns the text to the right */
+    display: block;
+    margin: 0;
+    font-weight: 600;
+    color: #666;
 }
