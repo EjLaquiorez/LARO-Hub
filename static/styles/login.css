@@ -52,8 +52,8 @@ body::before {
     left: 100px;
     font-size: 400px;
     font-weight: 700;
-    color: #DCDCDC;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    color: #ffffff;
+    text-shadow: 2px 2px 80px rgba(0, 0, 0, 0.8);
 }
 .background-text2 {
     z-index: -1;
@@ -84,7 +84,7 @@ body::before {
     background: white;
     padding: 30px 60px;
     border-radius: 50px;
-    box-shadow: 8px 0 15px rgba(0,0,0,0.6);
+    box-shadow: 8px 0 70px rgba(0,0,0,0.6);
     width: 400px;
     text-align: center;
 }
