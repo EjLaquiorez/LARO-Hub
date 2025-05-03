@@ -19,45 +19,33 @@ const barangayLocations = {
   }
 };
 
-const map = L.map('map').setView([9.7870, 118.7400], 13);
+document.addEventListener("DOMContentLoaded", function() {
+  const map = L.map('map').setView([9.7870, 118.7400], 13);
 
-// Add the tile layer for the map
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
+  // Add the tile layer for the map
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
 
-// Add markers for each barangay location
-for (const key in barangayLocations) {
-  const court = barangayLocations[key];
-  const marker = L.marker(court.coords, {
-    icon: L.icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    })
-  }).addTo(map)
-  .on("click", () => {
-    showCourtInfo(court);
-  });
-}
-
-// Function to search for a barangay and center the map on it
-function searchBarangay() {
-  const input = document.getElementById("search-barangay").value.toLowerCase();
-  const court = barangayLocations[input];
-
-  if (court) {
-    map.setView(court.coords, 15);
-    showCourtInfo(court);
-  } else {
-    alert("Barangay not found.");
+  // Add markers for each barangay location
+  for (const key in barangayLocations) {
+    const court = barangayLocations[key];
+    const marker = L.marker(court.coords, {
+      icon: L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      })
+    }).addTo(map)
+    .on("click", () => {
+      showCourtInfo(court);
+    });
   }
-}
+});
 
-// Show the court info on the sidebar
 function showCourtInfo(court) {
   document.getElementById("court-name").innerText = court.name;
   document.getElementById("court-image").src = court.image;
@@ -65,14 +53,7 @@ function showCourtInfo(court) {
   document.getElementById("court-info-tab").classList.remove("collapsed");
 }
 
-// Toggle the visibility of the court info sidebar
 function toggleCourtInfo() {
-  const courtInfo = document.getElementById("court-info-tab");
-  courtInfo.classList.toggle("collapsed");
+  const courtInfoTab = document.getElementById("court-info-tab");
+  courtInfoTab.classList.toggle("collapsed");
 }
-
-// Add an event listener for the close button
-document.getElementById("close-tab").addEventListener("click", toggleCourtInfo);
-
-// Move map controls (zoom buttons) to the bottom right
-map.zoomControl.setPosition('bottomright');

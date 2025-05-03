@@ -499,3 +499,89 @@ body::before {
         top: 45%;
     }
 }
+
+#quick-join-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Dimming effect */
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.quick-join-container {
+    background: #fff;
+    width: 90%;
+    height: 90%;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header styling */
+.quick-join-container h2 {
+    font-family: 'American Captain', sans-serif;
+    font-size: 3rem;
+    color: #AD2831;
+    text-align: center;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Inner content (game list, form, etc.) */
+.quick-join-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    border-top: 2px solid #ffc925;
+    border-bottom: 2px solid #ffc925;
+}
+
+/* Buttons inside the modal */
+.quick-join-container .btn {
+    align-self: center;
+    background-color: #AD2831;
+    color: #fff;
+    font-family: 'American Captain', sans-serif;
+    font-size: 1.5rem;
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 0.75rem;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.quick-join-container .btn:hover {
+    background-color: #ffc925;
+    color: #181717;
+}
+
+/* Close button (top-right corner) */
+.quick-join-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #AD2831;
+    cursor: pointer;
+    z-index: 10001;
+    background: transparent;
+    border: none;
+}
+.quick-join-close:hover {
+    color: #ffc925;
+    transform: scale(1.2);
+}
+
+  

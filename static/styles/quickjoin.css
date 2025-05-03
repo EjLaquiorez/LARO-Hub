@@ -1,233 +1,262 @@
-@font-face {
-  font-family: 'American Captain';
-  src: url('fonts/AmericanCaptain.ttf'); 
-  font-weight: normal;
-  font-style: normal;
+/* Quick Join Overlay */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it appears above other elements */
 }
 
-@font-face {
-  font-family: 'cocogoose';
-  src: url('fonts/Cocogoose_trial.otf'); 
-  font-weight: normal;
-  font-style: normal;
+/* Quick Join Container */
+.quick-join-container {
+    background: white;
+    width: 100%;
+    max-width: 1200px; /* Increased max-width for a wider layout */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    font-family: 'American Captain', sans-serif;
+    position: relative;
+   
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
+/* Header Bar */
+.header-bar {
+    background-color: #FFC925;
+    color: #000;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    position: sticky; /* Keeps the header bar fixed at the top */
+    top: 0;
+    z-index: 10;
 }
 
-.map-container, #map {
-  height: 100vh;
-  width: 100%;
-  position: relative;
+.header-bar .check-court-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: #000;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
 }
 
+.header-bar .check-court-btn:hover {
+    color: #AD2831;
+}
+
+/* Section Label with Search Bar */
+.section-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Aligns the search bar next to the label */
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    padding: 1rem;
+    background-color: #F5F5F5;
+    border-bottom: 1px solid #E0E0E0;
+    gap: 1rem; /* Adds spacing between the label and the search bar */
+}
+
+.section-label .search-box {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    flex-grow: 1; /* Ensures the search bar takes up available space */
+    max-width: 400px; /* Limits the width of the search bar */
+}
+
+.section-label .search-box input {
+    border: none;
+    outline: none;
+    flex-grow: 1;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 20px;
+}
+
+.section-label .search-box i {
+    font-size: 1.2rem;
+    color: #AD2831;
+    cursor: pointer;
+    margin-left: 0.5rem;
+}
+
+/* Search Map Container */
+.search-map-container {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+    position: relative;
+}
+
+/* Search Box */
 .search-box {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-  background: white;
-  padding: 8px;
-  border-radius: 100px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    position: absolute; /* Position the search bar on top of the map */
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    background: #FFC925;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .search-box input {
-  border: none;
-  padding: 5px;
-  font-size: 14px;
-  outline: none;
+    border: none;
+    outline: none;
+    flex-grow: 1;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 20px;
+    background-color: white;
 }
 
 .search-box i {
-  cursor: pointer;
-  margin-left: 5px;
+    font-size: 1.2rem;
+    color: #AD2831;
+    cursor: pointer;
+    margin-left: 0.5rem;
 }
 
-.court-preview {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-  width: 90%;
-  max-width: 400px;
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-
-.court-preview img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.court-overlay {
-  padding: 10px;
-  text-align: center;
-}
-
-.check-court-btn {
-  margin-bottom: 8px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.court-name {
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.header-bar, .section-label {
-  display: none;
-}
-
-.home-btn {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 1000;
-  background-color: transparent;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 5px;
-  cursor: pointer;
-  text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
-  font-family: 'cocogoose';
-  font-size: 150%;
+/* Map Container */
+.map-container {
+    position: relative;
+    height: 400px; /* Adjust height as needed */
+    background-color: #E0E0E0;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 #map {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-}
-
-#map::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 200px; 
-  pointer-events: none;
-  z-index: 999;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent);
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
 }
 
 /* Court Info Sidebar */
 .court-info {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 20%;
-  height: 100%;
-  background: #ffde7a; /* Light yellow background */
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease;
-  z-index: 1000;
-  padding: 40px;
-  overflow-y: auto;
+    background: #F9F9F9;
+    padding: 1rem;
+    border-left: 1px solid #E0E0E0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: transform 0.3s ease;
 }
 
-/* Hidden (collapsed) state */
 .court-info.collapsed {
-  transform: translateX(-100%);
+    transform: translateX(100%);
 }
 
-/* Close button for the sidebar */
-.close-tab {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 10;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #333;
-}
-
-/* Court image container */
 .court-image-container {
-  position: relative;
-  height: 200px;
-  width: 100%;
-  margin-bottom: 15px;
+    display: flex-end;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .court-image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 30px;
-  box-shadow: 0px 0px 20px 1px rgb(63, 60, 60, .7);
+    width: 100%;
+    max-width: 400px; /* Increased max-width for larger images */
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    
 }
 
-/* Info container at the bottom right of the image */
 .info-container {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  color: white;
-  text-align: right;
-  z-index: 1; /* Ensure text is above image */
+    text-align: center;
+    position: relative;
+    top: auto;
+    left: auto;
+    z-index: auto;
 }
 
-/* Barangay name inside image */
 .barangay-name {
-  font-size: .8rem;
-  font-family: 'cocogoose';
-  font-weight: normal;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-  margin-bottom: 5px;  /* Space between Barangay name and Court name */
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 5px 10px;
+    border-radius: 5px;
 }
 
-/* Court name inside image */
 .court-name {
-  font-size: 1rem;
-  font-family: 'cocogoose';
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-  margin: 0;
+    font-size: 1rem;
+    color: #666;
 }
 
-/* Red Marker Icon */
-.marker-icon {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  background-color: red;
-  border-radius: 50%;
-  margin-right: 10px;  /* Space between the marker and the court name */
-  vertical-align: middle;
+/* Scheduled Games */
+.scheduled-games ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-/* Court info sidebar text */
-.court-info h2 {
-  font-size: 1.4rem;
-  margin-bottom: 10px;
-  font-weight: bold;
-  color: #333;
+.scheduled-games li {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background: #FFF;
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.court-info p {
-  font-size: 1.1rem;
-  margin-bottom: 20px;
-  color: #555;
+.scheduled-games .game-item .date {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Close Tab Button */
+.close-tab {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #AD2831;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: color 0.3s ease;
+}
+
+.close-tab:hover {
+    color: #000;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .quick-join-container {
+        width: 95%;
+    }
+
+    .map-container {
+        height: 300px; /* Adjusted height for smaller screens */
+    }
+
+    .court-image-container img {
+        max-width: 100%;
+    }
 }

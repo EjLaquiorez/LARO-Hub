@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/styles/dashboard.css">
-    <script src="../static/scripts/usercheck.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../static/styles/dashboard.css" />
+    <link rel="stylesheet" href="../static/styles/quickjoin.css" />
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- User check JS -->
+    <script src="../static/scripts/usercheck.js"></script>
 </head>
+
 <body>
     <!-- Navigation Bar -->
     <div class="background-text2">LARO</div>
@@ -15,7 +24,7 @@
             <a href="index.html">LARO</a>
         </div>
         <div class="search-bar">
-            <input type="text" placeholder="Search Laro">
+            <input type="text" placeholder="Search Laro" />
         </div>
         <ul class="nav-links">
             <li><a href="booking.html">BOOKING</a></li>
@@ -30,7 +39,7 @@
             <button class="btn nearby-courts">Nearby Courts</button>
         </div>
         <div class="right-panel">
-            <button class="btn quick-join">Quick Join</button>
+            <button class="btn quick-join" id="quick-join-btn">Quick Join</button>
             <button class="btn upcoming-game">Upcoming Game<br><span>MARCH 25</span></button>
             <button class="btn invite">Invite</button>
             <button class="btn change-sport">Change Sport</button>
@@ -41,9 +50,7 @@
     <div id="upcoming-game-popup" class="popup-overlay" style="display: none;">
         <div class="popup-content">
             <h2>Upcoming Schedules</h2>
-            <ul class="schedule-list">
-                <!-- Schedules will be dynamically populated here -->
-            </ul>
+            <ul class="schedule-list"></ul>
             <button id="close-popup" class="btn">Close</button>
         </div>
     </div>
@@ -52,13 +59,58 @@
     <div id="nearby-courts-popup" class="popup-overlay" style="display: none;">
         <div class="popup-content">
             <h2>Nearby Courts</h2>
-            <ul class="courts-list">
-                <!-- Courts will be dynamically populated here -->
-            </ul>
+            <ul class="courts-list"></ul>
             <button id="close-nearby-popup" class="btn">Close</button>
         </div>
     </div>
 
+    <!-- Quick Join Overlay -->
+    <div id="quick-join-overlay" class="popup-overlay" style="display: none;">
+        <div class="quick-join-container">
+            <div class="header-bar">
+                <button class="check-court-btn" id="close-quick-join">← BACK TO HOME</button>
+                <span>QUICK JOIN</span>
+            </div>
+
+            <div class="search-box" style="position: static; transform: none; margin-bottom: 10px;">
+                <input id="search-barangay" type="text" placeholder="Search Barangay" />
+                <i class="bi bi-search" onclick="searchBarangay()"></i>
+            </div>
+
+            <div class="search-map-container">
+                <div class="map-container">
+                    <div id="map"></div>
+                </div>
+
+            <!-- Court Info Sidebar -->
+            <div id="court-info-tab" class="court-info collapsed">
+                <button class="close-tab" onclick="toggleCourtInfo()">×</button>
+                <div class="court-image-container">
+                    <img id="court-image" src="" alt="Court Image" />
+                    <div class="info-container">
+                        <div class="barangay-name" id="barangay-name"></div>
+                        <div class="court-name" id="court-name"></div>
+                    </div>
+                </div>
+                <div class="scheduled-games">
+                    <ul>
+                        <li>
+                            <div class="game-item">
+                                <div class="date"></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script src="../static/scripts/dashboard.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="../static/scripts/quickjoin.js"></script>
+
+
 </body>
+
 </html>
