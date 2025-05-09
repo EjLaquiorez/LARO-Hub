@@ -84,6 +84,8 @@ function handleLoginSubmit(event) {
                 localStorage.setItem("access", data.tokens.access);
                 localStorage.setItem("refresh", data.tokens.refresh);
                 localStorage.setItem("user", JSON.stringify(data.user));
+                    localStorage.setItem("id", JSON.stringify(data.id));
+                    localStorage.setItem("id", JSON.stringify(data.id));
                 window.location.href = "index.html";
             }
         })
