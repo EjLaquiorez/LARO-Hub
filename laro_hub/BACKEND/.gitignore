@@ -1,1 +1,6 @@
 laroenv/
+*.pyc
+__pycache__/
+*.swp
+*.swo
+db.sqlite3

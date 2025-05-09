@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!document.getElementById("gameModal")) {
           const modalHTML = `
           <!-- Modal -->
-          <div class="modal" id="gameModal" tabindex="-1">
+          <div class="modal" id="gameModal" tabindex="-1" style="z-index: 1045;">
             <div class="modal-dialog modal-lg mx-auto mt-3">
                 <div class="modal-content">
                     <!-- sticky headers -->
@@ -147,13 +147,17 @@ document.addEventListener("DOMContentLoaded", function () {
           document.body.appendChild(container);
         }
     
-        const modal = new bootstrap.Modal(document.getElementById("gameModal"));
+        const modal = new bootstrap.Modal(document.getElementById("gameModal"), {
+            backdrop: 'static', // Prevents closing on backdrop click
+            keyboard: true      // Allows ESC key to close
+        });
         modal.show();
     
         document.getElementById("gameModal").addEventListener("hidden.bs.modal", () => {
           document.getElementById("gameModal")?.remove();
           document.getElementById("bootstrap-css")?.remove();
           document.getElementById("bootstrap-js")?.remove();
+          document.querySelector('.modal-backdrop')?.remove(); // Remove backdrop
         }, { once: true });
 
         // Add this after creating the modal
@@ -195,8 +199,8 @@ async function openChatRoom(userId, userName, userAvatar) {
     }
 
     const chatRoomHTML = `
-        <div class="modal chat-room" id="chatRoom-${userId}" tabindex="-1">
-            <div class="modal-dialog modal-dialog-scrollable position-fixed bottom-0 end-0 mb-3 me-3" style="width: 300px;">
+        <div class="modal chat-room" id="chatRoom-${userId}" tabindex="-1" style="z-index: 1060;">
+            <div class="modal-dialog modal-dialog-scrollable mx-auto mt-4" style="width: 400px;">
                 <div class="modal-content border border-warning">
                     <div class="modal-header bg-warning py-2">
                         <div class="d-flex align-items-center flex-grow-1">
@@ -239,7 +243,9 @@ async function openChatRoom(userId, userName, userAvatar) {
                         <button class="btn btn-warning send-message" 
                             type="button" 
                             data-user-id="${userId}">
-                            <i class="bi bi-send"></i>
+                            <i class="bi bi-send">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16"><path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+                            </svg></i>
                         </button>
                     </div>
                     </div>
@@ -407,8 +413,28 @@ function closeChatRoom(userId) {
 
 // Add required styles
 const chatStyles = `
+    .modal-backdrop {
+        z-index: 1040 !important;
+    }
+    #gameModal {
+        z-index: 1045 !important;
+    }
     .chat-room {
+        z-index: 1060 !important;
         pointer-events: auto;
+    }
+    .chat-room .modal-dialog {
+        margin-top: 2rem !important;
+        max-width: 400px;
+        z-index: 1061 !important;
+    }
+    .chat-room .modal-content {
+        position: relative;
+        z-index: 1062 !important;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    .chat-room .modal-backdrop {
+        display: none !important;
     }
     .received-message {
         max-width: 80%;
@@ -417,9 +443,6 @@ const chatStyles = `
     .sent-message {
         max-width: 80%;
         margin-left: auto;
-    }
-    .modal-backdrop {
-        display: none;
     }
 `;
 
