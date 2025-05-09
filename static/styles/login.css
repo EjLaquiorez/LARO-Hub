@@ -82,11 +82,15 @@ body::before {
 /* Form Container Shared Styles */
 .form-container {
     background: white;
-    padding: 30px 60px;
+    padding: 40px 60px;
     border-radius: 50px;
     box-shadow: 8px 0 70px rgba(0,0,0,0.6);
     width: 400px;
     text-align: center;
+    transition: transform 0.3s ease;
+}
+.form-container:hover {
+    transform: translateY(-5px);
 }
 .form-container h1 {
     font-size: 3rem;
@@ -107,41 +111,45 @@ input[type="password"] {
     border-radius: 30px;
     font-size: 1rem;
     background-color: #DCDCDC;
-    transition: border-color 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
     box-sizing: border-box;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 input:focus {
     border-color: #AD2831;
     outline: none;
+    box-shadow: 0 0 5px rgba(173, 40, 49, 0.5);
 }
 
 /* Password Field with Toggle */
-
 .password-container {
     position: relative;
     display: flex;
     align-items: center;
+    width: 100%;
 }
 .password-container input {
-    padding-right: 2.5rem;
+    padding-right: 3rem;
+    width: 100%;
 }
 .toggle-password,
 #toggle-password,
 #toggle-confirm-password {
     position: absolute;
-    right: 20px;
-    top: 45%;
+    right: 15px;
+    top: 39%;
     transform: translateY(-50%);
     cursor: pointer;
     color: #666;
     font-size: 1.2rem;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .toggle-password:hover,
 #toggle-password:hover,
 #toggle-confirm-password:hover {
     color: #AD2831;
+    transform: scale(1.1);
 }
 
 /* Button Styles */
@@ -154,7 +162,7 @@ button {
     font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 button[type="submit"] {
     background-color: #AD2831;
@@ -162,6 +170,7 @@ button[type="submit"] {
 }
 button[type="submit"]:hover {
     background-color: #e6b31f;
+    transform: scale(1.05);
 }
 button.google-login {
     background-color: #DCDCDC;
@@ -170,6 +179,7 @@ button.google-login {
 button.google-login:hover {
     background-color: #7a1a21;
     color: white;
+    transform: scale(1.05);
 }
 
 /* Additional Text */
