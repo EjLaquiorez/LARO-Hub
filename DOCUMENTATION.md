@@ -1,5 +1,3 @@
----
-
 ## 📘 LARO-Hub Documentation
 
 ### 🌐 Project Overview
