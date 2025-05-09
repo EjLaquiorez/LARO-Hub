@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Game, Team, Court
+from .models import User, Game, Team, Court, Conversation, Message
 
 class UserSerializer(serializers.ModelSerializer):
     """
@@ -89,3 +89,33 @@ class GameMatchSerializer(serializers.ModelSerializer):
         model = Game
         fields = ['id', 'date', 'time', 'location', 'game_type', 
                  'team1', 'team2', 'status', 'court']
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ['id', 'conversation', 'sender', 'content', 'timestamp', 'is_read']
+        read_only_fields = ['id', 'timestamp']
+
+class ConversationSerializer(serializers.ModelSerializer):
+    last_message = serializers.SerializerMethodField()
+    unread_count = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Conversation
+        fields = ['id', 'participants', 'created_at', 'updated_at', 'last_message', 'unread_count']
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+    def get_last_message(self, obj):
+        last_message = obj.messages.last()
+        if (last_message):
+            return MessageSerializer(last_message).data
+        return None
+
+    def get_unread_count(self, obj):
+        try:
+            request = self.context.get('request')
+            if not request or not hasattr(request, 'user'):
+                return 0
+            return obj.messages.filter(is_read=False).exclude(sender=request.user).count()
+        except AttributeError:
+            return 0
