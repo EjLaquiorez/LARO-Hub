@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="../static/styles/quickjoin.css" />
     <!-- Leaflet Map CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
 
     <!-- User check JS -->
     <script src="../static/scripts/usercheck.js"></script>
@@ -37,71 +39,285 @@
     <!-- Main Content -->
     <div class="dashboard">
         <div class="left-panel">
-            <button class="btn nearby-courts">Nearby Courts</button>
+            <button class="btn nearby-courts" id="nearby-courts-btn">
+                <div class="btn-content">
+                    <i class="bi bi-map"></i>
+                    <span class="btn-text">NEARBY COURTS</span>
+                </div>
+            </button>
         </div>
         <div class="right-panel">
-            <button class="btn quick-join" id="quick-join-btn">Quick Join</button>
-            <button class="btn upcoming-game">Upcoming Game<br><span>MARCH 25</span></button>
-            <button class="btn invite">Invite</button>
-            <button class="btn change-sport">Change Sport</button>
+            <button class="btn quick-join" id="quick-join-btn">
+                <div class="btn-content">
+                    <i class="bi bi-geo-alt"></i>
+                    <span class="btn-text">QUICK JOIN</span>
+                </div>
+            </button>
+            <button class="btn upcoming-game">
+                <div class="btn-content">
+                    <i class="bi bi-calendar-event"></i>
+                    <span class="btn-text">UPCOMING GAME</span>
+                </div>
+                <div class="date-badge" id="next-game-date">Loading...</div>
+            </button>
+            <button class="btn invite">
+                <div class="btn-content">
+                    <i class="bi bi-people"></i>
+                    <span class="btn-text">INVITE</span>
+                </div>
+            </button>
+            <button class="btn change-sport">
+                <div class="btn-content">
+                    <i class="bi bi-arrow-repeat"></i>
+                    <span class="btn-text">CHANGE SPORT</span>
+                </div>
+            </button>
         </div>
     </div>
 
     <!-- Upcoming Game Popup -->
     <div id="upcoming-game-popup" class="popup-overlay" style="display: none;">
-        <div class="popup-content">
-            <h2>Upcoming Schedules</h2>
-            <ul class="schedule-list"></ul>
-            <button id="close-popup" class="btn">Close</button>
+        <div class="popup-content upcoming-games-content">
+            <!-- Header with Title and Close Button -->
+            <div class="upcoming-header">
+                <div class="upcoming-title">
+                    <i class="bi bi-calendar-event"></i>
+                    <h2>MY UPCOMING GAMES</h2>
+                </div>
+                <button id="close-popup" class="close-btn" title="Close">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <!-- Calendar and Schedule View -->
+            <div class="calendar-schedule-container">
+                <!-- Calendar Section -->
+                <div class="calendar-section">
+                    <div class="calendar-header">
+                        <button id="prev-month" class="month-nav"><i class="bi bi-chevron-left"></i></button>
+                        <h3 id="current-month">March 2025</h3>
+                        <button id="next-month" class="month-nav"><i class="bi bi-chevron-right"></i></button>
+                    </div>
+                    <div class="weekdays">
+                        <div>Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                    </div>
+                    <div class="calendar-days" id="calendar-days">
+                        <!-- Calendar days will be generated here -->
+                    </div>
+                </div>
+
+                <!-- Schedule Section -->
+                <div class="schedule-section">
+                    <div class="schedule-header">
+                        <h3>SCHEDULED GAMES</h3>
+                        <div class="schedule-filters">
+                            <button class="schedule-filter active" data-filter="all">All</button>
+                            <button class="schedule-filter" data-filter="upcoming">Upcoming</button>
+                            <button class="schedule-filter" data-filter="past">Past</button>
+                        </div>
+                    </div>
+                    <div class="schedule-list-container">
+                        <ul class="schedule-list" id="schedule-list">
+                            <!-- Schedules will be dynamically generated here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="upcoming-actions">
+                <button id="create-game-btn" class="action-btn create-btn">
+                    <i class="bi bi-plus-circle"></i> CREATE GAME
+                </button>
+                <button id="join-game-btn" class="action-btn join-btn">
+                    <i class="bi bi-person-plus"></i> FIND GAMES
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- Nearby Courts Popup -->
     <div id="nearby-courts-popup" class="popup-overlay" style="display: none;">
-        <div class="popup-content">
-            <h2>Nearby Courts</h2>
-            <ul class="courts-list"></ul>
-            <button id="close-nearby-popup" class="btn">Close</button>
+        <div class="popup-content nearby-courts-content">
+            <!-- Header with Title and Close Button -->
+            <div class="nearby-header">
+                <div class="nearby-title">
+                    <i class="bi bi-map"></i>
+                    <h2>NEARBY COURTS</h2>
+                </div>
+                <button id="close-nearby-popup" class="close-btn" title="Close">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <!-- Search and Courts Grid -->
+            <div class="nearby-content">
+                <div class="search-box-nearby">
+                    <i class="bi bi-search"></i>
+                    <input id="search-nearby-courts" type="text" placeholder="Search for courts..." />
+                </div>
+                <div class="nearby-courts-grid" id="nearby-courts-grid">
+                    <!-- Court cards will be dynamically generated here -->
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Quick Join Overlay -->
     <div id="quick-join-overlay" class="popup-overlay" style="display: none;">
         <div class="quick-join-container">
-            <div class="header-bar">
-                <button class="check-court-btn" id="close-quick-join">← BACK TO HOME</button>
-                <span>QUICK JOIN</span>
-            </div>
-
-            <div class="search-box" style="position: static; transform: none; margin-bottom: 10px;">
-                <input id="search-barangay" type="text" placeholder="Search Barangay" />
-                <i class="bi bi-search" onclick="searchBarangay()"></i>
-            </div>
-
-            <div class="search-map-container">
-                <div class="map-container">
-                    <div id="map"></div>
+            <!-- Header with Title and Close Button (Red Design) -->
+            <div class="quickjoin-header">
+                <div class="header-title left-aligned">
+                    <i class="bi bi-geo-alt"></i>
+                    <span>FIND A COURT</span>
                 </div>
+                <button class="close-quickjoin-btn" id="close-quick-join" title="Close">
+                    <i class="bi bi-x-lg"></i>
+                </button>
             </div>
 
-            <!-- Court Info Sidebar -->
-            <div id="court-info-tab" class="court-info collapsed">
-                <button class="close-tab" onclick="toggleCourtInfo()">×</button>
-                <div class="court-image-container">
-                    <img id="court-image" src="" alt="Court Image" />
-                    <div class="info-container" style="position: absolute; top: 10px; left: 10px; z-index: 10;">
-                        <div class="barangay-name" id="barangay-name"></div>
-                        <div class="court-name" id="court-name"></div>
+            <!-- Main Content Area with Map and Search -->
+            <div class="main-content">
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="bi bi-search"></i>
+                        <input id="search-barangay" type="text" placeholder="Search for basketball courts..." />
+                        <button class="filter-btn" id="filter-courts">
+                            <i class="bi bi-sliders"></i>
+                        </button>
+                    </div>
+                    <div class="quick-filters">
+                        <button class="filter-chip active" data-filter="all">All</button>
+                        <button class="filter-chip" data-filter="available">Available</button>
+                        <button class="filter-chip" data-filter="nearby">Nearby</button>
                     </div>
                 </div>
-                <div class="scheduled-games">
-                    <ul>
-                        <li>
-                            <div class="game-item">
-                                <div class="date"></div>
+
+                <div class="map-container">
+                    <div id="map"></div>
+                    <div class="map-legend">
+                        <div class="legend-item">
+                            <span class="legend-icon available"></span>
+                            <span class="legend-text">Available</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-icon busy"></span>
+                            <span class="legend-text">Busy</span>
+                        </div>
+                    </div>
+                    <div class="map-controls">
+                        <button class="control-btn" id="zoom-in"><i class="bi bi-plus-lg"></i></button>
+                        <button class="control-btn" id="zoom-out"><i class="bi bi-dash-lg"></i></button>
+                        <button class="control-btn" id="my-location"><i class="bi bi-geo-alt-fill"></i></button>
+                    </div>
+                </div>
+
+                <div class="court-list">
+                    <div class="court-list-header">
+                        <h3>NEARBY COURTS</h3>
+                        <button class="toggle-sidebar-btn" id="toggle-sidebar" title="View Court Details">
+                            <i class="bi bi-info-circle"></i>
+                        </button>
+                    </div>
+                    <div class="court-cards" id="court-cards-container">
+                        <!-- Court cards will be dynamically generated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar for Court Details -->
+            <div id="court-sidebar" class="court-sidebar">
+                <div class="sidebar-header">
+                    <div class="sidebar-title">
+                        <i class="bi bi-info-circle"></i>
+                        <h2>COURT DETAILS</h2>
+                    </div>
+                    <button class="close-sidebar" id="close-sidebar" title="Close Details">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+
+                <div class="sidebar-content">
+                    <div class="court-image-container">
+                        <img id="court-image" src="" alt="Basketball Court" />
+                        <div class="court-badge">BASKETBALL</div>
+                        <div class="info-overlay">
+                            <div class="barangay-name" id="barangay-name"></div>
+                            <div class="court-name" id="court-name"></div>
+                        </div>
+                    </div>
+
+                    <div class="court-status">
+                        <div class="status-indicator available">
+                            <i class="bi bi-circle-fill"></i> OPEN NOW
+                        </div>
+                    </div>
+
+                    <div class="court-details">
+                        <div class="detail-item">
+                            <i class="bi bi-people-fill"></i>
+                            <span id="current-players">0/10 Players</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="bi bi-clock-fill"></i>
+                            <span id="court-hours">Open 6AM - 10PM</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="bi bi-star-fill"></i>
+                            <span id="court-rating">4.5/5 (28 ratings)</span>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="join-game-btn">JOIN NEXT GAME</button>
+                        <button class="directions-btn"><i class="bi bi-map"></i> GET DIRECTIONS</button>
+                    </div>
+
+                    <div class="court-tabs">
+                        <button class="tab-btn active" data-tab="games">Games</button>
+                        <button class="tab-btn" data-tab="features">Features</button>
+                        <button class="tab-btn" data-tab="reviews">Reviews</button>
+                    </div>
+
+                    <div class="tab-content">
+                        <!-- Games Tab (Default Active) -->
+                        <div class="tab-pane active" id="games-tab">
+                            <div class="scheduled-games">
+                                <h3>Upcoming Games</h3>
+                                <ul id="games-list">
+                                    <!-- Games will be dynamically generated here -->
+                                </ul>
+                                <button class="create-game-btn"><i class="bi bi-plus-circle"></i> CREATE NEW GAME</button>
                             </div>
-                        </li>
-                    </ul>
+                        </div>
+
+                        <!-- Features Tab -->
+                        <div class="tab-pane" id="features-tab">
+                            <div class="court-amenities">
+                                <h3>Court Features</h3>
+                                <div class="amenities-list" id="amenities-list">
+                                    <!-- Features will be dynamically generated here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reviews Tab -->
+                        <div class="tab-pane" id="reviews-tab">
+                            <div class="court-reviews">
+                                <h3>Player Reviews</h3>
+                                <div class="reviews-list" id="reviews-list">
+                                    <!-- Reviews will be dynamically generated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -110,7 +326,7 @@
     <!-- Scripts -->
     <script src="../static/scripts/dashboard.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="../static/scripts/quickjoin.js"></script>
+    <script src="../static/scripts/basketball-sidebar.js"></script>
     <script src="../static/scripts/responsive-nav.js"></script>
 
 

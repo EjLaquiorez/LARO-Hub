@@ -5,57 +5,203 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    background-color: rgba(0, 0, 0, 0.7);
     display: none; /* Hidden by default */
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Ensure it appears above other elements */
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
 
 /* Quick Join Container */
 .quick-join-container {
-    background: white;
+    background: #1a1a1a;
     width: 100%;
-    max-width: 1200px; /* Increased max-width for a wider layout */
-    border-radius: 10px;
+    height: 100%;
+    max-width: 1400px;
+    max-height: 90vh;
+    border-radius: 0 0 20px 20px; /* Remove top border radius */
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr; /* Changed back to auto 1fr for header and content */
     font-family: 'American Captain', sans-serif;
     position: relative;
-   
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    color: #fff;
+    transition: all 0.3s ease;
+    padding: 0 0;
+
+}
+
+/* QuickJoin Header (Red Design) */
+.quickjoin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #AD2831;
+    padding: 10px 15px 10px 5px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    color: #fff;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    gap: 0.5rem;
+    justify-content: flex-start;
+    margin-left: 0;
+    padding-left: 0;
+    text-align: left;
+}
+
+.header-title.left-aligned {
+    margin-left: -5px;
+}
+
+.header-title i {
+    font-size: 1.4rem;
+    color: #fff;
+    margin-left: 5px;
+}
+
+.header-title span {
+    margin: 0;
+    font-size: 1.5rem;
+    font-family: 'American Captain', sans-serif;
+    letter-spacing: 1.5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.close-quickjoin-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    padding: 0;
+    margin: 0;
+}
+
+.close-quickjoin-btn:hover {
+    opacity: 0.8;
+    transform: scale(1.1);
+}
+
+/* Main Content Area */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+    transition: all 0.3s ease;
+    margin-right: 0;
+    width: 100%;
 }
 
 /* Header Bar */
 .header-bar {
-    background-color: #FFC925;
+    background: linear-gradient(135deg, #ffc925 0%, #ffb300 100%);
     color: #000;
-    padding: 1rem;
+    padding: 0.8rem 1.2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 2.5rem;
     font-weight: bold;
     text-transform: uppercase;
-    position: sticky; /* Keeps the header bar fixed at the top */
+    position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 20;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    letter-spacing: 1.5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.header-left, .header-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.header-right {
+    justify-content: flex-end;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-family: 'American Captain', sans-serif;
+    gap: 0.5rem;
+    flex: 2;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.header-title i {
+    font-size: 1.4rem;
 }
 
 .header-bar .check-court-btn {
-    background: none;
+    background: rgba(0, 0, 0, 0.08);
     border: none;
-    font-size: 1rem;
+    font-size: 0.85rem;
     color: #000;
     cursor: pointer;
     font-weight: bold;
     text-transform: uppercase;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .header-bar .check-court-btn:hover {
-    color: #AD2831;
+    background: rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header-bar .check-court-btn i {
+    font-size: 0.9rem;
+}
+
+.burger-menu {
+    background: rgba(0, 0, 0, 0.08);
+    border: none;
+    color: #000;
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.burger-menu:hover {
+    background: rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Section Label with Search Bar */
@@ -65,22 +211,25 @@
     justify-content: space-between; /* Aligns the search bar next to the label */
     font-size: 1.2rem;
     font-weight: bold;
-    color: #333;
-    padding: 1rem;
-    background-color: #F5F5F5;
-    border-bottom: 1px solid #E0E0E0;
+    color: #fff;
+    padding: 1.2rem;
+    background-color: #2a2a2a;
+    border-bottom: 1px solid rgba(173, 40, 49, 0.2);
     gap: 1rem; /* Adds spacing between the label and the search bar */
+    letter-spacing: 0.5px;
 }
 
 .section-label .search-box {
     display: flex;
     align-items: center;
-    background: white;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.6rem 1.2rem;
+    border-radius: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     flex-grow: 1; /* Ensures the search bar takes up available space */
     max-width: 400px; /* Limits the width of the search bar */
+    border: 1px solid rgba(173, 40, 49, 0.2);
+    position: relative;
 }
 
 .section-label .search-box input {
@@ -88,15 +237,27 @@
     outline: none;
     flex-grow: 1;
     font-size: 1rem;
-    padding: 0.5rem;
+    padding: 0.6rem;
     border-radius: 20px;
+    background: transparent;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.section-label .search-box input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
 }
 
 .section-label .search-box i {
     font-size: 1.2rem;
     color: #AD2831;
     cursor: pointer;
-    margin-left: 0.5rem;
+    margin-left: 0.8rem;
+    transition: color 0.3s ease;
+}
+
+.section-label .search-box i:hover {
+    color: #FF416C;
 }
 
 /* Search Map Container */
@@ -108,180 +269,1158 @@
     position: relative;
 }
 
+/* Search Container */
+.search-container {
+    padding: 0.75rem 1rem;
+    background: rgba(26, 26, 26, 0.95);
+    border-bottom: 1px solid rgba(255, 201, 37, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
 /* Search Box */
 .search-box {
-    position: absolute; /* Position the search bar on top of the map */
-    top: 10px;
-    left: 10px;
-    right: 10px;
     display: flex;
     align-items: center;
-    background: #FFC925;
+    background: rgba(255, 255, 255, 0.95);
     padding: 0.5rem 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 201, 37, 0.5);
+    z-index: 5;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.search-box:focus-within {
+    box-shadow: 0 4px 15px rgba(255, 201, 37, 0.25);
+    border-color: rgba(255, 201, 37, 0.8);
 }
 
 .search-box input {
     border: none;
     outline: none;
     flex-grow: 1;
-    font-size: 1rem;
+    font-size: 0.95rem;
     padding: 0.5rem;
-    border-radius: 20px;
-    background-color: white;
+    background-color: transparent;
+    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.search-box input::placeholder {
+    color: rgba(0, 0, 0, 0.5);
 }
 
 .search-box i {
-    font-size: 1.2rem;
-    color: #AD2831;
+    font-size: 1.1rem;
+    color: #ffc925;
+    margin-right: 0.5rem;
+}
+
+.filter-btn {
+    background: rgba(255, 201, 37, 0.2);
+    border: none;
+    color: #000;
+    font-size: 1.1rem;
     cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
     margin-left: 0.5rem;
+}
+
+.filter-btn:hover {
+    background: rgba(255, 201, 37, 0.4);
+    transform: scale(1.05);
+}
+
+/* Quick Filters */
+.quick-filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.25rem;
+}
+
+.filter-chip {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.filter-chip:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.filter-chip.active {
+    background: rgba(255, 201, 37, 0.8);
+    color: #000;
+    border-color: #ffc925;
+    font-weight: 500;
 }
 
 /* Map Container */
 .map-container {
     position: relative;
-    height: 400px; /* Adjust height as needed */
-    background-color: #E0E0E0;
-    border-radius: 10px;
+    height: 50vh;
+    min-height: 300px;
+    background-color: #f5f5f5;
     overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(255, 201, 37, 0.3);
+    border-bottom: 1px solid rgba(255, 201, 37, 0.3);
+    transition: all 0.3s ease;
 }
 
 #map {
     width: 100%;
     height: 100%;
-    border-radius: 10px;
+    z-index: 1;
 }
 
-/* Court Info Sidebar */
-.court-info {
-    background: #F9F9F9;
-    padding: 1rem;
-    border-left: 1px solid #E0E0E0;
+/* Map Controls */
+.map-controls {
+    position: absolute;
+    right: 15px;
+    bottom: 70px;
     display: flex;
     flex-direction: column;
+    gap: 10px;
+    z-index: 5;
+}
+
+.control-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 201, 37, 0.5);
+    color: #000;
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.control-btn:hover {
+    background: #ffc925;
+    transform: scale(1.1);
+}
+
+/* Map Legend */
+.map-legend {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    z-index: 5;
+    color: #000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 201, 37, 0.5);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.legend-icon {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.legend-icon.available {
+    background-color: #4CAF50;
+}
+
+.legend-icon.busy {
+    background-color: #ff5252;
+}
+
+.legend-text {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: 0.5px;
+}
+
+/* Court List */
+.court-list {
+    padding: 1rem;
+}
+
+.court-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5rem 0 1rem;
+    border-bottom: 1px solid rgba(173, 40, 49, 0.3);
+    padding-bottom: 0.5rem;
+}
+
+.court-list h3 {
+    font-size: 1.2rem;
+    margin: 0;
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+.toggle-sidebar-btn {
+    background: rgba(255, 201, 37, 0.2);
+    border: none;
+    color: #fff;
+    font-size: 1.1rem;
+    cursor: pointer;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-sidebar-btn:hover {
+    background: rgba(255, 201, 37, 0.8);
+    color: #000;
+    transform: scale(1.1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.court-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1rem;
-    transition: transform 0.3s ease;
+    margin-bottom: 1rem;
 }
 
-.court-info.collapsed {
+.court-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid rgba(255, 201, 37, 0.3);
+    position: relative;
+}
+
+.court-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    border-color: #ffc925;
+}
+
+.court-card-image {
+    height: 150px;
+    overflow: hidden;
+    position: relative;
+}
+
+.court-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.court-card:hover .court-card-image img {
+    transform: scale(1.05);
+}
+
+.court-card-status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #000;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 201, 37, 0.3);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-dot.available {
+    background-color: #4CAF50;
+}
+
+.status-dot.busy {
+    background-color: #ff5252;
+}
+
+.court-card-content {
+    padding: 1rem;
+}
+
+.court-card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #000;
+}
+
+.court-card-location {
+    font-size: 0.9rem;
+    color: rgba(0, 0, 0, 0.7);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.court-card-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.court-card-players, .court-card-rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.court-card-rating i {
+    color: #ffc925;
+}
+
+/* Court Sidebar */
+.court-sidebar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 380px;
+    height: 100%;
+    background: #1a1a1a;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+    z-index: 30;
     transform: translateX(100%);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid rgba(255, 201, 37, 0.3);
+    overflow: hidden;
 }
 
-.court-image-container {
-    display: flex-end;
-    flex-direction: column;
+.court-sidebar.active {
+    transform: translateX(0);
+}
+
+.sidebar-header {
+    background: linear-gradient(135deg, #ffc925 0%, #ffb300 100%);
+    color: #000;
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-title {
+    display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
+.sidebar-title i {
+    font-size: 1.2rem;
+}
+
+.sidebar-header h2 {
+    font-size: 1.2rem;
+    margin: 0;
+    letter-spacing: 1px;
+    font-family: 'American Captain', sans-serif;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.close-sidebar {
+    background: rgba(0, 0, 0, 0.08);
+    border: none;
+    color: #000;
+    font-size: 1.1rem;
+    cursor: pointer;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.close-sidebar:hover {
+    background: rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 1rem;
+    letter-spacing: 0.03em;
+    line-height: 1.5;
+}
+
+/* Court Image Container */
+.court-image-container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
 .court-image-container img {
     width: 100%;
-    max-width: 250px; /* Increased max-width for larger images */
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    height: 100%;
+    object-fit: cover;
 }
 
-.barangay-name {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #333;
+.court-badge {
     position: absolute;
     top: 15px;
-    left: 15px;
-    z-index: 10;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 6px 12px;
-    border-radius: 6px;
+    right: 15px;
+    background: #ffc925;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 2;
 }
 
-.court-name {
-    font-size: 1rem;
-    color: #666;
-    margin-top: 5px;
+.info-overlay {
     position: absolute;
-    top: 45px;
-    left: 15px;
-    z-index: 10;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 4px 10px;
-    border-radius: 6px;
-}
-
-.info-container {
-    text-align: center;
-    position: relative;
-    top: auto;
-    left: auto;
-    z-index: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
+    padding: 20px 15px 15px;
+    z-index: 1;
 }
 
 .barangay-name {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #333;
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 10;
-    background: rgba(255, 255, 255, 0.8);
-    padding: 5px 10px;
-    border-radius: 5px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 5px;
+    letter-spacing: 0.05em;
 }
 
 .court-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.05em;
+}
+
+/* Court Status */
+.court-status {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid rgba(255, 201, 37, 0.3);
+}
+
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.status-indicator.available {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4CAF50;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.status-indicator.busy {
+    background: rgba(255, 82, 82, 0.1);
+    color: #ff5252;
+    border: 1px solid rgba(255, 82, 82, 0.3);
+}
+
+.status-indicator i {
+    font-size: 0.7rem;
+}
+
+/* Court Badge */
+.court-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #AD2831;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+
+/* Court Details */
+.court-details {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255, 201, 37, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+}
+
+.detail-item i {
+    color: #ffc925;
+    font-size: 1.1rem;
+    width: 20px;
+    text-align: center;
+}
+
+/* Action Buttons */
+.action-buttons {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255, 201, 37, 0.3);
+}
+
+.join-game-btn {
+    background: #AD2831;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 12px;
+    font-family: 'American Captain', sans-serif;
     font-size: 1rem;
-    color: #666;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.join-game-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    background: #c93038;
+}
+
+.directions-btn {
+    background: #000000;
+    color: white;
+    border: 1px solid rgba(173, 40, 49, 0.5);
+    border-radius: 30px;
+    padding: 10px;
+    font-family: 'American Captain', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.directions-btn:hover {
+    background: #222222;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Tabs */
+.court-tabs {
+    display: flex;
+    border-bottom: 1px solid rgba(255, 201, 37, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 12px;
+    font-family: 'American Captain', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1.2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.tab-btn.active {
+    color: #fff;
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #AD2831;
+}
+
+.tab-btn:hover {
+    background: rgba(173, 40, 49, 0.1);
+}
+
+.tab-content {
+    padding: 1rem;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+/* Court Amenities */
+.court-amenities h3 {
+    font-size: 1.1rem;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+.amenities-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.amenity-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 201, 37, 0.2);
+    letter-spacing: 0.04em;
+}
+
+.amenity-item i {
+    color: #4CAF50;
+    font-size: 1rem;
+}
+
+/* Court Reviews */
+.court-reviews h3 {
+    font-size: 1.1rem;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.review-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid rgba(255, 201, 37, 0.2);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.reviewer {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.review-rating {
+    color: #ffc925;
+    font-size: 0.8rem;
+}
+
+.review-text {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+}
+
+.review-date {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 8px;
+    text-align: right;
 }
 
 /* Scheduled Games */
+.scheduled-games h3 {
+    font-size: 1.1rem;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #fff;
+    letter-spacing: 1px;
+}
+
 .scheduled-games ul {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 0 0 15px 0;
 }
 
 .scheduled-games li {
-    margin: 0.5rem 0;
-    padding: 0.5rem;
-    background: #FFF;
-    border: 1px solid #E0E0E0;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 0.8rem 0;
+    padding: 0.8rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 201, 37, 0.2);
+    border-left: 4px solid #ffc925;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
 
-.scheduled-games .game-item .date {
+.scheduled-games li:hover {
+    transform: translateX(5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 201, 37, 0.05);
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.game-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.04em;
+}
+
+.date {
     font-size: 1rem;
     font-weight: bold;
-    color: #333;
+    color: #fff;
+    letter-spacing: 0.8px;
+}
+
+.game-type {
+    color: #ffc925;
+    font-weight: bold;
+}
+
+.players-needed {
+    color: #4CAF50;
+}
+
+.skill-level {
+    background: rgba(255, 201, 37, 0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    border: 1px solid rgba(255, 201, 37, 0.2);
+}
+
+.create-game-btn {
+    background: #000000;
+    color: white;
+    border: 1px solid rgba(173, 40, 49, 0.5);
+    border-radius: 30px;
+    padding: 10px;
+    font-family: 'American Captain', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.create-game-btn:hover {
+    background: #222222;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Close Tab Button */
 .close-tab {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #AD2831;
+    background: rgba(255, 201, 37, 0.1);
+    border: 1px solid rgba(255, 201, 37, 0.2);
+    font-size: 1.2rem;
+    color: #ffc925;
     cursor: pointer;
     align-self: flex-end;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    margin-top: 0.5rem;
 }
 
 .close-tab:hover {
-    color: #000;
+    background: rgba(255, 201, 37, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Responsive Styles */
+@media (max-width: 1200px) {
+    .court-sidebar {
+        width: 350px;
+    }
+
+    .court-cards {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 992px) {
+    .quick-join-container {
+        max-width: 100%;
+        border-radius: 15px;
+    }
+
+    .court-sidebar {
+        width: 320px;
+    }
+
+    .amenities-list {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 768px) {
     .quick-join-container {
-        width: 95%;
+        width: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+
+    .quickjoin-header {
+        padding: 8px 12px;
+    }
+
+    .header-title span {
+        font-size: 1.3rem;
+    }
+
+    .header-title i {
+        font-size: 1.2rem;
+    }
+
+    .close-quickjoin-btn {
+        font-size: 1.3rem;
+    }
+
+    .toggle-sidebar-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+
+    .search-container {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .search-box {
+        padding: 0.4rem 0.75rem;
+    }
+
+    .filter-chip {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.6rem;
+    }
+
+    .quick-filters {
+        gap: 0.4rem;
+        margin-top: 0.4rem;
     }
 
     .map-container {
-        height: 300px; /* Adjusted height for smaller screens */
+        height: 40vh;
     }
 
-    .court-image-container img {
-        max-width: 100%;
+    .court-sidebar {
+        width: 100%;
+        height: 100vh;
+    }
+
+    .court-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .court-card {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .tab-btn {
+        font-size: 0.8rem;
+        padding: 10px 5px;
+    }
+
+    .game-header, .game-details {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .game-type, .skill-level {
+        align-self: flex-start;
+    }
+
+    .review-header {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .quickjoin-header {
+        padding: 6px 10px;
+    }
+
+    .header-title span {
+        font-size: 1.1rem;
+    }
+
+    .header-title i {
+        font-size: 1rem;
+    }
+
+    .close-quickjoin-btn {
+        font-size: 1.2rem;
+    }
+
+    .toggle-sidebar-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 0.9rem;
+    }
+
+    .search-container {
+        padding: 0.5rem 0.6rem;
+    }
+
+    .close-sidebar {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+    }
+
+    .search-box {
+        margin: 0;
+        padding: 0.4rem 0.6rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .search-box input {
+        font-size: 0.85rem;
+        padding: 0.4rem;
+    }
+
+    .filter-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 0.9rem;
+    }
+
+    .filter-chip {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+    }
+
+    .quick-filters {
+        gap: 0.3rem;
+    }
+
+    .map-container {
+        height: 35vh;
+    }
+
+    .map-controls {
+        right: 10px;
+        bottom: 60px;
+    }
+
+    .control-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+    }
+
+    .map-legend {
+        padding: 6px 10px;
+        font-size: 0.7rem;
+        left: 10px;
+        bottom: 10px;
+    }
+
+    .legend-icon {
+        width: 10px;
+        height: 10px;
+    }
+
+    .court-list h3 {
+        font-size: 1rem;
+    }
+
+    .court-card-title {
+        font-size: 1rem;
+    }
+
+    .court-card-location, .court-card-info {
+        font-size: 0.8rem;
+    }
+
+    .sidebar-header h2 {
+        font-size: 1.1rem;
+    }
+
+    .court-image-container {
+        height: 180px;
+    }
+
+    .court-badge {
+        font-size: 0.7rem;
+        padding: 4px 8px;
+        top: 10px;
+        right: 10px;
+    }
+
+    .court-name {
+        font-size: 1.1rem;
+    }
+
+    .status-indicator {
+        font-size: 0.7rem;
+        padding: 4px 10px;
+    }
+
+    .detail-item {
+        font-size: 0.8rem;
+    }
+
+    .detail-item i {
+        font-size: 1rem;
+    }
+
+    .join-game-btn, .directions-btn, .create-game-btn {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+
+    .court-tabs, .court-details, .action-buttons {
+        padding: 0.8rem;
+    }
+
+    .tab-content {
+        padding: 0.8rem;
+    }
+
+    .court-amenities h3, .scheduled-games h3, .court-reviews h3 {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+
+    .amenity-item {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+    }
+
+    .scheduled-games li {
+        padding: 0.6rem 0.8rem;
+        margin: 0.6rem 0;
+    }
+
+    .date {
+        font-size: 0.9rem;
+    }
+
+    .game-type {
+        font-size: 0.8rem;
+    }
+
+    .game-details {
+        font-size: 0.7rem;
+    }
+
+    .review-item {
+        padding: 10px;
+    }
+
+    .reviewer {
+        font-size: 0.8rem;
+    }
+
+    .review-text {
+        font-size: 0.8rem;
     }
 }
