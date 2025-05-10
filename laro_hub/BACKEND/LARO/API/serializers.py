@@ -3,29 +3,15 @@ from .models import User, Game, Team, Court, Conversation, Message
 
 class UserSerializer(serializers.ModelSerializer):
     """
-    UserSerializer handles the conversion of User model instances to/from JSON format.
-    
-    Features:
-    - Converts User model data to JSON for API responses
-    - Validates incoming JSON data for user creation/updates
-    - Handles password hashing during user creation and updates
-    - Ensures passwords are write-only and never included in responses
-    
-    Fields:
-    - id: User's unique identifier
-    - firstname: User's first name
-    - lastname: User's last name
-    - middlename: User's middle name (optional)
-    - email: User's email address (used for authentication)
-    - password: User's password (write-only)
+    Serializes all fields of the User model for full Swagger documentation.
     """
-    
     class Meta:
         model = User
-        fields = ["id", "firstname", "lastname", "middlename", "email", "password"]
+        fields = '__all__'
         extra_kwargs = {
-            'password': {'write_only': True}  # Ensures password is never included in responses
+            'password': {'write_only': True}
         }
+
 
     def create(self, validated_data):
         """

@@ -30,9 +30,9 @@ body {
     display: flex;
     justify-content: flex-start; /* Changed from flex-end to flex-start */
     align-items: center;
-    height: 100vh; /* Fixed height */
-    padding-left: max(2rem, 5vw); /* Changed from padding-right to padding-left */
-    overflow: hidden !important; /* Prevent scrolling with !important to override other styles */
+    height: 100vh;
+    padding-right: 2.5rem;
+    overflow: hidden;
     flex-wrap: wrap;
     touch-action: none; /* Prevent touch scrolling on mobile */
 }
@@ -238,8 +238,8 @@ body::before {
 
 /* Buttons */
 .btn {
-    padding: clamp(0.5rem, 2vw, 1.5rem) clamp(1rem, 3vw, 2.5rem);
-    font-size: clamp(1rem, 2vw, 1.5rem);
+    padding: 0.9375rem 1.875rem;
+    font-size: 0.02rem;
     font-weight: bold;
     border: none;
     border-radius: clamp(0.5rem, 1vw, 1rem);
@@ -251,11 +251,12 @@ body::before {
 }
 
 .nearby-courts {
-    background: linear-gradient(135deg, #2c2c2c 0%, #181717 100%);
-    margin-left: clamp(1rem, 5vw, 7.5rem);
-    border-radius: clamp(1rem, 2vw, 2rem);
-    padding: clamp(1rem, 1.8vw, 1.8rem);
+    background-color: #181717;
+    margin-left: 7.5rem;
+    border-radius: 1.875rem;
+    padding: 1.875rem 2.125rem;
     font-family: 'American Captain', sans-serif;
+    font-size: 2rem;
     letter-spacing: 2.7px;
     text-align: center;
     font-weight: bold;
@@ -271,15 +272,17 @@ body::before {
     gap: 0.8rem;
 }
 
-.nearby-courts::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 50%);
-    z-index: 1;
+.upcoming-game{
+    background-color: #AD2831;
+    margin-left: 0.625rem;
+    border-radius: 3.125rem;
+    padding: 1.675rem 2.125rem;
+    font-family: 'American Captain', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 2.7px;
+    text-align: left;
+    margin-top: 2.75rem;
+    margin-inline-end: 5.625rem;
 }
 
 .nearby-courts:hover {
@@ -311,12 +314,12 @@ body::before {
 }
 
 .quick-join {
-    background: linear-gradient(135deg, #AD2831 0%, #8C1C24 100%);
-    margin-left: clamp(0.5rem, 1vw, 1rem);
-    border-radius: clamp(1.5rem, 3vw, 3.125rem);
-    padding: clamp(1.2rem, 2.2vw, 2.2rem);
+    background-color: #AD2831;
+    margin-left: 0.625rem;
+    border-radius: 3.125rem;
+    padding: 1.875rem 2.125rem;
     font-family: 'American Captain', sans-serif;
-    font-size: clamp(1.5rem, 3vw, 3rem);
+    font-size: 2rem;
     letter-spacing: 2.7px;
     text-align: center;
     margin-top: clamp(0.5rem, 2vw, 3.5rem);
@@ -346,22 +349,16 @@ body::before {
 }
 
 .invite {
-    background: linear-gradient(135deg, #AD2831 0%, #8C1C24 100%);
-    margin-left: clamp(0.5rem, 1vw, 1rem);
-    border-radius: clamp(1.5rem, 3vw, 3.125rem);
-    padding: clamp(1.2rem, 2.2vw, 2.2rem);
+    background-color: #AD2831;
+    margin-left: 0.625rem;
+    border-radius: 3.125rem;
+    padding: 1.875rem 2.125rem;
     font-family: 'American Captain', sans-serif;
-    font-size: clamp(1.5rem, 3vw, 3rem);
+    font-size: 2rem;
     letter-spacing: 2.7px;
     text-align: center;
-    margin-top: clamp(0.5rem, 2vw, 2.5rem);
-    margin-inline-end: clamp(1rem, 12vw, 21.25rem);
-    width: clamp(180px, 35vw, 350px);
-    position: relative;
-    overflow: hidden;
-    border: none;
-    box-shadow: 0 10px 20px rgba(173, 40, 49, 0.3);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    margin-top: 2.75rem;
+    margin-inline-end: 21.25rem;
 }
 
 .invite::before {
@@ -389,38 +386,13 @@ body::before {
     text-align: center;
     margin-top: clamp(0.5rem, 2vw, 4rem);
     text-shadow: #181717 0px 0px 10px;
-    margin-inline-end: clamp(1rem, 15vw, 26.875rem);
-    width: clamp(150px, 30vw, 300px);
-    border-radius: clamp(1.5rem, 3vw, 3.125rem);
-    padding: clamp(0.8rem, 1.5vw, 1.5rem);
-    position: relative;
-    overflow: hidden;
-    border: 2px solid rgba(173, 40, 49, 0.3);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    margin-inline-end: 26.875rem;
+    margin-top: 3.25rem;
 }
 
-.change-sport::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(173, 40, 49, 0.1) 0%, rgba(0, 0, 0, 0) 50%);
-    z-index: 1;
-}
 
-.change-sport:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
-    border-color: rgba(173, 40, 49, 0.5);
-    background: rgba(0, 0, 0, 0.6);
-}
 
-.btn:not(.nearby-courts, .upcoming-game, .quick-join, .invite, .change-sport):hover {
+.btn:hover {
     transform: scale(1.05);
     opacity: 0.9;
 }

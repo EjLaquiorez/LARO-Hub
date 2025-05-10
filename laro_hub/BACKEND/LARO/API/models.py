@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils import timezone
+from datetime import date
 
-# Create your models here.
+
 
 class UserManager(BaseUserManager):
     """
@@ -58,74 +59,72 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """
-    Custom User model that uses email for authentication instead of username.
     
-    Inherits from:
-    - AbstractBaseUser: Provides core user fields and functionality
-    - PermissionsMixin: Adds support for groups and permissions
-    
-    Fields:
-    - firstname: User's first name
-    - lastname: User's last name
-    - middlename: Optional middle name
-    - email: Unique email address (used for login)
-    - is_active: Whether the user account is active
-    - is_staff: Whether the user can access admin site
-    - date_joined: When the user account was created
-    
-    This model supports:
-    - Email-based authentication
-    - Password hashing
-    - User permissions and groups
-    - Admin site integration
-    """
     firstname = models.CharField(max_length=25, verbose_name="First Name")
     lastname = models.CharField(max_length=25, verbose_name="Last Name")
     middlename = models.CharField(max_length=25, blank=True, null=True, verbose_name="Middle Name")
     email = models.EmailField(max_length=254, unique=True)
+    username = models.CharField(max_length=30, unique=True, null=True, blank=True)
+
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
 
-    # Add new fields
+    
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
-    bio = models.TextField(max_length=500, blank=True)
+    bio = models.TextField(max_length=500, blank=True, null=True)  
     birth_date = models.DateField(null=True, blank=True)
-    
-    # Add basketball-specific fields
-    height = models.DecimalField(max_digits=4, decimal_places=1, null=True, blank=True)
-    position = models.CharField(max_length=20, blank=True)
-    experience_level = models.CharField(max_length=20, blank=True)
 
-    # Add new fields to match ERD
+    height = models.DecimalField(max_digits=4, decimal_places=1, null=True, blank=True)
+    weight = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    gender = models.CharField(max_length=10, blank=True, null=True)  
+    sport = models.CharField(max_length=50, blank=True, null=True)  
+    position = models.CharField(max_length=20, blank=True, null=True)  
+    experience_level = models.CharField(max_length=20, blank=True, null=True)  
+
+    
     ROLE_CHOICES = [
         ('Player', 'Player'),
         ('Team Captain', 'Team Captain'),
         ('Court Owner', 'Court Owner'),
         ('Admin', 'Admin')
     ]
-    
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Player')
     skill_level = models.CharField(max_length=50, blank=True, null=True)
     availability = models.CharField(max_length=255, blank=True, null=True)
 
+    
+    followers = models.ManyToManyField(
+        'self',
+        symmetrical=False,
+        related_name='following',
+        blank=True,
+        help_text="Users who follow this user"
+    )
+
+    
+    @property
+    def age(self):
+        if self.birth_date:
+            today = date.today()
+            return today.year - self.birth_date.year - (
+                (today.month, today.day) < (self.birth_date.month, self.birth_date.day)
+            )
+        return None
+
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'  # Use email instead of username for authentication
-    REQUIRED_FIELDS = ['firstname', 'lastname']  # Required fields for createsuperuser
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['firstname', 'lastname', 'username']
 
     def __str__(self) -> str:
-        """
-        String representation of the user.
-        Returns: "lastname, firstname"
-        """
         return f"{self.lastname}, {self.firstname}"
 
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
+
 
 class Court(models.Model):
     name = models.CharField(max_length=100)

@@ -23,7 +23,7 @@ body {
     justify-content: flex-end;
     align-items: center;
     height: 100vh;
-    padding-right: 7.5rem;
+    padding-right: 2.5rem;
     overflow: hidden;
     flex-wrap: wrap;
 }
@@ -350,7 +350,8 @@ body::before {
     font-size: 130%;
     margin: 0;               
     padding: 0;              
-    line-height: 1.1;        
+    line-height: 1.1;   
+    text-align: center;     
 }
 
 .profile-card .left-panel #username {
@@ -358,7 +359,8 @@ body::before {
     font-weight: 50;
     margin: 0;               
     padding: 0;              
-    line-height: 1;          
+    line-height: 1;       
+    text-align: center;   
 }
 
 .profile-card .left-panel .hr {
@@ -393,6 +395,24 @@ body::before {
     align-items: center;
     font-family: 'cocogoose', sans-serif;
     color: white;
+}
+
+.profile-card .right-panel .logout {
+    padding: 0.5rem 1rem;
+    font-size: 100%;
+    font-family: sans-serif;
+    font-weight: bold;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    text-align: center;
+    background-color: #b38c43;
+    color: white;
+    margin-bottom: 30px;
+}
+
+.logout:hover {
+    opacity: 0.9;
 }
 
 .profile-card .right-panel .followers-row {
@@ -462,9 +482,9 @@ body::before {
 
 .profile-card .right-panel img {
     aspect-ratio: 1/1;
-    width: 20%;      /* Make image width relative to the container */
-    height: 20%;     /* Adjust height relative to the width (preserving aspect ratio) */
-    object-fit: cover;  /* Ensure the image covers the space without distortion */
+    width: 20%;      
+    height: 20%;     
+    object-fit: cover;  
 }
 
 
@@ -664,6 +684,178 @@ body::before {
     }
 }
 
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Modal content (centered, fixed position, non-scrollable) */
+.modal-content {
+    background-color: #0e0d0d;
+    padding: 50px;
+    border-radius: 10px;
+    color: white;
+    width: 30%;
+    height: 70%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centers the modal content */
+    overflow-y: auto;
+}
+
+
+#edit-icon {
+    display: flex;
+    border-radius: 1000px;
+    background-color: rgb(223, 212, 212);
+    height: 5%;
+    padding: 10px;
+    object-fit: cover; 
+}
+
+#edit-icon #edit-btn-container {
+    width: 100%;
+}
+
+#edit-icon .edit-icon-photo {
+    padding: 0.5rem 1rem;           
+    font-size: 100%;                 
+    font-family: 'cocogoose';        
+    border: none;                   
+    border-radius: 100px;           
+    cursor: pointer;               
+    margin: auto;                   
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    text-align: center;             
+    background-color: #ffc925;      
+    color: white;                   
+    display: inline-block;                  
+}
+
+
+
+#edit-icon .edit-icon-photo:hover {
+    opacity: 0.8;
+}
+
+
+
+#edit-icon .col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    color: #0e0d0d;
+    width: fit-content; 
+}
+
+#edit-icon .col img {
+    width: 80px;              
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;        
+}
+
+#edit-icon #edit-names-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;  
+    text-align: left;
+    width: 100%;
+    padding: 10px;
+}
+
+
+#edit-icon .col .edit-fullname {
+    font-family: 'cocogoose', sans-serif;
+    font-size: 20px;
+}
+
+#edit-icon .col .edit-username {
+    font-family: 'cocogoose', sans-serif;
+    font-size: 10px;
+}
+
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.modal-content label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.modal-content input,
+.modal-content textarea,
+.modal-content select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.modal-content button {
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-content #first-name, #middle-name, #last-name, #new-username, #bio, #birthdate, #height, #weight, #gender {
+    background-color: #333;
+    border: none;
+    font-family: 'cocogoose';
+    color: #c3c3c3;
+    margin: auto;
+}
+
+.modal-content::-webkit-scrollbar {
+    width: 10px;
+    
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: rgba(147, 144, 144, 0.3);
+    border-radius: 20px; 
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(133, 131, 131, 0.5);
+}
+
+.modal-content #save-changes {
+    background-color: #ffc925;
+    font-family: 'cocogoose';
+    border-radius: 20px;
+}
+
 
 @media (max-width: 1200px) {
     html {
@@ -789,3 +981,5 @@ body::before {
         top: 45%;
     }
 }
+
+

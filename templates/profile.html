@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/styles/profile-responsive.css">
+    <link rel="stylesheet" href="../static/styles/profile.css">
     <script src="../static/scripts/usercheck.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>My Profile</title>
 </head>
 <body>
-    <!-- Navigation Bar -->
+    
     <div class="background-text2">LARO</div>
     <nav class="navbar">
         <div class="logo">
@@ -25,31 +25,31 @@
         </ul>
     </nav>
 
-    <!-- Main Content -->
+    
     <div class="myprofile">
         <div class="profile-card">
             <div class="left-panel">
                 <div class="icon-row">
-                    <img src="../static/img/kai-sotto.jpg" id="profile-icon" alt="profile-icon">
+                    <img src="../static/img/default.jpg" id="profile-icon" alt="profile-icon">
                 </div>
                 <div class="name-row">
-                    <p id="full-name">Kai Sutto</p>
-                    <p id="username">@GinulayAngMunggo</p>
+                    <p id="full-name"></p>
+                    <p id="username"></p>
                 </div>
-
+                
                 <div class="bio-row">
-                    <p>Basketball is my game.</p>
+                    <p></p>
                 </div>
                 <div class="hr"></div>
                 <div class="stat-row">
                     <ul>
-                        <li>AGE - 21</li>
-                        <li>HEIGHT - 5'11"</li>
-                        <li>WEIGHT - 90 kg</li>
-                        <li>GENDER - MALE</li>
+                        <li>AGE -</li>
+                        <li>HEIGHT -</li>
+                        <li>WEIGHT -</li>
+                        <li>GENDER -</li>
                     </ul>
                 </div>
-
+                
 
             </div>
             <div class="right-panel">
@@ -75,8 +75,11 @@
                 <div class="position-row">
                     <p>POINT GUARD</p>
                 </div>
+                <button class="logout" onclick="localStorage.removeItem('access')
+                                                localStorage.removeItem('refresh')
+                                                location.reload();">LOGOUT</button>
             </div>
-
+            
         </div>
         <div class="game-history">
             <p>HISTORY</p>
@@ -101,9 +104,67 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="editProfileForm">
+            <div id="edit-icon">
+                <div class="col" id="edit-icon-cont">
+                    <img src="../static/img/default.jpg" alt="Profile Image" id="edit-profile-icon">
+                </div>
+                <div class="col" id="edit-names-container">
+                    <div class="edit-fullname" id="edit-fullname">FULL NAME</div>
+                    <div class="edit-username" id="edit-username">@username</div>
+                </div>
+                <div class="col" id="edit-btn-container">
+                    <button type="button" class="edit-icon-photo" id="change-photo-btn">CHANGE PHOTO</button>
+                    <input type="file" id="photo-upload" style="display:none" accept="image/*">
+                </div>
+            </div>
+
+            <label for="first-name">CHANGE FIRST NAME</label>
+            <input type="text" id="first-name" name="first-name">
+
+            <label for="middle-name">CHANGE MIDDLE NAME</label>
+            <input type="text" id="middle-name" name="middle-name">
+
+            <label for="last-name">CHANGE LAST NAME</label>
+            <input type="text" id="last-name" name="last-name">
+
+            <label for="username">CHANGE USERNAME</label>
+            <input type="text" id="new-username" name="username">
+
+            <label for="bio">CHANGE BIO</label>
+            <textarea id="bio" name="bio" rows="3"></textarea>
+
+            <label for="birthdate">CHANGE BIRTHDATE</label>
+            <input type="date" id="birthdate" name="birthdate">
+
+            <label for="height">HEIGHT (cm)</label>
+            <input type="number" id="height" name="height">
+
+            <label for="weight">WEIGHT (kg)</label>
+            <input type="number" id="weight" name="weight">
+
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <button type="submit" id="save-changes">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+    
     <script src="../static/scripts/profile.js"></script>
     <script src="../static/scripts/donutChart.js"></script>
-    <script src="../static/scripts/responsive-profile-nav.js"></script>
 </body>
 </html>

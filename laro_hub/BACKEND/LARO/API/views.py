@@ -8,6 +8,10 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from rest_framework.parsers import MultiPartParser, FormParser
+
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 
 import asyncio
 from typing import AsyncGenerator
@@ -93,38 +97,14 @@ class UserRetrieveUpdateDestroy(APIView):
     """
     Handles individual user operations:
     GET: Retrieve a specific user's details
-    PUT: Update a user's information
+    PUT: Update a user's information (including profile picture)
     DELETE: Remove a user from the system
-    
+
     Requires user ID (pk) in the URL
     """
     permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]  # Ensure multipart is set for file uploads
 
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter(
-                'id',
-                openapi.IN_PATH,
-                description="User ID",
-                type=openapi.TYPE_INTEGER,
-                required=True
-            ),
-            openapi.Parameter(
-                'Authorization',
-                openapi.IN_HEADER,
-                description="Token format: Bearer <token>",
-                type=openapi.TYPE_STRING,
-                required=True
-            )
-        ],
-        responses={
-            200: UserSerializer,
-            404: 'User not found',
-            401: 'Unauthorized'
-        },
-        security=[{'Bearer': []}],
-        operation_description="Get user details by ID"
-    )
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
@@ -180,7 +160,6 @@ class UserRetrieveUpdateDestroy(APIView):
                 required=True
             )
         ],
-        request_body=UserSerializer,
         responses={
             200: UserSerializer,
             400: 'Bad request',
@@ -188,18 +167,26 @@ class UserRetrieveUpdateDestroy(APIView):
             401: 'Unauthorized'
         },
         security=[{'Bearer': []}],
-        operation_description="Update user details by ID"
+        operation_description="Update user details (including profile picture)"
     )
     def put(self, request, pk):
         user = self.get_object(pk)
         if user is None:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-        serializer = UserSerializer(user, data=request.data)
+
+        # Update the user data (including the profile picture)
+        serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
+            # Handle profile picture upload separately if necessary
+            # Example: save the file to the User model if it's provided
+            if 'profile_picture' in request.FILES:
+                user.profile_picture = request.FILES['profile_picture']
+                user.save()
+
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
@@ -218,19 +205,43 @@ class UserRetrieveUpdateDestroy(APIView):
             )
         ],
         responses={
-            204: 'Successfully deleted',
+            200: 'User deleted successfully',
             404: 'User not found',
             401: 'Unauthorized'
         },
         security=[{'Bearer': []}],
-        operation_description="Delete user by ID"
+        operation_description="Delete a user from the system"
     )
     def delete(self, request, pk):
         user = self.get_object(pk)
         if user is None:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': 'User deleted successfully'}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def upload_profile_picture(request):
+    if 'profile_picture' not in request.FILES:
+        return Response({'error': 'No profile picture provided'}, status=400)
+
+    profile_picture = request.FILES['profile_picture']
+    
+    # Save the profile picture to the server
+    file_name = f"profile_pictures/{profile_picture.name}"
+    file_path = default_storage.save(file_name, ContentFile(profile_picture.read()))
+    
+    # Construct the URL for the uploaded file
+    file_url = default_storage.url(file_path)
+
+    # Optionally, update the user's profile in the database with the new image URL
+    user = request.user  # Get the authenticated user
+    user.profile_picture_url = file_url  # Update the user's profile picture URL field
+    user.save()
+
+    return Response({
+        'success': True,
+        'profile_picture_url': file_url
+    }, status=200)
 
 # Authentication Views
 class RegisterView(APIView):

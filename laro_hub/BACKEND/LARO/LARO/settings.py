@@ -190,3 +190,18 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'x-csrftoken',
     'x-requested-with',
 ]
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': 'JWT Authorization header using the Bearer scheme. Example: "Bearer <token>"',
+        }
+    },
+    'USE_SESSION_AUTH': False,  # Disable session authentication for APIs
+}
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
