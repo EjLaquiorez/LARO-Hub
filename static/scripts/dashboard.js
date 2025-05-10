@@ -1,4 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Prevent scrolling on the dashboard
+    document.body.style.overflow = 'hidden';
+
+    // Ensure body remains unscrollable on resize
+    window.addEventListener('resize', () => {
+        document.body.style.overflow = 'hidden';
+    });
     // Buttons and Popups
     const upcomingGameBtn = document.querySelector(".btn.upcoming-game");
     const upcomingPopup = document.getElementById("upcoming-game-popup");
@@ -45,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const closePopup = (popup) => {
         popup.style.display = "none";
-        document.body.style.overflow = "auto";
+        document.body.style.overflow = "hidden"; // Keep body unscrollable
     };
 
     // Event Listeners - Upcoming

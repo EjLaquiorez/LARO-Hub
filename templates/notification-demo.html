@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LARO-Hub Notification Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/styles/base.css">
+    <link rel="stylesheet" href="../static/styles/notifications.css">
+    <style>
+        .demo-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .demo-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #181717;
+        }
+        .demo-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+        .demo-section h3 {
+            margin-bottom: 15px;
+            color: #181717;
+        }
+        .btn-demo {
+            margin: 5px;
+        }
+        .code-block {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .btn-laro {
+            background-color: #fada39;
+            color: #181717;
+            border: none;
+        }
+        .btn-laro:hover {
+            background-color: #e5c732;
+            color: #181717;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1 class="demo-title">LARO-Hub Notification System</h1>
+        
+        <div class="demo-section">
+            <h3>Basic Notifications</h3>
+            <p>Click the buttons below to see different types of notifications:</p>
+            
+            <button id="demo-success-notification" class="btn btn-success btn-demo">Success Notification</button>
+            <button id="demo-error-notification" class="btn btn-danger btn-demo">Error Notification</button>
+            <button id="demo-warning-notification" class="btn btn-warning btn-demo">Warning Notification</button>
+            <button id="demo-info-notification" class="btn btn-info btn-demo">Info Notification</button>
+            <button id="demo-laro-notification" class="btn btn-laro btn-demo">LARO Notification</button>
+        </div>
+        
+        <div class="demo-section">
+            <h3>LARO-Hub Specific Notifications</h3>
+            <p>Examples of notifications specific to the LARO-Hub application:</p>
+            
+            <button id="demo-message-notification" class="btn btn-primary btn-demo">New Message</button>
+            <button id="demo-invite-notification" class="btn btn-laro btn-demo">Game Invitation</button>
+            <button id="demo-follower-notification" class="btn btn-success btn-demo">New Follower</button>
+        </div>
+        
+        <div class="demo-section">
+            <h3>How to Use</h3>
+            <p>Include the notification CSS and JavaScript files in your HTML:</p>
+            
+            <div class="code-block">&lt;link rel="stylesheet" href="/static/styles/notifications.css"&gt;
+&lt;script src="/static/scripts/notification-system.js"&gt;&lt;/script&gt;</div>
+            
+            <p>Then use the notification system in your JavaScript:</p>
+            
+            <div class="code-block">// Success notification
+window.notifications.success({
+    title: 'Success!',
+    message: 'Your action was completed successfully.'
+});
+
+// Error notification
+window.notifications.error({
+    title: 'Error!',
+    message: 'Something went wrong.'
+});
+
+// Warning notification
+window.notifications.warning({
+    title: 'Warning!',
+    message: 'This action cannot be undone.'
+});
+
+// Info notification
+window.notifications.info({
+    title: 'Information',
+    message: 'Your game will start in 10 minutes.'
+});
+
+// LARO-themed notification
+window.notifications.laro({
+    title: 'LARO Update',
+    message: 'New basketball court added near your location!'
+});</div>
+        </div>
+    </div>
+
+    <script src="../static/scripts/notification-system.js"></script>
+    <script src="../static/scripts/notification-demo.js"></script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+/* 
+ * LARO-Hub Notifications CSS
+ * This file contains styles for all notification elements in the application
+ */
+
+/* Base notification container */
+.notification-container {
+    position: fixed;
+    z-index: 9999;
+    max-width: 400px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Positioning options */
+.notification-top-right {
+    top: 20px;
+    right: 20px;
+}
+
+.notification-top-left {
+    top: 20px;
+    left: 20px;
+}
+
+.notification-bottom-right {
+    bottom: 20px;
+    right: 20px;
+}
+
+.notification-bottom-left {
+    bottom: 20px;
+    left: 20px;
+}
+
+.notification-top-center {
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.notification-bottom-center {
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Individual notification */
+.notification {
+    position: relative;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: flex-start;
+    overflow: hidden;
+    animation: notification-slide-in 0.3s ease-out forwards;
+    max-width: 100%;
+    font-family: 'American Captain', sans-serif;
+}
+
+.notification.closing {
+    animation: notification-slide-out 0.3s ease-in forwards;
+}
+
+/* Notification types */
+.notification-success {
+    background-color: #d4edda;
+    border-left: 5px solid #28a745;
+    color: #155724;
+}
+
+.notification-error {
+    background-color: #f8d7da;
+    border-left: 5px solid #dc3545;
+    color: #721c24;
+}
+
+.notification-warning {
+    background-color: #fff3cd;
+    border-left: 5px solid #ffc107;
+    color: #856404;
+}
+
+.notification-info {
+    background-color: #d1ecf1;
+    border-left: 5px solid #17a2b8;
+    color: #0c5460;
+}
+
+/* LARO-Hub themed notification */
+.notification-laro {
+    background-color: #181717;
+    border-left: 5px solid #fada39;
+    color: #fff;
+}
+
+/* Icon container */
+.notification-icon {
+    margin-right: 15px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Content container */
+.notification-content {
+    flex: 1;
+}
+
+/* Notification title */
+.notification-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+/* Notification message */
+.notification-message {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Close button */
+.notification-close {
+    background: transparent;
+    border: none;
+    color: inherit;
+    opacity: 0.7;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0;
+    margin-left: 10px;
+    transition: opacity 0.2s;
+}
+
+.notification-close:hover {
+    opacity: 1;
+}
+
+/* Progress bar for auto-dismiss */
+.notification-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background-color: rgba(255, 255, 255, 0.5);
+    width: 100%;
+}
+
+.notification-progress-bar {
+    height: 100%;
+    width: 100%;
+    transform-origin: left;
+    animation: notification-progress 5s linear forwards;
+}
+
+.notification-success .notification-progress-bar {
+    background-color: #28a745;
+}
+
+.notification-error .notification-progress-bar {
+    background-color: #dc3545;
+}
+
+.notification-warning .notification-progress-bar {
+    background-color: #ffc107;
+}
+
+.notification-info .notification-progress-bar {
+    background-color: #17a2b8;
+}
+
+.notification-laro .notification-progress-bar {
+    background-color: #fada39;
+}
+
+/* Badge for notification count */
+.notification-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #dc3545;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Notification button */
+.notification-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 15px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.notification-success .notification-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.notification-error .notification-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.notification-warning .notification-btn {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.notification-info .notification-btn {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.notification-laro .notification-btn {
+    background-color: #fada39;
+    color: #181717;
+}
+
+/* Animations */
+@keyframes notification-slide-in {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes notification-slide-out {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+@keyframes notification-progress {
+    from {
+        transform: scaleX(1);
+    }
+    to {
+        transform: scaleX(0);
+    }
+}
+
+/* Responsive styles */
+@media (max-width: 480px) {
+    .notification-container {
+        max-width: 100%;
+        width: calc(100% - 40px);
+    }
+    
+    .notification {
+        padding: 12px 15px;
+    }
+    
+    .notification-title {
+        font-size: 14px;
+    }
+    
+    .notification-message {
+        font-size: 12px;
+    }
+}
+
+/* Toast notifications (similar to Bootstrap) */
+.toast-container {
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.toast {
+    width: 350px;
+    max-width: 100%;
+    font-size: 0.875rem;
+    pointer-events: auto;
+    background-color: rgba(255, 255, 255, 0.95);
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border-radius: 0.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.toast-header {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    color: #6c757d;
+    background-color: rgba(255, 255, 255, 0.85);
+    background-clip: padding-box;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-top-left-radius: calc(0.25rem - 1px);
+    border-top-right-radius: calc(0.25rem - 1px);
+}
+
+.toast-body {
+    padding: 0.75rem;
+}

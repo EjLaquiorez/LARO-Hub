@@ -1,15 +1,23 @@
 @font-face {
     font-family: 'American Captain';
-    src: url('fonts/AmericanCaptain.ttf'); 
+    src: url('fonts/AmericanCaptain.ttf');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'cocogoose';
-    src: url('fonts/Cocogoose_trial.otf'); 
+    src: url('fonts/Cocogoose_trial.otf');
     font-weight: normal;
     font-style: normal;
+}
+
+/* Prevent scrolling on html and body */
+html, body {
+    overflow: hidden;
+    height: 100%;
+    position: fixed;
+    width: 100%;
 }
 
 /* General body styles */
@@ -22,10 +30,11 @@ body {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    height: 100vh;
-    padding-right: 7.5rem;
-    overflow: hidden;
+    height: 100vh; /* Fixed height */
+    padding-right: max(2rem, 5vw);
+    overflow: hidden !important; /* Prevent scrolling with !important to override other styles */
     flex-wrap: wrap;
+    touch-action: none; /* Prevent touch scrolling on mobile */
 }
 body::before {
     content: "";
@@ -33,12 +42,12 @@ body::before {
     top: 0; left: 0; right: 0; bottom: 0;
     background-image: url('../img/login-photo.png');
     background-repeat: no-repeat;
-    background-position: calc(10% + 20px) 1%;
-    background-size: 1400px;
+    background-position: left top;
+    background-size: contain;
     z-index: 1; /* Above .background-text2 */
     margin-top: 60px; /* Optional: adjust to fit your design */
     mix-blend-mode: multiply; /* Optional: blend with background */
-    
+    opacity: 0.9;
 }
 
 .background-text2 {
@@ -65,10 +74,11 @@ body::before {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.9375rem 0.125rem; /* Reduced padding makes navbar smaller */
+    padding: 0.9375rem 1rem; /* Added horizontal padding */
     background-color: transparent;
     color: #fff;
     box-shadow: none;
+    transition: all 0.3s ease;
 }
 
 .nav-links a.active {
@@ -79,10 +89,10 @@ body::before {
 }
 
 .navbar .logo {
-    font-size: 4.8rem;
+    font-size: clamp(2.5rem, 5vw, 4.8rem); /* Responsive font size */
     font-weight: 5;
     font-family: 'American Captain', sans-serif;
-    margin-left:  5rem;
+    margin-left: clamp(1rem, 3vw, 5rem); /* Responsive margin */
     text-shadow: 15px 6px 20px rgba(0, 0, 0, 0.8);
 }
 
@@ -97,45 +107,84 @@ body::before {
     align-items: center;
     gap: 1.25rem;
     font-family: 'American Captain', sans-serif;
-    font-size: 2rem;
+    font-size: clamp(1.2rem, 2vw, 2rem); /* Responsive font size */
     text-shadow: 15px 6px 20px rgba(0, 0, 0, 0.8);
     padding: 0.3125rem 0.625rem;
     border-radius: 3.125rem;
     background-color: #fff;
+    max-width: 100%;
+    width: auto;
 }
 
 .navbar .search-bar input {
-    padding: 0.75rem 2.8125rem 0.75rem 2.5rem; /* increased right padding for icon */
+    padding: 0.75rem 2.8125rem 0.75rem 1rem; /* Adjusted padding */
     border-radius: 1.25rem;
     border: none;
-    font-size: 1.2rem;
+    font-size: clamp(0.9rem, 1.5vw, 1.2rem); /* Responsive font size */
     outline: none;
     background: url('../img/search-icon.png') no-repeat right 0.9375rem center;
     background-size: 1.25rem 1.25rem;
     font-family: 'American Captain', sans-serif;
     font-style: normal;
     letter-spacing: 1.7px;
+    width: clamp(120px, 20vw, 200px); /* Responsive width */
 }
 
 .navbar .search-bar button {
     background: none;
     border: none;
     cursor: pointer;
-    
 }
 
 .navbar .nav-links {
     list-style: none;
     display: flex;
     align-items: center;
-    gap: 5.625rem;
+    gap: clamp(1rem, 3vw, 5.625rem); /* Responsive gap */
     font-family: 'cocogoose', sans-serif;
-    margin-right: 8.75rem; /* shifted left by reducing margin */
-    font-size: 1.8rem;
+    margin-right: clamp(1rem, 5vw, 8.75rem); /* Responsive margin */
+    font-size: clamp(1rem, 2vw, 1.8rem); /* Responsive font size */
     text-shadow: 15px 6px 20px rgba(0, 0, 0, 0.8);
     letter-spacing: 0px;
-    
-    
+}
+
+/* Hamburger menu for mobile */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+    z-index: 1001;
+    position: relative;
+}
+
+.menu-toggle span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+/* Hamburger menu animation */
+.menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Mobile nav background */
+.navbar.mobile-active {
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 .navbar .nav-links li a {
@@ -155,8 +204,14 @@ body::before {
     justify-content: space-between;
     align-items: center;
     flex-grow: 1;
-    padding: 1.25rem;
-    gap: 1.25rem;
+    padding: clamp(1rem, 3vw, 2rem);
+    gap: clamp(1rem, 3vw, 2rem);
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    margin-top: 5rem; /* Space for navbar */
+    max-height: calc(100vh - 6rem); /* Ensure it fits in viewport without scrolling */
+    overflow: hidden;
 }
 
 /* Panels */
@@ -164,14 +219,13 @@ body::before {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.25rem;
+    gap: clamp(1rem, 3vw, 2rem);
 }
 
 .left-panel {
     flex: 1;
     align-items: flex-start;
 }
-
 
 .right-panel {
     flex: 1;
@@ -180,24 +234,25 @@ body::before {
 
 /* Buttons */
 .btn {
-    padding: 0.9375rem 1.875rem;
-    font-size: 1.2rem;
+    padding: clamp(0.5rem, 2vw, 1.5rem) clamp(1rem, 3vw, 2.5rem);
+    font-size: clamp(1rem, 2vw, 1.5rem);
     font-weight: bold;
     border: none;
-    border-radius: 0.625rem;
+    border-radius: clamp(0.5rem, 1vw, 1rem);
     cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.3s ease;
+    transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
     text-align: center;
     color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .nearby-courts {
     background-color: #181717;
-    margin-left: 7.5rem;
-    border-radius: 1.875rem;
-    padding: 2.875rem 3.125rem;
+    margin-left: clamp(1rem, 5vw, 7.5rem);
+    border-radius: clamp(1rem, 2vw, 2rem);
+    padding: clamp(1.5rem, 3vw, 3rem);
     font-family: 'American Captain', sans-serif;
-    font-size: 3rem;
+    font-size: clamp(1.5rem, 3vw, 3rem);
     letter-spacing: 2.7px;
     border: none;
     cursor: pointer;
@@ -205,55 +260,62 @@ body::before {
     text-align: center;
     font-weight: bold;
     transition: transform 0.2s ease, background-color 0.3s ease;
+    width: clamp(200px, 40vw, 400px);
 }
 
-.upcoming-game{
+.upcoming-game {
     background-color: #AD2831;
-    margin-left: 0.625rem;
-    border-radius: 3.125rem;
-    padding: 1.875rem 3.125rem;
+    margin-left: clamp(0.5rem, 1vw, 1rem);
+    border-radius: clamp(1.5rem, 3vw, 3.125rem);
+    padding: clamp(1rem, 2vw, 2rem);
     font-family: 'American Captain', sans-serif;
-    font-size: 3rem;
+    font-size: clamp(1.5rem, 3vw, 3rem);
     letter-spacing: 2.7px;
-    text-align: left;
-    margin-top: 3.75rem;
-    margin-inline-end: 5.625rem;
+    text-align: center;
+    margin-top: clamp(1rem, 3vw, 3.75rem);
+    margin-inline-end: clamp(1rem, 3vw, 5.625rem);
+    width: clamp(180px, 35vw, 350px);
 }
+
 .quick-join {
     background-color: #AD2831;
-    margin-left: 0.625rem;
-    border-radius: 3.125rem;
-    padding: 1.875rem 3.125rem;
+    margin-left: clamp(0.5rem, 1vw, 1rem);
+    border-radius: clamp(1.5rem, 3vw, 3.125rem);
+    padding: clamp(1rem, 2vw, 2rem);
     font-family: 'American Captain', sans-serif;
-    font-size: 3rem;
+    font-size: clamp(1.5rem, 3vw, 3rem);
     letter-spacing: 2.7px;
     text-align: center;
-    margin-top: 5rem;
-    margin-inline-end: 16.25rem;
+    margin-top: clamp(1rem, 3vw, 5rem);
+    margin-inline-end: clamp(1rem, 10vw, 16.25rem);
+    width: clamp(180px, 35vw, 350px);
 }
+
 .invite {
     background-color: #AD2831;
-    margin-left: 0.625rem;
-    border-radius: 3.125rem;
-    padding: 1.875rem 3.125rem;
+    margin-left: clamp(0.5rem, 1vw, 1rem);
+    border-radius: clamp(1.5rem, 3vw, 3.125rem);
+    padding: clamp(1rem, 2vw, 2rem);
     font-family: 'American Captain', sans-serif;
-    font-size: 3rem;
+    font-size: clamp(1.5rem, 3vw, 3rem);
     letter-spacing: 2.7px;
     text-align: center;
-    margin-top: 3.75rem;
-    margin-inline-end: 21.25rem;
+    margin-top: clamp(1rem, 3vw, 3.75rem);
+    margin-inline-end: clamp(1rem, 12vw, 21.25rem);
+    width: clamp(180px, 35vw, 350px);
 }
+
 .change-sport {
     background-color: transparent;
     color: #fff;
     font-family: 'American Captain', sans-serif;
-    font-size: 2rem;
+    font-size: clamp(1.2rem, 2vw, 2rem);
     letter-spacing: 2.7px;
     text-align: center;
-    margin-top: 1.25rem;
+    margin-top: clamp(1rem, 3vw, 6.25rem);
     text-shadow: #181717 0px 0px 10px;
-    margin-inline-end: 26.875rem;
-    margin-top: 6.25rem;
+    margin-inline-end: clamp(1rem, 15vw, 26.875rem);
+    width: clamp(150px, 30vw, 300px);
 }
 
 .btn:hover {
@@ -295,6 +357,7 @@ body::before {
     justify-content: center;
     align-items: center;
     z-index: 1000; /* Ensure it appears above other elements */
+    overflow: hidden; /* Prevent scrolling */
 }
 
 /* Popup Content */
@@ -304,9 +367,12 @@ body::before {
     border-radius: 10px;
     width: 80%;
     max-width: 500px;
+    max-height: 80vh;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
     animation: fadeIn 0.3s ease-in-out; /* Smooth fade-in effect */
+    overflow-y: auto; /* Allow scrolling within the popup if needed */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 /* Popup Header */
@@ -375,76 +441,50 @@ body::before {
 }
 
 /* Responsive Styles */
-@media (max-width: 1200px) {
-    html {
-        font-size: 90%;
+@media (max-width: 1400px) {
+    .background-text2 {
+        font-size: 50vw;
     }
 
     .dashboard {
+        padding-top: 6rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    html {
+        font-size: 95%;
+    }
+
+    .dashboard {
+        padding-top: 7rem;
+        gap: 2rem;
+    }
+
+    .navbar .search-bar {
+        margin: 0 1rem;
+    }
+
+    .navbar .nav-links {
+        margin-right: 2rem;
+    }
+
+    .background-text2 {
+        opacity: 0.3;
+    }
+}
+
+@media (max-width: 992px) {
+    .dashboard {
         flex-direction: column;
         align-items: center;
-        gap: 1.875rem;
+        gap: 2.5rem;
+        padding-top: 8rem;
     }
 
     .left-panel, .right-panel {
         align-items: center;
-    }
-
-    .navbar .search-bar input {
-        width: 9.375rem;
-    }
-}
-
-@media (max-width: 768px) {
-    html {
-        font-size: 80%;
-    }
-
-    body {
-        overflow-y: auto;
-        align-items: flex-start;
-        padding-right: 2rem;
-    }
-
-    body::before {
-        background-size: cover;
-        background-position: center top;
-    }
-
-    .navbar {
-        flex-direction: column;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.625rem;
-        padding: 1rem;
-    }
-
-    .navbar .logo {
-        font-size: 1.875rem;
-        margin: 0 auto;
-    }
-
-    .navbar .search-bar input {
         width: 100%;
-    }
-
-    .navbar .nav-links {
-        flex-direction: column;
-        gap: 0.625rem;
-        margin: 0;
-        font-size: 1.2rem;
-    }
-
-    .dashboard {
-        flex-direction: column;
-        gap: 1.25rem;
-    }
-
-    .btn {
-        font-size: 1rem;
-        padding: 0.625rem 1.25rem;
-        width: 90%;
-        text-align: center;
     }
 
     .nearby-courts,
@@ -454,49 +494,165 @@ body::before {
     .change-sport {
         margin-left: 0;
         margin-inline-end: 0;
-        padding: 1rem 2rem;
-        font-size: 1.5rem;
-        width: 90%;
+        width: 80%;
+        max-width: 400px;
+    }
+
+    .background-text2 {
+        font-size: 70vw;
+    }
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 90%;
+    }
+
+    body {
+        padding: 0 1rem;
+        justify-content: center;
+    }
+
+    body::before {
+        background-size: contain;
+        background-position: center 100px;
+        opacity: 0.7;
+    }
+
+    /* Show hamburger menu */
+    .menu-toggle {
+        display: flex;
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+    }
+
+    .navbar {
+        flex-direction: column;
+        padding: 1rem;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .navbar .logo {
+        margin: 0;
         text-align: center;
-        margin-top: 1.5rem;
     }
 
     .navbar .search-bar {
-        width: 10%;
-        margin: 0 auto;
+        width: 80%;
+        max-width: 300px;
+        margin: 1rem auto;
     }
 
+    .navbar .nav-links {
+        display: none; /* Hide by default on mobile */
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+        margin: 0;
+        padding: 1rem 0;
+        gap: 1rem;
+    }
+
+    .navbar .nav-links.active {
+        display: flex; /* Show when active class is added */
+    }
+
+    .dashboard {
+        padding-top: 9rem;
+        gap: 2rem;
+    }
+
+    .nearby-courts,
+    .upcoming-game,
+    .quick-join,
+    .invite,
     .change-sport {
-        margin-top: 2rem;
+        width: 90%;
+        margin-top: 1rem;
     }
 
     .background-text2 {
         font-size: 80vw;
         top: 50%;
+        opacity: 0.2;
+    }
+}
+
+@media (max-width: 576px) {
+    html {
+        font-size: 85%;
+    }
+
+    .navbar .logo {
+        font-size: 2.5rem;
+    }
+
+    .dashboard {
+        padding-top: 7rem;
+    }
+
+    .nearby-courts,
+    .upcoming-game,
+    .quick-join,
+    .invite,
+    .change-sport {
+        width: 100%;
+        padding: 1rem;
+        margin-top: 0.8rem;
+    }
+
+    .background-text2 {
+        font-size: 90vw;
     }
 }
 
 @media (max-width: 480px) {
     html {
-        font-size: 70%;
+        font-size: 80%;
+    }
+
+    body {
+        padding: 0 0.5rem;
     }
 
     .navbar .logo {
-        font-size: 1.25rem;
+        font-size: 2rem;
     }
 
-    .btn {
-        font-size: 0.9rem;
-        padding: 0.5rem 0.9375rem;
+    .navbar .search-bar {
+        width: 90%;
     }
 
     .navbar .search-bar input {
-        font-size: 1rem;
+        width: 100%;
+        font-size: 0.9rem;
+    }
+
+    .dashboard {
+        padding-top: 6rem;
+        padding-bottom: 2rem;
+    }
+
+    .nearby-courts,
+    .upcoming-game,
+    .quick-join,
+    .invite,
+    .change-sport {
+        font-size: 1.5rem;
+        padding: 0.8rem;
+        margin-top: 0.6rem;
     }
 
     .background-text2 {
         font-size: 100vw;
         top: 45%;
+    }
+
+    /* Adjust popup content for mobile */
+    .popup-content {
+        width: 95%;
+        padding: 15px;
     }
 }
 
@@ -511,12 +667,14 @@ body::before {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden; /* Prevent scrolling */
 }
 
 .quick-join-container {
     background: #fff;
     width: 90%;
     height: 90%;
+    max-height: 90vh;
     border-radius: 1.25rem;
     overflow: hidden;
     position: relative;
@@ -584,4 +742,3 @@ body::before {
     transform: scale(1.2);
 }
 
-  
