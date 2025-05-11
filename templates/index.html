@@ -1,13 +1,182 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="../static/scripts/usercheck.js"></script>
-    <title>Index</title>
+    <title>LARO - Basketball Community</title>
+    <link rel="stylesheet" href="../static/styles/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <script>
-        window.location.replace("dashboard.html")
-    </script>
+    <div class="background-text">LARO</div>
+
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">LARO</div>
+                <ul class="nav-links">
+                    <li><a href="#" class="active">HOME</a></li>
+                    <li><a href="#features">FEATURES</a></li>
+                    <li><a href="#about">ABOUT US</a></li>
+                    <li><a href="#ambassador">AMBASSADOR</a></li>
+                    <li><a href="#contact">CONTACT US</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn btn-login">LOG IN</a>
+                    <a href="signup.html" class="btn btn-signup">SIGN UP</a>
+                </div>
+                <div class="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text animate-slide-up">
+                    <h1>WELCOME TO <span>LARO</span></h1>
+                    <p class="hero-subtitle">The ultimate basketball community platform</p>
+                    <div class="hero-buttons">
+                        <a href="signup.html" class="btn btn-signup animate-pulse">GET STARTED</a>
+                        <a href="#about" class="btn btn-login">LEARN MORE</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="../static/img/login-photo.png" alt="Basketball Player">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose LARO</h2>
+            <div class="feature-cards">
+                <div class="feature-card">
+                    <div class="feature-icon animate-pulse">🏀</div>
+                    <h2>PLAY</h2>
+                    <h3>WITH FRIENDS</h3>
+                    <p>Connect with friends and organize basketball games at your favorite courts.</p>
+                    <img src="../static/img/play-friends.jpg" alt="Play with friends">
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon animate-pulse">🏆</div>
+                    <h2>BE</h2>
+                    <h3>COMPETITIVE</h3>
+                    <p>Join tournaments, leagues, and competitive matches to test your skills.</p>
+                    <img src="../static/img/competitive.jpg" alt="Be competitive">
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon animate-pulse">⭐</div>
+                    <h2>SEE</h2>
+                    <h3>TALENTS</h3>
+                    <p>Improve your game with training sessions, tips, and performance tracking.</p>
+                    <img src="../static/img/potential.jpg" alt="Unlock your potential">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2>WELCOME TO LARO</h2>
+            <div class="about-content">
+                <p>A growing sports platform built for real-world competition and pure love of the game. Right now, we're all about basketball, and whether you're here to compete seriously or just have fun with friends, we provide a space where players of all levels can come together, play real games, and enjoy the energy of the competition.</p>
+                <p>Our goal is to grow a community where sports are accessible, exciting, and inclusive. As we build, we'll be adding more games, more events, and more ways for you to connect through sport. This is just the beginning.</p>
+                <div class="about-stats">
+                    <div class="stat">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Active Players</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Courts</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">100+</span>
+                        <span class="stat-label">Weekly Games</span>
+                    </div>
+                </div>
+                <p class="tagline">Lace up, show up, and let's play.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="ambassador" class="ambassador">
+        <div class="container">
+            <h2 class="section-title">Our Ambassador</h2>
+            <div class="ambassador-content">
+                <div class="ambassador-image">
+                    <img src="../static/img/kobe-scream.png" alt="Basketball Ambassador" style="transform: scaleX(-1);">
+                </div>
+                <div class="ambassador-info">
+                    <h3>Join the LARO Community</h3>
+                    <p>Be part of a growing basketball community that's changing how people play and connect through the sport.</p>
+                    <a href="signup.html" class="btn btn-signup">JOIN NOW</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>123 Basketball Court, Manila, Philippines</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <p>info@larobasketball.com</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <p>+63 123 456 7890</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>LARO</h3>
+                    <p>Basketball Community</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#">Home</a>
+                    <a href="#features">Features</a>
+                    <a href="#about">About</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 LARO Basketball. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="scroll-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script src="../static/scripts/script.js"></script>
 </body>
 </html>

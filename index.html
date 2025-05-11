@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LARO - Basketball Community</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #FFC925;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .redirect {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #AD2831;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        a:hover {
+            background-color: #8A1F27;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="redirect">
+        <h1>LARO Basketball Community</h1>
+        <p>Redirecting to the landing page...</p>
+        <a href="templates/index.html">Go to Landing Page</a>
+    </div>
+    <script>
+        // Automatically redirect after 2 seconds
+        setTimeout(function() {
+            window.location.href = "templates/index.html";
+        }, 2000);
+    </script>
+</body>
+</html>
