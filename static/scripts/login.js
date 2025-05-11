@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("access");
     if (token && isTokenValid(token)) {
-        window.location.replace("index.html");
+        window.location.replace("dashboard.html");
     }
 
     attachLoginFormEvents();
@@ -86,7 +86,7 @@ function handleLoginSubmit(event) {
                 localStorage.setItem("user", JSON.stringify(data.user));
                     localStorage.setItem("id", JSON.stringify(data.id));
                     localStorage.setItem("id", JSON.stringify(data.id));
-                window.location.href = "index.html";
+                window.location.href = "dashboard.html";
             }
         })
         .catch(console.error);
@@ -183,7 +183,7 @@ function switchToLoginForm() {
     `;
 
     attachLoginFormEvents(); // Reattach login logic after rendering
-    attachPasswordToggleEvents(); 
+    attachPasswordToggleEvents();
 }
 
 function togglePasswordVisibility() {

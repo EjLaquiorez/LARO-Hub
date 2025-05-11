@@ -226,12 +226,28 @@ body::before {
     display: flex;
     width: clamp(300px, 30vw, 500px);
     min-height: 400px;
-    border-radius: 40px;
-    background-color: #0e0d0d;
-    box-shadow: 0px 0px 20px 3px rgb(53, 51, 51);
+    border-radius: 30px;
+    background-color: #111111;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3),
+                inset 0 1px 1px rgba(255, 255, 255, 0.1),
+                inset 0 -1px 1px rgba(0, 0, 0, 0.1);
     margin-left: auto;
     margin-right: auto;
-    padding: 2%;
+    padding: 2.5%;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 201, 37, 0.1) 0%, rgba(0, 0, 0, 0) 60%);
+    z-index: 0;
 }
 
 /* Left Panel */
@@ -244,7 +260,10 @@ body::before {
     align-items: center;
     font-family: 'cocogoose', sans-serif;
     color: white;
-    padding: 0.5rem;
+    padding: 0.75rem;
+    position: relative;
+    z-index: 1;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .profile-card .left-panel .icon-row {
@@ -253,6 +272,7 @@ body::before {
     align-items: center;
     width: 100%;
     text-align: center;
+    position: relative;
 }
 
 #profile-icon {
@@ -261,64 +281,168 @@ body::before {
     max-width: 150px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
+    border: 3px solid rgba(255, 201, 37, 0.7);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#profile-icon:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Settings Icon */
+.settings-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.settings-icon i {
+    font-size: 1.3rem;
+    color: #ffc925;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    padding: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.settings-icon i:hover {
+    transform: rotate(30deg);
+    color: white;
+}
+
+.settings-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #222;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 180px;
+    padding: 10px 0;
+    display: none;
+    z-index: 100;
+}
+
+.settings-icon:hover .settings-dropdown {
+    display: block;
+}
+
+.dropdown-item {
+    padding: 10px 15px;
+    color: white;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-item i {
+    margin-right: 10px;
+    font-size: 1rem;
+    background: none;
+    padding: 0;
+}
+
+.dropdown-item:hover {
+    background-color: #333;
+}
+
+.profile-card .left-panel .name-row {
+    margin-top: 0.8rem;
+    text-align: center;
+    width: 100%;
 }
 
 .profile-card .left-panel #full-name {
-    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
     margin: 0;
     padding: 0;
     line-height: 1.2;
     text-align: center;
     font-weight: bold;
-    margin-top: 0.5rem;
     margin-bottom: 0.3rem;
     word-wrap: break-word;
     max-width: 100%;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(to right, #ffffff, #ffc925);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 0.5px;
 }
 
 .profile-card .left-panel #username {
-    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
-    font-weight: 50;
+    font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+    font-weight: 400;
     margin: 0;
     padding: 0;
     line-height: 1.2;
     text-align: center;
-    opacity: 0.8;
+    color: rgba(255, 255, 255, 0.7);
     margin-bottom: 0.5rem;
     word-wrap: break-word;
     max-width: 100%;
+    letter-spacing: 0.5px;
 }
 
 .profile-card .left-panel .hr {
-    background-color: white;
-    height: 2px;
-    width: 80%;
+    background: linear-gradient(to right, transparent, rgba(255, 201, 37, 0.7), transparent);
+    height: 1px;
+    width: 85%;
+    margin: 0.8rem 0;
+    opacity: 0.8;
+}
+
+.bio-row {
+    font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+    text-align: center;
+    padding: 0 0.5rem;
+    line-height: 1.5;
     margin: 0.5rem 0;
-    opacity: 0.7;
+    word-wrap: break-word;
+    max-width: 100%;
+    color: rgba(255, 255, 255, 0.9);
+    font-style: italic;
+    letter-spacing: 0.3px;
+}
+
+.stat-row {
+    width: 100%;
+    margin: 0.5rem 0;
 }
 
 .stat-row ul {
     list-style: none;
-    text-align: center;
-    padding: 0;
-    margin: 0.5rem 0;
-    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    text-align: left;
+    padding: 0 10%;
+    margin: 0.7rem 0;
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
     width: 100%;
 }
 
 .stat-row ul li {
-    margin-bottom: 0.8rem;
-    line-height: 1.3;
+    margin-bottom: 0.9rem;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-left: 5px;
+    letter-spacing: 0.5px;
 }
 
-.bio-row {
-    font-size: clamp(0.8rem, 1.5vw, 1rem);
-    text-align: center;
-    padding: 0 0.5rem;
-    line-height: 1.4;
-    margin: 0.5rem 0;
-    word-wrap: break-word;
-    max-width: 100%;
+.stat-row ul li::before {
+    content: '•';
+    color: #ffc925;
+    font-size: 1.2em;
+    margin-right: 8px;
+    position: relative;
+    top: -1px;
 }
 
 /* Right Panel */
@@ -331,21 +455,33 @@ body::before {
     align-items: center;
     font-family: 'cocogoose', sans-serif;
     color: white;
-    padding: 0.5rem;
+    padding: 0.75rem;
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent);
 }
 
 .profile-card .right-panel .followers-row {
     display: flex;
-    margin-top: 5%;
+    margin-top: 3%;
     justify-content: space-evenly;
     width: 100%;
     padding: 0.5rem 0;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .profile-card .right-panel .followers-row .follow-col {
     text-align: center;
     margin: 0 0.5rem;
     width: 45%;
+    padding: 0.5rem 0;
+    transition: transform 0.3s ease;
+}
+
+.profile-card .right-panel .followers-row .follow-col:hover {
+    transform: translateY(-3px);
 }
 
 .profile-card .right-panel .followers-row .follow-col .count {
@@ -353,33 +489,93 @@ body::before {
     margin: 0;
     font-weight: bold;
     line-height: 1.2;
+    color: #ffc925;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .profile-card .right-panel .followers-row p {
-    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
-    margin: 0.2rem 0 0.5rem;
-    opacity: 0.8;
+    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+    margin: 0.2rem 0 0.3rem;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 0.5px;
 }
 
-.edit-btn {
-    padding: 0.6rem 1.2rem;
-    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
-    font-family: 'cocogoose';
-    border: none;
-    border-radius: 100px;
+/* Sport Icons */
+.sport-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 1.2rem 0 0.8rem;
+    width: 100%;
+    padding: 0.5rem 0;
+    position: relative;
+}
+
+.sport-icons::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+.sport-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-    text-align: center;
-    background-color: #ffc925;
-    color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    margin: 0.5rem 0;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
 }
 
-.edit-btn:hover {
-    opacity: 0.9;
-    transform: scale(1.05);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+.sport-icon::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0) 60%);
+    z-index: 1;
+}
+
+.sport-icon i {
+    font-size: 1.2rem;
+    color: #aaa;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.sport-icon:hover {
+    background-color: #333;
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.sport-icon:hover i {
+    color: #fff;
+}
+
+.sport-icon.active {
+    background-color: #ffc925;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(255, 201, 37, 0.3);
+}
+
+.sport-icon.active i {
+    color: white;
 }
 
 .profile-card .right-panel .sport-chart {
@@ -388,6 +584,18 @@ body::before {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+}
+
+.profile-card .right-panel .sport-chart::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, transparent 65%, rgba(0, 0, 0, 0.1) 100%);
+    pointer-events: none;
 }
 
 .profile-card .right-panel .sport-chart #donutChart {
@@ -395,24 +603,59 @@ body::before {
     width: 93%;
     max-width: 200px;
     font-family: 'cocogoose';
+    filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
+    transition: transform 0.3s ease;
+}
+
+.profile-card .right-panel .sport-chart:hover #donutChart {
+    transform: scale(1.02);
 }
 
 .profile-card .right-panel .sport-row {
     display: flex;
-    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
-    margin: 0.5rem 0;
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    margin: 0.5rem 0 0.2rem;
     justify-content: center;
     width: 100%;
     font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.profile-card .right-panel .sport-row p {
+    background: linear-gradient(to right, #ffffff, #ffc925);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .profile-card .right-panel .position-row {
     display: flex;
-    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
-    margin: 0.3rem 0 0.5rem;
+    font-size: clamp(0.85rem, 1.5vw, 0.95rem);
+    margin: 0.2rem 0 0.5rem;
     justify-content: center;
     width: 100%;
-    opacity: 0.9;
+    position: relative;
+}
+
+.profile-card .right-panel .position-row p {
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 0.5px;
+    padding-bottom: 5px;
+    position: relative;
+}
+
+.profile-card .right-panel .position-row p::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 2px;
+    background-color: rgba(255, 201, 37, 0.5);
+    border-radius: 2px;
 }
 
 /* Game History */
@@ -499,6 +742,276 @@ body::before {
 
 .history-list::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 0, 0, 0.5);
+}
+
+/* Share Profile Button */
+.share-profile {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.share-btn {
+    background-color: #ffc925;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 18px;
+    font-size: 0.95rem;
+    font-family: 'cocogoose', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.5px;
+}
+
+.share-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.share-btn:hover {
+    background-color: #e6b522;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+.share-btn:hover::before {
+    opacity: 1;
+}
+
+.share-btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.share-btn i {
+    font-size: 1.1rem;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    overflow: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #222;
+    margin: 50px auto;
+    padding: 25px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    color: white;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    font-family: 'cocogoose', sans-serif;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: #ffc925;
+}
+
+.modal h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffc925;
+    font-size: 1.8rem;
+}
+
+/* Share Modal Styles */
+.share-options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.qr-code-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#qrcode {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.qr-code-container p {
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.profile-link-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-link-container p {
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.copy-link-container {
+    display: flex;
+    width: 100%;
+}
+
+#profile-link {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 5px 0 0 5px;
+    background-color: #333;
+    color: white;
+    font-size: 0.9rem;
+}
+
+#copy-link-btn {
+    background-color: #ffc925;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#copy-link-btn:hover {
+    background-color: #e6b522;
+}
+
+.social-share {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.social-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.social-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.facebook {
+    background-color: #3b5998;
+}
+
+.twitter {
+    background-color: #1da1f2;
+}
+
+.whatsapp {
+    background-color: #25d366;
+}
+
+.email {
+    background-color: #ea4335;
+}
+
+/* Edit Profile Modal Styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: white;
+    font-size: 0.9rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.form-group textarea {
+    height: 80px;
+    resize: vertical;
+}
+
+.save-btn {
+    background-color: #ffc925;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-family: 'cocogoose', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    margin: 20px auto 0;
+    width: 100%;
+    max-width: 200px;
+}
+
+.save-btn:hover {
+    background-color: #e6b522;
 }
 
 /* Responsive Media Queries */
@@ -648,6 +1161,16 @@ body::before {
         width: 40%;
     }
 
+    .settings-icon {
+        top: 5px;
+        right: 5px;
+    }
+
+    .settings-icon i {
+        font-size: 1.2rem;
+        padding: 6px;
+    }
+
     .stat-row ul {
         display: flex;
         flex-wrap: wrap;
@@ -664,10 +1187,23 @@ body::before {
         margin-top: 0;
     }
 
+    .sport-icons {
+        margin: 0.5rem 0;
+    }
+
+    .sport-icon {
+        width: 35px;
+        height: 35px;
+    }
+
+    .sport-icon i {
+        font-size: 1rem;
+    }
+
     .profile-card .right-panel .sport-chart {
         width: 60%;
         max-width: 200px;
-        margin: 1rem 0;
+        margin: 0.5rem 0;
     }
 
     .game-history {
@@ -679,6 +1215,22 @@ body::before {
     .game-history .history-list .list-item {
         height: 3rem;
         margin: 10px 0;
+    }
+
+    /* Modal Responsive */
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+        margin: 30px auto;
+    }
+
+    #qrcode {
+        width: 180px;
+        height: 180px;
+    }
+
+    .social-share {
+        flex-wrap: wrap;
     }
 }
 
@@ -840,10 +1392,18 @@ body::before {
         margin: 0.1rem 0 0.3rem;
     }
 
-    .edit-btn {
-        font-size: 0.85rem;
-        padding: 0.4rem 0.9rem;
+    .sport-icons {
+        gap: 10px;
         margin: 0.3rem 0;
+    }
+
+    .sport-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    .sport-icon i {
+        font-size: 0.9rem;
     }
 
     .profile-card .right-panel .sport-chart {

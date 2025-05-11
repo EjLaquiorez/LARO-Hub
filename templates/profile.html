@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="../static/styles/profile-responsive.css">
     <script src="../static/scripts/usercheck.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>My Profile</title>
 </head>
 <body>
@@ -31,6 +33,20 @@
             <div class="left-panel">
                 <div class="icon-row">
                     <img src="../static/img/kai-sotto.jpg" id="profile-icon" alt="profile-icon">
+                    <div class="settings-icon" id="settings-icon">
+                        <i class="fas fa-cog"></i>
+                        <div class="settings-dropdown">
+                            <div class="dropdown-item" id="edit-profile">
+                                <i class="fas fa-user-edit"></i> Edit Profile
+                            </div>
+                            <div class="dropdown-item" id="change-password">
+                                <i class="fas fa-key"></i> Change Password
+                            </div>
+                            <div class="dropdown-item" id="privacy-settings">
+                                <i class="fas fa-lock"></i> Privacy Settings
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="name-row">
                     <p id="full-name">Kai Sutto</p>
@@ -50,7 +66,11 @@
                     </ul>
                 </div>
 
-
+                <div class="share-profile">
+                    <button id="share-btn" class="share-btn">
+                        <i class="fas fa-share-alt"></i> Share Profile
+                    </button>
+                </div>
             </div>
             <div class="right-panel">
                 <div class="followers-row">
@@ -63,8 +83,20 @@
                         <p>following</p>
                     </div>
                 </div>
-                <div class="edit-row">
-                    <button class="edit-btn">EDIT PROFILE</button>
+
+                <div class="sport-icons">
+                    <div class="sport-icon active" data-sport="basketball">
+                        <i class="fas fa-basketball-ball"></i>
+                    </div>
+                    <div class="sport-icon" data-sport="football">
+                        <i class="fas fa-futbol"></i>
+                    </div>
+                    <div class="sport-icon" data-sport="volleyball">
+                        <i class="fas fa-volleyball-ball"></i>
+                    </div>
+                    <div class="sport-icon" data-sport="tennis">
+                        <i class="fas fa-table-tennis"></i>
+                    </div>
                 </div>
                 <div class="sport-chart">
                     <canvas id="donutChart"></canvas>
@@ -101,9 +133,94 @@
         </div>
     </div>
 
+    <!-- Share Profile Modal -->
+    <div id="share-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Share Your Profile</h2>
+            <div class="share-options">
+                <div class="qr-code-container">
+                    <div id="qrcode"></div>
+                    <p>Scan this QR code to view profile</p>
+                </div>
+                <div class="profile-link-container">
+                    <p>Or share this link:</p>
+                    <div class="copy-link-container">
+                        <input type="text" id="profile-link" readonly>
+                        <button id="copy-link-btn">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="social-share">
+                        <button class="social-btn facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+                        <button class="social-btn twitter">
+                            <i class="fab fa-twitter"></i>
+                        </button>
+                        <button class="social-btn whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                        <button class="social-btn email">
+                            <i class="fas fa-envelope"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="edit-profile-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Edit Profile</h2>
+            <form id="edit-profile-form">
+                <div class="form-group">
+                    <label for="edit-fullname">Full Name</label>
+                    <input type="text" id="edit-fullname" name="fullname">
+                </div>
+                <div class="form-group">
+                    <label for="edit-username">Username</label>
+                    <input type="text" id="edit-username" name="username">
+                </div>
+                <div class="form-group">
+                    <label for="edit-bio">Bio</label>
+                    <textarea id="edit-bio" name="bio"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-age">Age</label>
+                    <input type="number" id="edit-age" name="age">
+                </div>
+                <div class="form-group">
+                    <label for="edit-height">Height</label>
+                    <input type="text" id="edit-height" name="height">
+                </div>
+                <div class="form-group">
+                    <label for="edit-weight">Weight</label>
+                    <input type="text" id="edit-weight" name="weight">
+                </div>
+                <div class="form-group">
+                    <label for="edit-gender">Gender</label>
+                    <select id="edit-gender" name="gender">
+                        <option value="MALE">Male</option>
+                        <option value="FEMALE">Female</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="profile-image">Profile Image</label>
+                    <input type="file" id="profile-image" name="profile-image" accept="image/*">
+                </div>
+                <button type="submit" class="save-btn">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
     <!-- JavaScript -->
     <script src="../static/scripts/profile.js"></script>
     <script src="../static/scripts/donutChart.js"></script>
+    <script src="../static/scripts/sport-icons.js"></script>
     <script src="../static/scripts/responsive-profile-nav.js"></script>
 </body>
 </html>
