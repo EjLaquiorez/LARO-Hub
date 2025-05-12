@@ -46,8 +46,8 @@ function attachLoginFormEvents() {
     });
 
     signupLink?.addEventListener("click", (event) => {
-        event.preventDefault();
-        switchToRegisterForm();
+        // Instead of showing inline form, redirect to the dedicated signup page
+        window.location.href = "/signup.html";
     });
 }
 
@@ -67,7 +67,7 @@ function handleLoginSubmit(event) {
         return;
     }
 
-    fetch("http://127.0.0.1:8000/login/", {
+    fetch("/api/login/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -84,107 +84,18 @@ function handleLoginSubmit(event) {
                 localStorage.setItem("access", data.tokens.access);
                 localStorage.setItem("refresh", data.tokens.refresh);
                 localStorage.setItem("user", JSON.stringify(data.user));
+                localStorage.setItem("currentUser", JSON.stringify(data.user));
+                if (data.id) {
                     localStorage.setItem("id", JSON.stringify(data.id));
-                    localStorage.setItem("id", JSON.stringify(data.id));
-                window.location.href = "dashboard.html";
+                }
+                window.location.href = "/dashboard.html";
             }
         })
         .catch(console.error);
 }
 
-function switchToRegisterForm() {
-    const container = document.querySelector(".form-container");
-    container.innerHTML = `
-        <h1>REGISTER</h1>
-        <form id="register-form">
-            <input type="text" id="firstname" name="firstname" placeholder="FIRST NAME" required />
-            <input type="text" id="lastname" name="lastname" placeholder="LAST NAME" required />
-            <input type="email" id="email" name="email" placeholder="EMAIL" required />
-            <div class="password-container">
-                <input type="password" id="password" name="password" placeholder="PASSWORD" required />
-                <i id="toggle-password" class="fas fa-eye"></i>
-            </div>
-            <div class="password-container">
-                <input type="password" id="confirm-password" name="confirm-password" placeholder="CONFIRM PASSWORD" required />
-                <i id="toggle-confirm-password" class="fas fa-eye"></i>
-            </div>
-            <button type="submit">REGISTER</button>
-            <p class="signup-text">Already have an Account? <a href="#">Log-In</a></p>
-        </form>
-    `;
-
-    const registerForm = document.getElementById("register-form");
-    const loginLink = document.querySelector(".signup-text a");
-
-    registerForm.addEventListener("submit", handleRegisterSubmit);
-    loginLink.addEventListener("click", (e) => {
-        e.preventDefault();
-        switchToLoginForm();
-    });
-
-    attachPasswordToggleEvents(); // Attach toggle events for password visibility
-}
-
-function handleRegisterSubmit(event) {
-    event.preventDefault();
-
-    const firstname = document.getElementById("firstname").value.trim();
-    const lastname = document.getElementById("lastname").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const confirmPassword = document.getElementById("confirm-password").value.trim();
-
-    const errors = [];
-
-    if (!isValidEmail(email)) errors.push("Invalid email format.");
-    if (password !== confirmPassword) errors.push("Passwords do not match.");
-    if (password.length < 8) errors.push("Password must be at least 8 characters long.");
-
-    if (errors.length > 0) {
-        displayError(errors.join(" "), "register-form");
-        return;
-    }
-
-    fetch("http://127.0.0.1:8000/register/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ firstname, lastname, email, password }),
-    })
-        .then((response) => {
-            if (!response.ok) {
-                displayError("Registration failed. Email may already be in use.", "register-form");
-                throw new Error("Registration failed");
-            }
-            return response.json();
-        })
-        .then(() => {
-            alert("Account created successfully! Redirecting to login...");
-            switchToLoginForm();
-        })
-        .catch(console.error);
-}
-
-function switchToLoginForm() {
-    const container = document.querySelector(".form-container");
-    container.innerHTML = `
-            <h1>WELCOME!</h1>
-            <form id="login-form">
-                <input type="email" id="email" name="email" placeholder="EMAIL" required />
-                <div class="password-container">
-                    <input type="password" id="password" name="password" placeholder="PASSWORD" required />
-                    <i id="toggle-password" class="fas fa-eye"></i>
-                </div>
-                <p class="forgot-password"><a href="#">forgot password?</a></p>
-                <p class="or-text"> ━━━━━━━or━━━━━━━</p>
-                <button type="button" class="google-login">Login with Google</button>
-                <button type="submit">LOG-IN</button>
-                <p class="signup-text">Don't have an Account? <a href="#">Sign-Up</a></p>
-            </form>
-    `;
-
-    attachLoginFormEvents(); // Reattach login logic after rendering
-    attachPasswordToggleEvents();
-}
+// These functions have been removed as we now redirect to signup.html
+// instead of showing an inline registration form
 
 function togglePasswordVisibility() {
     const passwordInput = document.getElementById("password");

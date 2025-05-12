@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/styles/profile-responsive.css">
-    <script src="../static/scripts/usercheck.js"></script>
+    <link rel="stylesheet" href="/static/styles/profile-responsive.css">
+    <script src="/static/scripts/usercheck.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,15 +15,15 @@
     <div class="background-text2">LARO</div>
     <nav class="navbar">
         <div class="logo">
-            <a href="index.html">LARO</a>
+            <a href="/">LARO</a>
         </div>
         <div class="search-bar">
             <input type="text" placeholder="Search Laro">
         </div>
         <ul class="nav-links">
-            <li><a href="booking.html">BOOKING</a></li>
-            <li><a href="notifications.html">NOTIFICATIONS</a></li>
-            <li><a href="profile.html" class="active">PROFILE</a></li>
+            <li><a href="/booking.html">BOOKING</a></li>
+            <li><a href="/notifications.html">NOTIFICATIONS</a></li>
+            <li><a href="/profile.html" class="active">PROFILE</a></li>
         </ul>
     </nav>
 
@@ -32,7 +32,7 @@
         <div class="profile-card">
             <div class="left-panel">
                 <div class="icon-row">
-                    <img src="../static/img/kai-sotto.jpg" id="profile-icon" alt="profile-icon">
+                    <img src="/static/img/kai-sotto.jpg" id="profile-icon" alt="profile-icon">
                     <div class="settings-icon" id="settings-icon">
                         <i class="fas fa-cog"></i>
                         <div class="settings-dropdown">
@@ -218,9 +218,11 @@
     </div>
 
     <!-- JavaScript -->
-    <script src="../static/scripts/profile.js"></script>
-    <script src="../static/scripts/donutChart.js"></script>
-    <script src="../static/scripts/sport-icons.js"></script>
-    <script src="../static/scripts/responsive-profile-nav.js"></script>
+    <script src="/static/scripts/profile.js"></script>
+    <script src="/static/scripts/donutChart.js"></script>
+    <script src="/static/scripts/sport-icons.js"></script>
+    <script src="/static/scripts/responsive-profile-nav.js"></script>
+    <!-- Testing utility for clearing localStorage -->
+    <script src="/static/scripts/clear-storage.js"></script>
 </body>
 </html>

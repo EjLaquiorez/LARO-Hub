@@ -17,6 +17,9 @@
     <div class="container">
         <div class="form-container">
             <h1>JOIN LARO</h1>
+            <div id="error-message" style="display: none; color: #AD2831; margin-bottom: 15px; text-align: center; font-weight: bold;">
+                Registration failed. Email may already be in use.
+            </div>
             <form id="signup-form">
                 <input type="text" id="fullname" name="fullname" placeholder="Full Name" required />
                 <input type="email" id="email" name="email" placeholder="Email Address" required />
@@ -34,7 +37,7 @@
                     <i class="bi bi-google"></i>
                     Sign up with Google
                 </button>
-                <p class="signup-text">Already have an account? <a href="login.html">Log in</a></p>
+                <p class="signup-text">Already have an account? <a href="/login.html" class="btn btn-login login-btn">LOG IN</a></p>
             </form>
         </div>
     </div>

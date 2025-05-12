@@ -347,6 +347,49 @@ button.google-login i {
     width: 100%;
 }
 
+/* Styling for the signup and login buttons */
+.signup-text .btn {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-left: 10px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.signup-text .btn.btn-signup {
+    background-color: #AD2831;
+    color: white;
+    box-shadow: 0 4px 15px rgba(173, 40, 49, 0.3);
+}
+
+.signup-text .btn.btn-signup:hover {
+    background-color: #c13039;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(173, 40, 49, 0.3);
+    color: white;
+}
+
+.signup-text .btn.btn-login {
+    background-color: white;
+    color: #333;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.signup-text .btn.btn-login:hover {
+    background-color: #f5f5f5;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.signup-text .btn::after {
+    display: none;
+}
+
 /* Registration Form Specific */
 #register-form {
     display: flex;

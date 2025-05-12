@@ -53,13 +53,13 @@ class UserCreate(APIView):
     def get(self, request):
         search_query = request.query_params.get('search', '')
         users = User.objects.all()
-        
+
         if search_query:
             users = users.filter(
                 Q(firstname__icontains=search_query) |
                 Q(lastname__icontains=search_query)
             ).exclude(id=request.user.id)  # Exclude current user
-            
+
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -95,7 +95,7 @@ class UserRetrieveUpdateDestroy(APIView):
     GET: Retrieve a specific user's details
     PUT: Update a user's information
     DELETE: Remove a user from the system
-    
+
     Requires user ID (pk) in the URL
     """
     permission_classes = [IsAuthenticated]
@@ -326,7 +326,7 @@ class LoginView(APIView):
         email = request.data.get('email')
         password = request.data.get('password')
         user = authenticate(email=email, password=password)
-        
+
         if user is not None:
             refresh = RefreshToken.for_user(user)
             serializer = UserSerializer(user)
@@ -465,19 +465,19 @@ class GameMatchView(APIView):
         # Get query parameters
         status = request.query_params.get('status')
         game_type = request.query_params.get('game_type')
-        
+
         # Start with all games
         games = Game.objects.all().order_by('-date', '-time')
-        
+
         # Apply filters if provided
         if status:
             games = games.filter(status=status)
         if game_type:
             games = games.filter(game_type=game_type)
-            
+
         # Serialize the data
         serializer = GameMatchSerializer(games, many=True)
-        
+
         return Response({
             'count': games.count(),
             'results': serializer.data
@@ -507,7 +507,7 @@ class GameMatchView(APIView):
         """Update an existing game match"""
         try:
             game = Game.objects.get(id=game_id)
-            
+
             # Update fields if provided
             if 'date' in request.data:
                 game.date = request.data['date']
@@ -519,7 +519,7 @@ class GameMatchView(APIView):
                 game.game_type = request.data['game_type']
             if 'status' in request.data:
                 game.status = request.data['status']
-            
+
             # Update team references if provided
             if 'team1' in request.data:
                 team1 = Team.objects.get(id=request.data['team1'])
@@ -530,9 +530,9 @@ class GameMatchView(APIView):
             if 'court' in request.data:
                 court = Court.objects.get(id=request.data['court'])
                 game.court = court
-            
+
             game.save()
-            
+
             return Response({
                 'message': 'Game match updated successfully',
                 'game_id': game.id,
@@ -564,7 +564,7 @@ class GameMatchView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Game.DoesNotExist:
             return Response({'error': 'Game match not found'}, status=status.HTTP_404_NOT_FOUND)
-        
+
 
 @swagger_auto_schema(
     method='get',
@@ -584,6 +584,9 @@ class GameMatchView(APIView):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def current_user_view(request):
+    """
+    Get the current authenticated user's details
+    """
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
 
@@ -592,7 +595,7 @@ class ConversationAPI(APIView):
     API endpoints for managing conversations
     """
     permission_classes = [IsAuthenticated]
-    
+
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
@@ -614,12 +617,12 @@ class ConversationAPI(APIView):
         """Get all conversations for current user"""
         conversations = Conversation.objects.filter(participants=request.user)
         serializer = ConversationSerializer(
-            conversations, 
+            conversations,
             many=True,
             context={'request': request}  # Add request context here
         )
         return Response(serializer.data)
-    
+
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
@@ -652,37 +655,37 @@ class ConversationAPI(APIView):
     def post(self, request):
         """Create a new conversation"""
         participant_id = request.data.get('participant_id')
-        
+
         try:
             participant = User.objects.get(id=participant_id)
-            
+
             # Check if conversation already exists
             existing_conversation = Conversation.objects.filter(
                 participants=request.user
             ).filter(
                 participants=participant
             ).first()
-            
+
             if existing_conversation:
                 serializer = ConversationSerializer(
                     existing_conversation,
                     context={'request': request}  # Add request context here
                 )
                 return Response(serializer.data)
-            
+
             # Create new conversation
             conversation = Conversation.objects.create()
             conversation.participants.add(request.user, participant)
-            
+
             serializer = ConversationSerializer(
                 conversation,
                 context={'request': request}  # Add request context here
             )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-            
+
         except User.DoesNotExist:
             return Response(
-                {'error': 'User not found'}, 
+                {'error': 'User not found'},
                 status=status.HTTP_404_NOT_FOUND
             )
 
@@ -766,14 +769,14 @@ class MessageAPI(APIView):
             )
             messages = Message.objects.filter(conversation=conversation)
             serializer = MessageSerializer(messages, many=True)
-            
+
             # Mark unread messages as read
             messages.filter(
                 sender=request.user
             ).update(is_read=True)
-            
+
             return Response(serializer.data)
-            
+
         except Conversation.DoesNotExist:
             return Response(
                 {'error': 'Conversation not found'},
@@ -823,25 +826,25 @@ class MessageAPI(APIView):
                 id=conversation_id,
                 participants=request.user
             )
-            
+
             serializer = MessageSerializer(data={
                 'conversation': conversation.id,
                 'sender': request.user.id,
                 'content': request.data.get('content'),
                 'is_read': False
             })
-            
+
             if serializer.is_valid():
                 serializer.save()
                 # Update conversation timestamp
                 conversation.save()  # This triggers auto_now update
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
-            
+
             return Response(
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST
             )
-            
+
         except Conversation.DoesNotExist:
             return Response(
                 {'error': 'Conversation not found'},

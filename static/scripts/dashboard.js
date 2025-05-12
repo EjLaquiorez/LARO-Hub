@@ -653,11 +653,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Navigation Redirect Buttons
     document.querySelector(".btn.invite").addEventListener("click", () => {
-        window.location.href = "invite.html";
+        window.location.href = "/invite.html";
     });
 
     document.querySelector(".btn.change-sport").addEventListener("click", () => {
-        window.location.href = "change-sport.html";
+        window.location.href = "/change-sport.html";
     });
 
     // Highlight Active Nav Link

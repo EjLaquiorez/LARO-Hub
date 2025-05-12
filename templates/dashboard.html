@@ -7,16 +7,16 @@
     <title>Dashboard</title>
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../static/styles/dashboard.css" />
-    <link rel="stylesheet" href="../static/styles/quickjoin.css" />
+    <link rel="stylesheet" href="/static/styles/dashboard.css" />
+    <link rel="stylesheet" href="/static/styles/quickjoin.css" />
     <!-- Leaflet Map CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
 
     <!-- User check JS -->
-    <script src="../static/scripts/usercheck.js"></script>
-    <script src="../static/scripts/notifications.js"></script>
+    <script src="/static/scripts/usercheck.js"></script>
+    <script src="/static/scripts/notifications.js"></script>
 </head>
 
 <body>
@@ -24,15 +24,15 @@
     <div class="background-text2">LARO</div>
     <nav class="navbar">
         <div class="logo">
-            <a href="index.html">LARO</a>
+            <a href="/">LARO</a>
         </div>
         <div class="search-bar">
             <input type="text" placeholder="Search Laro" />
         </div>
         <ul class="nav-links">
-            <li><a href="booking.html">BOOKING</a></li>
+            <li><a href="/booking.html">BOOKING</a></li>
             <li><a id="openGameModal" href="#">NOTIFICATIONS</a></li>
-            <li><a href="profile.html">PROFILE</a></li>
+            <li><a href="/profile.html">PROFILE</a></li>
         </ul>
     </nav>
 
@@ -324,10 +324,12 @@
     </div>
 
     <!-- Scripts -->
-    <script src="../static/scripts/dashboard.js"></script>
+    <script src="/static/scripts/dashboard.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="../static/scripts/basketball-sidebar.js"></script>
-    <script src="../static/scripts/responsive-nav.js"></script>
+    <script src="/static/scripts/basketball-sidebar.js"></script>
+    <script src="/static/scripts/responsive-nav.js"></script>
+    <!-- Testing utility for clearing localStorage -->
+    <script src="/static/scripts/clear-storage.js"></script>
 
 
 </body>

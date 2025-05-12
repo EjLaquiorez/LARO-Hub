@@ -1,36 +1,83 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const token = localStorage.getItem("access");
+document.addEventListener("DOMContentLoaded", async () => {
     let currentUser = null;
 
-    // Fetch user data
-    fetch("http://localhost:8000/current-user/", {
-        method: "GET",
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
+    try {
+        console.log("Profile page loaded, checking authentication...");
+
+        // Get the access token
+        const token = localStorage.getItem("access");
+        if (!token) {
+            console.error("No access token found in localStorage");
+            // Redirect to login page
+            window.location.href = "/login.html";
+            return;
         }
-    })
-    .then(response => {
-        if (!response.ok) throw new Error("Authentication failed.");
-        return response.json();
-    })
-    .then(user => {
-        currentUser = user;
-        document.getElementById("full-name").textContent = `${user.firstname} ${user.lastname}`;
-        document.getElementById("username").textContent = `@${user.username}`;
-        document.getElementById("profile-icon").src = user.image_url || "../static/img/default.jpg";
 
-        // Set up profile link for sharing
-        const profileUrl = `${window.location.origin}/templates/profile.html?id=${user.id}`;
-        document.getElementById("profile-link").value = profileUrl;
+        // Check if token is valid
+        if (!isTokenValid(token)) {
+            console.log("Token expired, attempting to refresh...");
+            try {
+                await refreshAccessToken();
+            } catch (error) {
+                console.error("Token refresh failed:", error);
+                // Redirect to login page
+                window.location.href = "/login.html";
+                return;
+            }
+        }
 
-        // Generate QR code
-        generateQRCode(profileUrl);
-    })
-    .catch(err => {
-        console.error(err);
-        window.location.href = "login.html";
-    });
+        console.log("Access token found, fetching user data...");
+
+        // Fetch user data
+        fetch("/api/current-user/", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => {
+            console.log("Response status:", response.status);
+            if (!response.ok) {
+                console.error("Response not OK:", response.status);
+                throw new Error("Authentication failed.");
+            }
+            return response.json();
+        })
+        .then(user => {
+            console.log("User data received:", user);
+            currentUser = user;
+            document.getElementById("full-name").textContent = `${user.firstname} ${user.lastname}`;
+            document.getElementById("username").textContent = `@${user.username || 'username'}`;
+            document.getElementById("profile-icon").src = user.image_url || "/static/img/default.jpg";
+
+            // Set up profile link for sharing
+            const profileUrl = `${window.location.origin}/profile.html?id=${user.id}`;
+            document.getElementById("profile-link").value = profileUrl;
+
+            // Generate QR code
+            generateQRCode(profileUrl);
+        })
+        .catch(err => {
+            console.error("Error fetching user data:", err);
+            // Redirect to login page if authentication failed
+            if (err.message === "Authentication failed.") {
+                window.location.href = "/login.html";
+            } else {
+                // For other errors, show an error message
+                document.getElementById("full-name").textContent = "Error loading profile";
+            }
+        });
+    } catch (error) {
+        console.error("Profile initialization error:", error);
+        // Redirect to login for authentication errors
+        if (error.message && error.message.includes("authentication")) {
+            window.location.href = "/login.html";
+        } else {
+            // For other errors, show an error message
+            document.getElementById("full-name").textContent = "Error loading profile";
+        }
+    }
 
     // Settings dropdown functionality
     const settingsIcon = document.getElementById("settings-icon");

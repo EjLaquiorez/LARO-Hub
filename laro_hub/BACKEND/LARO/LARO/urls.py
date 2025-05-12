@@ -22,6 +22,7 @@ from drf_yasg import openapi
 from rest_framework import permissions
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
+from API.template_views import index_view, dashboard_view, login_view, signup_view, booking_view, profile_view
 
 # Swagger settings
 swagger_settings = {
@@ -72,11 +73,28 @@ class LoginView(APIView):
 
 # URL Patterns
 urlpatterns = [
+    # Admin
     path('admin/', admin.site.urls),
-    path("", include("API.urls")),
+
+    # API endpoints
+    path("api/", include("API.urls")),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    
+
     # Swagger URLs
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
+    # Template views
+    path('', index_view, name='index'),
+    path('index.html', index_view, name='index_html'),
+    path('dashboard/', dashboard_view, name='dashboard'),
+    path('dashboard.html', dashboard_view, name='dashboard_html'),
+    path('login/', login_view, name='login_page'),
+    path('login.html', login_view, name='login_html'),
+    path('signup/', signup_view, name='signup_page'),
+    path('signup.html', signup_view, name='signup_html'),
+    path('booking/', booking_view, name='booking'),
+    path('booking.html', booking_view, name='booking_html'),
+    path('profile/', profile_view, name='profile'),
+    path('profile.html', profile_view, name='profile_html'),
 ]
