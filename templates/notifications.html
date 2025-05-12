@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LARO - Notifications</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/styles/notifications-page.css">
+    <link rel="stylesheet" href="/static/styles/notifications.css">
+
+    <!-- User check JS -->
+    <script src="/static/scripts/usercheck.js"></script>
+    <script src="/static/scripts/notification-service.js"></script>
+</head>
+<body>
+    <!-- Background Text -->
+    <div class="background-text2">LARO</div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="/dashboard/">LARO</a>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="SEARCH LARO">
+        </div>
+        <ul class="nav-links">
+            <li><a href="/booking.html">BOOKING</a></li>
+            <li class="notification-item">
+                <a href="#" id="notification-bell">
+                    <i class="bi bi-bell-fill"></i>
+                    <span class="notification-badge">1</span>
+                </a>
+                <!-- Notification Dropdown Panel -->
+                <div class="notification-dropdown">
+                    <div class="notification-header">
+                        <h3>Notifications</h3>
+                        <div class="notification-actions">
+                            <button class="notification-option active">All</button>
+                            <button class="notification-option">Unread</button>
+                        </div>
+                    </div>
+                    <div class="notification-subheader">
+                        <span>Earlier</span>
+                        <a href="/notifications.html" class="see-all">See all</a>
+                    </div>
+                    <div class="notification-list">
+                        <!-- Sample notifications -->
+                        <div class="notification-item unread">
+                            <div class="notification-avatar">
+                                <img src="/static/img/avatar1.jpg" alt="User">
+                            </div>
+                            <div class="notification-content">
+                                <p>You approved a login.</p>
+                                <span class="notification-time">10h</span>
+                            </div>
+                            <div class="notification-status">
+                                <span class="status-dot"></span>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-avatar">
+                                <img src="/static/img/laro-icon.png" alt="LARO">
+                            </div>
+                            <div class="notification-content">
+                                <p>Your last game got 22 views before it expired. You can create a new game.</p>
+                                <span class="notification-time">12h</span>
+                            </div>
+                        </div>
+                        <div class="notification-item unread">
+                            <div class="notification-avatar">
+                                <img src="/static/img/avatar2.jpg" alt="User">
+                            </div>
+                            <div class="notification-content">
+                                <p>You approved a login.</p>
+                                <span class="notification-time">21h</span>
+                            </div>
+                            <div class="notification-status">
+                                <span class="status-dot"></span>
+                            </div>
+                        </div>
+                        <div class="notification-item unread">
+                            <div class="notification-avatar">
+                                <img src="/static/img/avatar3.jpg" alt="User">
+                            </div>
+                            <div class="notification-content">
+                                <p>You approved a login.</p>
+                                <span class="notification-time">1d</span>
+                            </div>
+                            <div class="notification-status">
+                                <span class="status-dot"></span>
+                            </div>
+                        </div>
+                        <div class="notification-item unread">
+                            <div class="notification-avatar alert-icon">
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p>Reminder: The files you requested are only available to download for 24 more hours.</p>
+                                <span class="notification-time">1d</span>
+                            </div>
+                            <div class="notification-status">
+                                <span class="status-dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="notification-footer">
+                        <button class="see-previous">See previous notifications</button>
+                    </div>
+                </div>
+            </li>
+            <li class="profile-item">
+                <a href="/profile.html">
+                    <i class="bi bi-person-circle"></i>
+                    <span id="username-display">PROFILE</span>
+                </a>
+            </li>
+        </ul>
+        <div class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="notifications-container">
+        <div class="notifications-header">
+            <h1>NOTIFICATIONS</h1>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <ul class="nav nav-tabs" id="notificationTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="messages-tab" data-bs-toggle="tab" data-bs-target="#messages" type="button" role="tab" aria-controls="messages" aria-selected="true">
+                    <i class="bi bi-chat-left-dots-fill"></i> Messages
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="invitations-tab" data-bs-toggle="tab" data-bs-target="#invitations" type="button" role="tab" aria-controls="invitations" aria-selected="false">
+                    <i class="bi bi-bell-fill"></i> Invitations
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="updates-tab" data-bs-toggle="tab" data-bs-target="#updates" type="button" role="tab" aria-controls="updates" aria-selected="false">
+                    <i class="bi bi-person-circle"></i> Updates
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="notificationTabContent">
+            <!-- Messages Tab -->
+            <div class="tab-pane fade show active" id="messages" role="tabpanel" aria-labelledby="messages-tab">
+                <div class="search-container">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control" id="userSearch" placeholder="Search users..." onkeyup="filterUsers(this.value)">
+                    </div>
+                </div>
+
+                <ul class="list-group" id="usersList">
+                    <!-- Users will be loaded here dynamically -->
+                    <li class="text-center">
+                        <div class="spinner-border text-warning" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Invitations Tab -->
+            <div class="tab-pane fade" id="invitations" role="tabpanel" aria-labelledby="invitations-tab">
+                <div class="invitation-list">
+                    <div class="invitation-item">
+                        <div class="invitation-content">
+                            <h3>Mahi League</h3>
+                            <p class="invitation-date">December 13, 10pm</p>
+                            <p class="invitation-location">Pallumo Court, Brgy. Tiniguiban</p>
+                        </div>
+                        <div class="invitation-actions">
+                            <button class="btn btn-primary">Accept</button>
+                            <button class="btn btn-outline-secondary">Decline</button>
+                        </div>
+                    </div>
+
+                    <div class="invitation-item">
+                        <div class="invitation-content">
+                            <h3>Liga ng mga Bida</h3>
+                            <p class="invitation-date">November 19, 7pm</p>
+                            <p class="invitation-location">Quezon City Circle</p>
+                        </div>
+                        <div class="invitation-actions">
+                            <button class="btn btn-primary">Accept</button>
+                            <button class="btn btn-outline-secondary">Decline</button>
+                        </div>
+                    </div>
+
+                    <div class="invitation-item">
+                        <div class="invitation-content">
+                            <h3>Ito ang Liga</h3>
+                            <p class="invitation-date">April 1, 7pm</p>
+                            <p class="invitation-location">Pallumo Court, Brgy. Tiniguiban</p>
+                            <div class="invitation-image">
+                                <img src="/static/img/palumco.jpg" alt="Court Image">
+                            </div>
+                        </div>
+                        <div class="invitation-actions">
+                            <button class="btn btn-primary">Accept</button>
+                            <button class="btn btn-outline-secondary">Decline</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Updates Tab -->
+            <div class="tab-pane fade" id="updates" role="tabpanel" aria-labelledby="updates-tab">
+                <div class="updates-list">
+                    <div class="update-item">
+                        <div class="update-avatar">
+                            <img src="https://via.placeholder.com/50" class="rounded-circle" alt="User Avatar">
+                        </div>
+                        <div class="update-content">
+                            <h3>Mahni Gear</h3>
+                            <p class="update-action">Followed you</p>
+                            <p class="update-time">2 hours ago</p>
+                        </div>
+                        <div class="update-actions">
+                            <button class="btn btn-primary">View Profile</button>
+                            <button class="btn btn-outline-secondary">Follow Back</button>
+                        </div>
+                    </div>
+
+                    <div class="update-item">
+                        <div class="update-avatar">
+                            <img src="https://via.placeholder.com/50" class="rounded-circle" alt="User Avatar">
+                        </div>
+                        <div class="update-content">
+                            <h3>Kai Sutto</h3>
+                            <p class="update-action">Followed you</p>
+                            <p class="update-time">Yesterday</p>
+                        </div>
+                        <div class="update-actions">
+                            <button class="btn btn-primary">View Profile</button>
+                            <button class="btn btn-outline-secondary">Follow Back</button>
+                        </div>
+                    </div>
+
+                    <div class="update-item detailed">
+                        <div class="update-avatar">
+                            <img src="https://via.placeholder.com/50" class="rounded-circle" alt="User Avatar">
+                        </div>
+                        <div class="update-content">
+                            <h3>Lance Nah Bro</h3>
+                            <p class="update-action">Followed you</p>
+                            <p class="update-time">3 days ago</p>
+
+                            <div class="player-details">
+                                <p><strong>Position:</strong> Point Guard</p>
+                                <p><strong>Skill Level:</strong> ⭐⭐⭐⭐☆</p>
+                                <p><strong>Recent Matches:</strong></p>
+                                <ul class="match-history">
+                                    <li><i class="bi bi-trophy-fill"></i> February 5, 2025 - Win</li>
+                                    <li><i class="bi bi-trophy-fill"></i> January 7, 2025 - Win</li>
+                                    <li><i class="bi bi-x-circle-fill"></i> December 21, 2024 - Loss</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="update-actions">
+                            <button class="btn btn-primary">View Profile</button>
+                            <button class="btn btn-outline-secondary">Follow Back</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="/static/scripts/notifications-page.js"></script>
+    <script src="/static/scripts/responsive-nav.js"></script>
+</body>
+</html>

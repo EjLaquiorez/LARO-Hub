@@ -202,6 +202,221 @@ body::before {
     color: #FFC925;
 }
 
+/* Profile item styling */
+.profile-item a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.profile-item i {
+    font-size: 1.2rem;
+}
+
+#username-display {
+    font-weight: bold;
+}
+
+/* Notification Bell and Badge */
+.notification-item {
+    position: relative;
+}
+
+#notification-bell {
+    position: relative;
+    display: inline-block;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #ff3b30;
+    color: white;
+    font-size: 0.7rem;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+/* Notification Dropdown */
+.notification-dropdown {
+    position: absolute;
+    top: 100%;
+    right: -100px;
+    width: 350px;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    display: none;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.notification-dropdown.show {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+.notification-header {
+    padding: 15px;
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-header h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.notification-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.notification-option {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 15px;
+}
+
+.notification-option.active {
+    background-color: #333;
+    color: #fff;
+}
+
+.notification-subheader {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+.see-all {
+    color: #3897f0;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.notification-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notification-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notification-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.notification-list::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 3px;
+}
+
+.notification-list .notification-item {
+    padding: 12px 15px;
+    display: flex;
+    align-items: flex-start;
+    border-bottom: 1px solid #333;
+    transition: background-color 0.2s ease;
+}
+
+.notification-list .notification-item:hover {
+    background-color: #2a2a2a;
+}
+
+.notification-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.notification-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.notification-avatar.alert-icon {
+    background-color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ff3b30;
+    font-size: 1.2rem;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-content p {
+    margin: 0 0 5px 0;
+    color: #fff;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.notification-time {
+    color: #aaa;
+    font-size: 0.8rem;
+}
+
+.notification-status {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #3897f0;
+    border-radius: 50%;
+}
+
+.notification-footer {
+    padding: 12px;
+    text-align: center;
+    border-top: 1px solid #333;
+}
+
+.see-previous {
+    background: none;
+    border: none;
+    color: #3897f0;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 5px 10px;
+    width: 100%;
+}
+
 /* Dashboard Layout */
 .dashboard {
     display: flex;
@@ -345,13 +560,13 @@ body::before {
     box-shadow: 0 15px 25px rgba(173, 40, 49, 0.4);
 }
 
-.invite {
+.create-game {
     background: linear-gradient(135deg, #AD2831 0%, #8C1C24 100%);
     margin-left: clamp(0.5rem, 1vw, 1rem);
     border-radius: clamp(1.5rem, 3vw, 3.125rem);
-    padding: clamp(1.2rem, 2.2vw, 2.2rem);
+    padding: clamp(1rem, 1.8vw, 2rem);
     font-family: 'American Captain', sans-serif;
-    font-size: clamp(1.5rem, 3vw, 3rem);
+    font-size: clamp(1.2rem, 2.5vw, 2.5rem);
     letter-spacing: 2.7px;
     text-align: center;
     margin-top: clamp(0.5rem, 2vw, 2.5rem);
@@ -362,9 +577,13 @@ body::before {
     border: none;
     box-shadow: 0 10px 20px rgba(173, 40, 49, 0.3);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.invite::before {
+.create-game::before {
     content: '';
     position: absolute;
     top: 0;
@@ -375,7 +594,12 @@ body::before {
     z-index: 1;
 }
 
-.invite:hover {
+.create-game .btn-content i {
+    font-size: clamp(1.1rem, 1.8vw, 1.6rem);
+    flex-shrink: 0;
+}
+
+.create-game:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 25px rgba(173, 40, 49, 0.4);
 }
@@ -420,7 +644,7 @@ body::before {
     background: rgba(0, 0, 0, 0.6);
 }
 
-.btn:not(.nearby-courts, .upcoming-game, .quick-join, .invite, .change-sport):hover {
+.btn:not(.nearby-courts, .upcoming-game, .quick-join, .create-game, .change-sport):hover {
     transform: scale(1.05);
     opacity: 0.9;
 }
@@ -438,6 +662,7 @@ body::before {
     gap: 0.8rem;
     position: relative;
     z-index: 2;
+    width: 100%;
 }
 
 .btn-content i {
@@ -490,7 +715,7 @@ body::before {
     z-index: 1;
 }
 /* Shared Button Styles */
-.invite, .quick-join, .upcoming-game, .nearby-courts, .change-sport {
+.create-game, .quick-join, .upcoming-game, .nearby-courts, .change-sport {
     z-index: 1;
     position: relative;
 }
@@ -503,37 +728,7 @@ body::before {
     margin-top: -1rem;
     vertical-align: middle;
 }
-/* Popup Overlay */
-.popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    display: none; /* Hidden by default */
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Ensure it appears above other elements */
-    overflow: hidden; /* Prevent scrolling */
-}
-
-/* Popup Content */
-.popup-content {
-    background: #1a1a1a;
-    padding: 25px 35px;
-    border-radius: 20px;
-    width: 80%;
-    max-width: 500px;
-    max-height: 80vh;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Enhanced shadow for depth */
-    animation: fadeIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smooth fade-in effect with easing */
-    overflow-y: auto; /* Allow scrolling within the popup if needed */
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-    border: 1px solid rgba(173, 40, 49, 0.2);
-    color: #fff;
-}
+/* Popup Overlay and Content now using modal-common.css */
 
 /* Nearby Courts Content */
 .nearby-courts-content {
@@ -586,34 +781,7 @@ body::before {
     margin-top: 10px;
 }
 
-/* Nearby Courts Header */
-.nearby-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: linear-gradient(135deg, #2c2c2c 0%, #181717 100%);
-    padding: 15px 20px;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    color: #fff;
-}
-
-.nearby-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.nearby-title i {
-    font-size: 1.5rem;
-}
-
-.nearby-title h2 {
-    margin: 0;
-    font-size: 1.5rem;
-    font-family: 'American Captain', sans-serif;
-    letter-spacing: 1.5px;
-}
+/* Nearby Courts Header now using modal-common.css */
 
 .nearby-content {
     padding: 25px;
@@ -637,7 +805,7 @@ body::before {
     margin-top: 0;
     margin-bottom: 20px;
     font-size: 2rem;
-    color: #fff;
+    color: #fff!important;
     font-family: 'American Captain', sans-serif;
     letter-spacing: 1.5px;
     position: relative;
@@ -656,54 +824,9 @@ body::before {
     border-radius: 3px;
 }
 
-/* Upcoming Games Header */
-.upcoming-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: linear-gradient(135deg, #AD2831 0%, #8C1C24 100%);
-    padding: 15px 20px;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    color: #fff;
-}
+/* Upcoming Games Header now using modal-common.css */
 
-.upcoming-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.upcoming-title i {
-    font-size: 1.5rem;
-}
-
-.upcoming-title h2 {
-    margin: 0;
-    font-size: 1.5rem;
-    font-family: 'American Captain', sans-serif;
-    letter-spacing: 1.5px;
-}
-
-.close-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    color: #fff;
-    font-size: 1.2rem;
-    cursor: pointer;
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.close-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-}
+/* Close button now using modal-common.css */
 
 /* Calendar and Schedule Container */
 .calendar-schedule-container {
@@ -986,51 +1109,7 @@ body::before {
     color: #9E9E9E;
 }
 
-/* Action Buttons */
-.upcoming-actions {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    padding: 20px;
-}
-
-.action-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: none;
-    font-family: 'American Captain', sans-serif;
-    letter-spacing: 1px;
-}
-
-.create-btn {
-    background: linear-gradient(135deg, #AD2831 0%, #8C1C24 100%);
-    color: #fff;
-}
-
-.create-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(173, 40, 49, 0.3);
-}
-
-.join-btn {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.join-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
+/* Action Buttons - Now using modal-common.css */
 
 /* Search Box for Nearby Courts */
 .search-box-nearby {
@@ -1308,7 +1387,7 @@ body::before {
     .nearby-courts,
     .upcoming-game,
     .quick-join,
-    .invite,
+    .create-game,
     .change-sport {
         margin-left: 0;
         margin-inline-end: 0;
@@ -1386,7 +1465,7 @@ body::before {
     .nearby-courts,
     .upcoming-game,
     .quick-join,
-    .invite,
+    .create-game,
     .change-sport {
         width: 90%;
         margin-top: 1rem;
@@ -1415,13 +1494,19 @@ body::before {
     .nearby-courts,
     .upcoming-game,
     .quick-join,
-    .invite,
+    .create-game,
     .change-sport {
         width: 100%;
         padding: 1rem;
         margin-top: 0.8rem;
         border-radius: 15px;
         box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .create-game .btn-content {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
     }
 
     .btn-content {
@@ -1488,11 +1573,20 @@ body::before {
     .nearby-courts,
     .upcoming-game,
     .quick-join,
-    .invite,
+    .create-game,
     .change-sport {
         padding: 0.8rem;
         margin-top: 0.6rem;
         border-radius: 12px;
+    }
+
+    .create-game .btn-content {
+        gap: 0.5rem;
+    }
+
+    .create-game .btn-text {
+        font-size: 1.1rem;
+        white-space: nowrap;
     }
 
     .btn-content {

@@ -1,0 +1,217 @@
+/**
+ * Common Modal Styles
+ * Shared styles for modals like upcoming games and invite
+ */
+
+/* Modal Overlay */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    overflow: hidden; /* Prevent body scrolling */
+}
+
+/* Modal Content Container */
+.popup-content {
+    background: #1a1a1a;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 1000px;
+    max-height: 90vh;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: 1px solid rgba(173, 40, 49, 0.2);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Important: prevents content from breaking out */
+}
+
+/* Modal Header */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #AD2831 0%, #8C1C24 100%);
+    padding: 15px 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    color: #fff;
+    flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.modal-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-title i {
+    font-size: 1.5rem;
+}
+
+.modal-title h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-family: 'American Captain', sans-serif;
+    letter-spacing: 1.5px;
+}
+
+/* Close Button */
+.close-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+/* Modal Content Area - Scrollable */
+.modal-body {
+    padding: 20px;
+    overflow-y: auto; /* Enable vertical scrolling */
+    flex-grow: 1; /* Allow content to grow and take available space */
+}
+
+/* Modal Footer */
+.modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    flex-shrink: 0; /* Prevent footer from shrinking */
+}
+
+/* Tab Navigation */
+.tab-navigation {
+    display: flex;
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    padding: 5px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+}
+
+.tab-button {
+    padding: 8px 15px;
+    background: none;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+    font-family: 'American Captain', sans-serif;
+    letter-spacing: 1px;
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.tab-button.active {
+    background-color: #AD2831;
+    color: #fff;
+}
+
+/* Action Buttons */
+.action-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'American Captain', sans-serif;
+    letter-spacing: 1px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.action-btn.primary {
+    background-color: #AD2831;
+    color: #fff;
+}
+
+.action-btn.primary:hover {
+    background-color: #8C1C24;
+    transform: translateY(-2px);
+}
+
+.action-btn.secondary {
+    background-color: #333;
+    color: #fff;
+}
+
+.action-btn.secondary:hover {
+    background-color: #444;
+    transform: translateY(-2px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .popup-content {
+        width: 95%;
+        max-height: 85vh;
+    }
+    
+    .modal-title h2 {
+        font-size: 1.2rem;
+    }
+    
+    .modal-body {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-title h2 {
+        font-size: 1rem;
+    }
+    
+    .modal-title i {
+        font-size: 1.2rem;
+    }
+    
+    .close-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+    
+    .action-btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+}

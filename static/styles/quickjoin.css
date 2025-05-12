@@ -1,114 +1,31 @@
-/* Quick Join Overlay */
-.popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: none; /* Hidden by default */
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-}
+/* Quick Join Overlay - Now using modal-common.css */
 
-/* Quick Join Container */
+/* Quick Join Container - Customizations on top of modal-common.css */
 .quick-join-container {
-    background: #1a1a1a;
-    width: 100%;
-    height: 100%;
     max-width: 1400px;
     max-height: 90vh;
-    border-radius: 0 0 20px 20px; /* Remove top border radius */
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr; /* Changed back to auto 1fr for header and content */
+    grid-template-rows: auto 1fr; /* Header and content */
     font-family: 'American Captain', sans-serif;
     position: relative;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
     color: #fff;
-    transition: all 0.3s ease;
-    padding: 0 0;
-
-}
-
-/* QuickJoin Header (Red Design) */
-.quickjoin-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #AD2831;
-    padding: 10px 15px 10px 5px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    color: #fff;
-}
-
-.header-title {
-    display: flex;
-    align-items: center;
-    font-size: 1.5rem;
-    gap: 0.5rem;
-    justify-content: flex-start;
-    margin-left: 0;
-    padding-left: 0;
-    text-align: left;
-}
-
-.header-title.left-aligned {
-    margin-left: -5px;
-}
-
-.header-title i {
-    font-size: 1.4rem;
-    color: #fff;
-    margin-left: 5px;
-}
-
-.header-title span {
-    margin: 0;
-    font-size: 1.5rem;
-    font-family: 'American Captain', sans-serif;
-    letter-spacing: 1.5px;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #fff;
-}
-
-.close-quickjoin-btn {
-    background: transparent;
-    border: none;
-    color: #fff;
-    font-size: 1.5rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
     padding: 0;
-    margin: 0;
 }
 
-.close-quickjoin-btn:hover {
-    opacity: 0.8;
-    transform: scale(1.1);
-}
+/* QuickJoin Header - Now using modal-common.css */
 
-/* Main Content Area */
+/* Main Content Area - Customizations on top of modal-body */
 .main-content {
     display: flex;
     flex-direction: column;
     height: 100%;
-    overflow-y: auto;
     position: relative;
     transition: all 0.3s ease;
     margin-right: 0;
     width: 100%;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 /* Header Bar */
@@ -382,10 +299,50 @@
     min-height: 300px;
     background-color: #f5f5f5;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border-top: 1px solid rgba(255, 201, 37, 0.3);
-    border-bottom: 1px solid rgba(255, 201, 37, 0.3);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 201, 37, 0.3);
     transition: all 0.3s ease;
+    margin: 0 10px 20px 10px; /* Add horizontal margins */
+    width: calc(100% - 20px); /* Adjust width to account for margins */
+    box-sizing: border-box;
+}
+
+/* Map loading indicator */
+.map-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+    opacity: 1;
+}
+
+.map-container::after {
+    content: 'Loading map...';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 1.2rem;
+    z-index: 11;
+    transition: opacity 0.5s ease;
+    opacity: 1;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.map-container.loaded::before,
+.map-container.loaded::after {
+    opacity: 0;
+    pointer-events: none;
 }
 
 #map {
@@ -470,16 +427,24 @@
 
 /* Court List */
 .court-list {
-    padding: 1rem;
+    padding: 1.2rem;
+    background: rgba(26, 26, 26, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .court-list-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0.5rem 0 1rem;
+    margin: 0.5rem 0 1.2rem;
     border-bottom: 1px solid rgba(173, 40, 49, 0.3);
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.8rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .court-list h3 {
@@ -514,9 +479,10 @@
 
 .court-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem;
 }
 
 .court-card {
@@ -524,22 +490,45 @@
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     cursor: pointer;
     border: 1px solid rgba(255, 201, 37, 0.3);
     position: relative;
+    transform-origin: center bottom;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-width: 100%;
 }
 
 .court-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
     border-color: #ffc925;
 }
 
+.court-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #ffc925, #AD2831);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.court-card:hover::after {
+    transform: scaleX(1);
+}
+
 .court-card-image {
-    height: 150px;
+    height: 160px;
     overflow: hidden;
     position: relative;
+    flex-shrink: 0;
 }
 
 .court-card-image img {
@@ -547,6 +536,7 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
+    display: block;
 }
 
 .court-card:hover .court-card-image img {
@@ -586,6 +576,9 @@
 
 .court-card-content {
     padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .court-card-title {
@@ -593,6 +586,10 @@
     font-weight: bold;
     margin-bottom: 0.5rem;
     color: #000;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .court-card-location {
@@ -602,6 +599,8 @@
     display: flex;
     align-items: center;
     gap: 5px;
+    line-height: 1.4;
+    flex-wrap: wrap;
 }
 
 .court-card-info {
@@ -609,6 +608,9 @@
     justify-content: space-between;
     font-size: 0.8rem;
     color: rgba(0, 0, 0, 0.6);
+    margin-top: auto;
+    padding-top: 0.5rem;
+    border-top: 1px dashed rgba(0, 0, 0, 0.1);
 }
 
 .court-card-players, .court-card-rating {
@@ -629,10 +631,10 @@
     width: 380px;
     height: 100%;
     background: #1a1a1a;
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.4);
     z-index: 30;
     transform: translateX(100%);
-    transition: transform 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     flex-direction: column;
     border-left: 1px solid rgba(255, 201, 37, 0.3);
@@ -641,6 +643,71 @@
 
 .court-sidebar.active {
     transform: translateX(0);
+}
+
+/* Sidebar entrance animation */
+.court-sidebar.active .sidebar-header {
+    animation: slideDown 0.4s forwards;
+}
+
+.court-sidebar.active .sidebar-content > * {
+    animation: fadeIn 0.5s forwards;
+    opacity: 0;
+}
+
+/* Loading state */
+.court-sidebar.loading .sidebar-content {
+    position: relative;
+}
+
+.court-sidebar.loading .sidebar-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(26, 26, 26, 0.7);
+    z-index: 10;
+    backdrop-filter: blur(3px);
+}
+
+.court-sidebar.loading .sidebar-content::after {
+    content: 'Loading court details...';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 1rem;
+    z-index: 11;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 201, 37, 0.3);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .sidebar-header {
@@ -850,12 +917,43 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    animation: pulse 2s infinite;
 }
 
 .join-game-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
     background: #c93038;
+    animation: none;
+}
+
+.join-game-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.6s ease;
+}
+
+.join-game-btn:hover::before {
+    left: 100%;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(173, 40, 49, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(173, 40, 49, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(173, 40, 49, 0);
+    }
 }
 
 .directions-btn {
@@ -1138,14 +1236,15 @@
     }
 
     .court-cards {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1.2rem;
+        padding: 0.5rem;
     }
 }
 
 @media (max-width: 992px) {
     .quick-join-container {
         max-width: 100%;
-        border-radius: 15px;
     }
 
     .court-sidebar {
@@ -1161,23 +1260,6 @@
     .quick-join-container {
         width: 100%;
         max-height: 100vh;
-        border-radius: 0;
-    }
-
-    .quickjoin-header {
-        padding: 8px 12px;
-    }
-
-    .header-title span {
-        font-size: 1.3rem;
-    }
-
-    .header-title i {
-        font-size: 1.2rem;
-    }
-
-    .close-quickjoin-btn {
-        font-size: 1.3rem;
     }
 
     .toggle-sidebar-btn {
@@ -1206,6 +1288,9 @@
 
     .map-container {
         height: 40vh;
+        margin-right: 15px; /* Add margin to prevent touching the container edge */
+        width: calc(100% - 30px); /* Adjust width to account for margins */
+        margin-left: 15px;
     }
 
     .court-sidebar {
@@ -1213,13 +1298,26 @@
         height: 100vh;
     }
 
+    .court-list {
+        padding: 1rem;
+        margin: 0 15px; /* Match the map container margins */
+        width: calc(100% - 30px); /* Adjust width to account for margins */
+    }
+
     .court-cards {
         grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 0.5rem;
     }
 
     .court-card {
         max-width: 500px;
         margin: 0 auto;
+        height: auto;
+    }
+
+    .court-card-image {
+        height: 180px;
     }
 
     .tab-btn {
@@ -1243,21 +1341,7 @@
 }
 
 @media (max-width: 480px) {
-    .quickjoin-header {
-        padding: 6px 10px;
-    }
-
-    .header-title span {
-        font-size: 1.1rem;
-    }
-
-    .header-title i {
-        font-size: 1rem;
-    }
-
-    .close-quickjoin-btn {
-        font-size: 1.2rem;
-    }
+    /* Modal header styling now handled by modal-common.css */
 
     .toggle-sidebar-btn {
         width: 28px;
@@ -1267,6 +1351,8 @@
 
     .search-container {
         padding: 0.5rem 0.6rem;
+        margin: 0 20px; /* Match the map container margins for smaller screens */
+        width: calc(100% - 40px); /* Adjust width to account for margins */
     }
 
     .close-sidebar {
@@ -1303,6 +1389,9 @@
 
     .map-container {
         height: 35vh;
+        margin-right: 20px; /* Increase margin for smaller screens */
+        width: calc(100% - 40px); /* Adjust width to account for margins */
+        margin-left: 20px;
     }
 
     .map-controls {
@@ -1328,16 +1417,31 @@
         height: 10px;
     }
 
+    .court-list {
+        padding: 1rem;
+        margin: 0 20px; /* Match the map container margins for smaller screens */
+        width: calc(100% - 40px); /* Adjust width to account for margins */
+    }
+
     .court-list h3 {
         font-size: 1rem;
     }
 
     .court-card-title {
         font-size: 1rem;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        line-height: 1.3;
     }
 
     .court-card-location, .court-card-info {
         font-size: 0.8rem;
+        line-height: 1.4;
+    }
+
+    .court-card-content {
+        padding: 0.8rem;
     }
 
     .sidebar-header h2 {
@@ -1422,5 +1526,54 @@
 
     .review-text {
         font-size: 0.8rem;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 380px) {
+    .court-cards {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+        padding: 0.3rem;
+    }
+
+    .court-card {
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .court-card-image {
+        height: 160px;
+    }
+
+    .court-card-content {
+        padding: 0.7rem;
+    }
+
+    .court-card-title {
+        font-size: 0.95rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .court-card-location {
+        font-size: 0.75rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .court-card-info {
+        font-size: 0.7rem;
+        padding-top: 0.4rem;
+    }
+
+    .court-card-status {
+        padding: 3px 6px;
+        font-size: 0.65rem;
+        top: 8px;
+        right: 8px;
+    }
+
+    .status-dot {
+        width: 6px;
+        height: 6px;
     }
 }

@@ -9,7 +9,9 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/static/styles/dashboard.css" />
     <link rel="stylesheet" href="/static/styles/quickjoin.css" />
-    <link rel="stylesheet" href="/static/styles/invite-modal.css" />
+    <link rel="stylesheet" href="/static/styles/create-game-modal.css" />
+    <link rel="stylesheet" href="/static/styles/location-carousel.css" />
+    <link rel="stylesheet" href="/static/styles/modal-common.css" />
     <!-- Leaflet Map CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- Bootstrap Icons -->
@@ -17,7 +19,7 @@
 
     <!-- User check JS -->
     <script src="/static/scripts/usercheck.js"></script>
-    <script src="/static/scripts/notifications.js"></script>
+    <script src="/static/scripts/notification-service.js"></script>
 </head>
 
 <body>
@@ -32,8 +34,95 @@
         </div>
         <ul class="nav-links">
             <li><a href="/booking.html">BOOKING</a></li>
-            <li><a id="openGameModal" href="#">NOTIFICATIONS</a></li>
-            <li><a href="/profile.html">PROFILE</a></li>
+            <li class="notification-item">
+                <a href="#" id="notification-bell">
+                    <i class="bi bi-bell-fill"></i>
+                    <span class="notification-badge">1</span>
+                </a>
+                <!-- Notification Dropdown Panel -->
+                <div class="notification-dropdown">
+                    <div class="notification-header">
+                        <h3>Notifications</h3>
+                        <div class="notification-actions">
+                            <button class="notification-option active">All</button>
+                            <button class="notification-option">Unread</button>
+                        </div>
+                    </div>
+                    <div class="notification-subheader">
+                        <span>Earlier</span>
+                        <a href="/notifications/" class="see-all">See all</a>
+                    </div>
+                    <div class="notification-list">
+                        <!-- Sample notifications -->
+                        <div class="notification-item unread">
+                            <div class="notification-avatar">
+                                <img src="/static/img/avatar1.jpg" alt="User">
+                            </div>
+                            <div class="notification-content">
+                                <p>You approved a login.</p>
+                                <span class="notification-time">10h</span>
+                            </div>
+                            <div class="notification-status">
+                                <span class="status-dot"></span>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-avatar">
+                                <img src="/static/img/laro-icon.png" alt="LARO">
+                            </div>
+                            <div class="notification-content">
+                                <p>Your last game got 22 views before it expired. You can create a new game.</p>
+                                <span class="notification-time">12h</span>
+                            </div>
+                        </div>
+                        <div class="notification-item unread">
+                            <div class="notification-avatar">
+                                <img src="/static/img/avatar2.jpg" alt="User">
+                            </div>
+                            <div class="notification-content">
+                                <p>You approved a login.</p>
+                                <span class="notification-time">21h</span>
+                            </div>
+                            <div class="notification-status">
+                                <span class="status-dot"></span>
+                            </div>
+                        </div>
+                        <div class="notification-item unread">
+                            <div class="notification-avatar">
+                                <img src="/static/img/avatar3.jpg" alt="User">
+                            </div>
+                            <div class="notification-content">
+                                <p>You approved a login.</p>
+                                <span class="notification-time">1d</span>
+                            </div>
+                            <div class="notification-status">
+                                <span class="status-dot"></span>
+                            </div>
+                        </div>
+                        <div class="notification-item unread">
+                            <div class="notification-avatar alert-icon">
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p>Reminder: The files you requested are only available to download for 24 more hours.</p>
+                                <span class="notification-time">1d</span>
+                            </div>
+                            <div class="notification-status">
+                                <span class="status-dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="notification-footer">
+                        <button class="see-previous">See previous notifications</button>
+                    </div>
+                </div>
+            </li>
+            <li class="profile-item">
+                <a href="/profile.html">
+                    <i class="bi bi-person-circle"></i>
+                    <span id="username-display">PROFILE</span>
+                </a>
+            </li>
         </ul>
     </nav>
 
@@ -61,10 +150,10 @@
                 </div>
                 <div class="date-badge" id="next-game-date">Loading...</div>
             </button>
-            <button class="btn invite">
+            <button class="btn create-game">
                 <div class="btn-content">
-                    <i class="bi bi-people"></i>
-                    <span class="btn-text">INVITE</span>
+                    <i class="bi bi-plus-circle"></i>
+                    <span class="btn-text">CREATE GAME</span>
                 </div>
             </button>
             <button class="btn change-sport">
@@ -78,10 +167,10 @@
 
     <!-- Upcoming Game Popup -->
     <div id="upcoming-game-popup" class="popup-overlay" style="display: none;">
-        <div class="popup-content upcoming-games-content">
+        <div class="popup-content">
             <!-- Header with Title and Close Button -->
-            <div class="upcoming-header">
-                <div class="upcoming-title">
+            <div class="modal-header">
+                <div class="modal-title">
                     <i class="bi bi-calendar-event"></i>
                     <h2>MY UPCOMING GAMES</h2>
                 </div>
@@ -91,7 +180,7 @@
             </div>
 
             <!-- Calendar and Schedule View -->
-            <div class="calendar-schedule-container">
+            <div class="modal-body calendar-schedule-container">
                 <!-- Calendar Section -->
                 <div class="calendar-section">
                     <div class="calendar-header">
@@ -132,11 +221,11 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="upcoming-actions">
-                <button id="create-game-btn" class="action-btn create-btn">
+            <div class="modal-footer">
+                <button id="create-game-btn" class="action-btn primary">
                     <i class="bi bi-plus-circle"></i> CREATE GAME
                 </button>
-                <button id="join-game-btn" class="action-btn join-btn">
+                <button id="join-game-btn" class="action-btn secondary">
                     <i class="bi bi-person-plus"></i> FIND GAMES
                 </button>
             </div>
@@ -145,10 +234,10 @@
 
     <!-- Nearby Courts Popup -->
     <div id="nearby-courts-popup" class="popup-overlay" style="display: none;">
-        <div class="popup-content nearby-courts-content">
+        <div class="popup-content">
             <!-- Header with Title and Close Button -->
-            <div class="nearby-header">
-                <div class="nearby-title">
+            <div class="modal-header">
+                <div class="modal-title">
                     <i class="bi bi-map"></i>
                     <h2>NEARBY COURTS</h2>
                 </div>
@@ -158,7 +247,7 @@
             </div>
 
             <!-- Search and Courts Grid -->
-            <div class="nearby-content">
+            <div class="modal-body nearby-content">
                 <div class="search-box-nearby">
                     <i class="bi bi-search"></i>
                     <input id="search-nearby-courts" type="text" placeholder="Search for courts..." />
@@ -170,58 +259,76 @@
         </div>
     </div>
 
-    <!-- Invite Popup -->
-    <div id="invite-popup" class="popup-overlay" style="display: none;">
-        <div class="popup-content invite-content">
+    <!-- Create Game Popup -->
+    <div id="create-game-popup" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
             <!-- Header with Title and Close Button -->
-            <div class="invite-header">
-                <div class="invite-title">
-                    <i class="bi bi-people"></i>
-                    <h2>CREATE INVITATION</h2>
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="bi bi-plus-circle"></i>
+                    <h2>CREATE GAME</h2>
                 </div>
-                <button id="close-invite-popup" class="close-btn" title="Close">
+                <button id="close-create-game-popup" class="close-btn" title="Close">
                     <i class="bi bi-x-lg"></i>
                 </button>
             </div>
 
-            <!-- Invitation Form -->
-            <div class="invite-form-container">
+            <!-- Game Creation Form -->
+            <div class="modal-body create-game-form-container">
                 <div class="location-selection">
                     <h3>SELECT LOCATION</h3>
-                    <div class="location-cards">
-                        <div class="location-card" data-location="Brgy. Palumco">
-                            <img src="/static/img/palumco.jpg" alt="Brgy. Palumco">
-                            <div class="location-info">
-                                <h4>Brgy. Palumco</h4>
-                                <p>Outdoor Basketball Court</p>
-                                <div class="location-details">
-                                    <span><i class="bi bi-geo-alt"></i> 2.5 km away</span>
-                                    <span><i class="bi bi-star-fill"></i> 4.5</span>
+                    <div class="location-carousel-container">
+                        <button class="carousel-nav prev" id="carousel-prev">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+
+                        <div class="location-carousel">
+                            <div class="location-cards">
+                                <div class="location-card" data-location="Brgy. Palumco">
+                                    <img src="/static/img/palumco.jpg" alt="Brgy. Palumco">
+                                    <div class="location-info">
+                                        <h4>Brgy. Palumco</h4>
+                                        <p>Outdoor Basketball Court</p>
+                                        <div class="location-details">
+                                            <span><i class="bi bi-geo-alt"></i> 2.5 km away</span>
+                                            <span><i class="bi bi-star-fill"></i> 4.5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="location-card" data-location="Quezon City Circle">
+                                    <img src="/static/img/qc-circle.jpg" alt="Quezon City Circle">
+                                    <div class="location-info">
+                                        <h4>Quezon City Circle</h4>
+                                        <p>Public Basketball Court</p>
+                                        <div class="location-details">
+                                            <span><i class="bi bi-geo-alt"></i> 5.1 km away</span>
+                                            <span><i class="bi bi-star-fill"></i> 4.2</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="location-card" data-location="UP Diliman">
+                                    <img src="/static/img/up-diliman.jpg" alt="UP Diliman">
+                                    <div class="location-info">
+                                        <h4>UP Diliman</h4>
+                                        <p>University Basketball Court</p>
+                                        <div class="location-details">
+                                            <span><i class="bi bi-geo-alt"></i> 7.3 km away</span>
+                                            <span><i class="bi bi-star-fill"></i> 4.8</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="location-card" data-location="Quezon City Circle">
-                            <img src="/static/img/qc-circle.jpg" alt="Quezon City Circle">
-                            <div class="location-info">
-                                <h4>Quezon City Circle</h4>
-                                <p>Public Basketball Court</p>
-                                <div class="location-details">
-                                    <span><i class="bi bi-geo-alt"></i> 5.1 km away</span>
-                                    <span><i class="bi bi-star-fill"></i> 4.2</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="location-card" data-location="UP Diliman">
-                            <img src="/static/img/up-diliman.jpg" alt="UP Diliman">
-                            <div class="location-info">
-                                <h4>UP Diliman</h4>
-                                <p>University Basketball Court</p>
-                                <div class="location-details">
-                                    <span><i class="bi bi-geo-alt"></i> 7.3 km away</span>
-                                    <span><i class="bi bi-star-fill"></i> 4.8</span>
-                                </div>
-                            </div>
-                        </div>
+
+                        <button class="carousel-nav next" id="carousel-next">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="carousel-indicators">
+                        <span class="indicator active" data-index="0"></span>
+                        <span class="indicator" data-index="1"></span>
+                        <span class="indicator" data-index="2"></span>
                     </div>
                 </div>
 
@@ -261,39 +368,40 @@
                             <textarea id="event-notes" placeholder="Add any additional information"></textarea>
                         </div>
                     </div>
-
-                    <div class="form-actions">
-                        <button type="button" id="share-options-btn" class="secondary-btn">
-                            <i class="bi bi-share"></i> Sharing Options
-                        </button>
-                        <button type="button" id="invite-players-btn" class="secondary-btn">
-                            <i class="bi bi-person-plus"></i> Invite Players
-                        </button>
-                        <button type="submit" class="primary-btn">
-                            <i class="bi bi-send"></i> Send Invite
-                        </button>
-                    </div>
                 </form>
+            </div>
+
+            <!-- Footer with action buttons -->
+            <div class="modal-footer">
+                <button type="button" id="share-options-btn" class="action-btn secondary">
+                    <i class="bi bi-share"></i> Sharing Options
+                </button>
+                <button type="button" id="invite-players-btn" class="action-btn secondary">
+                    <i class="bi bi-person-plus"></i> Invite Players
+                </button>
+                <button type="submit" id="create-game-submit-btn" class="action-btn primary">
+                    <i class="bi bi-plus-circle"></i> Create Game
+                </button>
             </div>
         </div>
     </div>
 
     <!-- Quick Join Overlay -->
     <div id="quick-join-overlay" class="popup-overlay" style="display: none;">
-        <div class="quick-join-container">
-            <!-- Header with Title and Close Button (Red Design) -->
-            <div class="quickjoin-header">
-                <div class="header-title left-aligned">
+        <div class="popup-content quick-join-container">
+            <!-- Header with Title and Close Button -->
+            <div class="modal-header">
+                <div class="modal-title">
                     <i class="bi bi-geo-alt"></i>
-                    <span>FIND A COURT</span>
+                    <h2>FIND A COURT</h2>
                 </div>
-                <button class="close-quickjoin-btn" id="close-quick-join" title="Close">
+                <button id="close-quick-join" class="close-btn" title="Close">
                     <i class="bi bi-x-lg"></i>
                 </button>
             </div>
 
             <!-- Main Content Area with Map and Search -->
-            <div class="main-content">
+            <div class="modal-body main-content">
                 <div class="search-container">
                     <div class="search-box">
                         <i class="bi bi-search"></i>
@@ -437,6 +545,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="/static/scripts/basketball-sidebar.js"></script>
     <script src="/static/scripts/responsive-nav.js"></script>
+    <script src="/static/scripts/location-carousel.js"></script>
     <!-- Testing utility for clearing localStorage -->
     <script src="/static/scripts/clear-storage.js"></script>
 

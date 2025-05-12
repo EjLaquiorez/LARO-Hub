@@ -1,0 +1,138 @@
+/* Location Carousel Styles */
+
+.location-carousel-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    width: 100%;
+}
+
+.location-carousel {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.location-cards {
+    display: flex;
+    transition: transform 0.5s ease;
+    width: 300%; /* 100% for each card */
+}
+
+.location-card {
+    flex: 1;
+    min-width: 33.333%; /* Each card takes 1/3 of the carousel width */
+    box-sizing: border-box;
+    padding: 0 10px;
+    transition: all 0.3s ease;
+    transform: scale(0.9);
+    opacity: 0.7;
+}
+
+.location-card.active {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Carousel Navigation Buttons */
+.carousel-nav {
+    background: rgba(173, 40, 49, 0.8);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-nav:hover {
+    background: #AD2831;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-nav.prev {
+    left: -15px;
+}
+
+.carousel-nav.next {
+    right: -15px;
+}
+
+.carousel-nav i {
+    font-size: 1.2rem;
+}
+
+/* Carousel Indicators */
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    gap: 8px;
+}
+
+.indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator.active {
+    background-color: #ffc925;
+    transform: scale(1.2);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .location-card {
+        min-width: 100%; /* On smaller screens, show one card at a time */
+    }
+    
+    .location-cards {
+        width: 300%; /* 100% for each of the 3 cards */
+    }
+    
+    .carousel-nav {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .carousel-nav.prev {
+        left: -10px;
+    }
+    
+    .carousel-nav.next {
+        right: -10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-nav {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .carousel-nav i {
+        font-size: 1rem;
+    }
+    
+    .indicator {
+        width: 8px;
+        height: 8px;
+    }
+}

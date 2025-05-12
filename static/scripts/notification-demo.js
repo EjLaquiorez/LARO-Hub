@@ -1,155 +1,174 @@
 /**
  * LARO-Hub Notification Demo
- * This file demonstrates how to use the notification system
+ * This file demonstrates how to use the notification service
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if notification system is loaded
-    if (!window.notifications) {
-        console.error('Notification system not loaded!');
+    // Check if notification service is available
+    if (!window.notificationService) {
+        console.error('Notification service not available');
         return;
     }
 
-    // Example: Show a success notification
-    function showSuccessNotification() {
-        window.notifications.success({
-            title: 'Success!',
-            message: 'Your action was completed successfully.',
-            duration: 5000
-        });
-    }
+    // Add demo controls to the page
+    addDemoControls();
 
-    // Example: Show an error notification
-    function showErrorNotification() {
-        window.notifications.error({
-            title: 'Error!',
-            message: 'Something went wrong. Please try again.',
-            duration: 0, // Won't auto-dismiss
-            buttonText: 'Retry',
-            buttonCallback: function() {
-                console.log('Retry clicked');
-                window.notifications.info({
-                    message: 'Retrying...'
-                });
-            }
-        });
-    }
-
-    // Example: Show a warning notification
-    function showWarningNotification() {
-        window.notifications.warning({
-            title: 'Warning!',
-            message: 'This action cannot be undone.',
-            buttonText: 'Proceed Anyway',
-            buttonCallback: function() {
-                console.log('Proceed clicked');
-                window.notifications.success({
-                    message: 'Action completed!'
-                });
-            }
-        });
-    }
-
-    // Example: Show an info notification
-    function showInfoNotification() {
-        window.notifications.info({
-            title: 'Information',
-            message: 'Your game will start in 10 minutes.',
-            onClick: function() {
-                console.log('Notification clicked');
-                window.notifications.info({
-                    message: 'Opening game details...'
-                });
-            }
-        });
-    }
-
-    // Example: Show a LARO-themed notification
-    function showLaroNotification() {
-        window.notifications.laro({
-            title: 'LARO Update',
-            message: 'New basketball court added near your location!',
-            buttonText: 'View Court',
-            buttonCallback: function() {
-                console.log('View court clicked');
-            }
-        });
-    }
-
-    // Example: Show a notification for a new message
-    function showNewMessageNotification(sender, message) {
-        window.notifications.info({
-            title: `New Message from ${sender}`,
-            message: message,
-            icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793zm5 4a1 1 0 1 0-2 0 1 1 0 0 0 2 0m4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/></svg>',
-            onClick: function() {
-                console.log('Opening chat with', sender);
-            }
-        });
-    }
-
-    // Example: Show a notification for a game invitation
-    function showGameInvitationNotification(league, time, location) {
-        window.notifications.laro({
-            title: `Invitation: ${league}`,
-            message: `${time} at ${location}`,
-            icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/></svg>',
-            buttonText: 'See Invite',
-            buttonCallback: function() {
-                console.log('Opening invitation for', league);
-            }
-        });
-    }
-
-    // Example: Show a notification for a new follower
-    function showNewFollowerNotification(follower) {
-        window.notifications.success({
-            title: 'New Follower',
-            message: `${follower} is now following you!`,
-            icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/><path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/></svg>',
-            buttonText: 'View Profile',
-            buttonCallback: function() {
-                console.log('Viewing profile of', follower);
-            }
-        });
-    }
-
-    // Add demo buttons if they exist
-    const successBtn = document.getElementById('demo-success-notification');
-    if (successBtn) successBtn.addEventListener('click', showSuccessNotification);
-
-    const errorBtn = document.getElementById('demo-error-notification');
-    if (errorBtn) errorBtn.addEventListener('click', showErrorNotification);
-
-    const warningBtn = document.getElementById('demo-warning-notification');
-    if (warningBtn) warningBtn.addEventListener('click', showWarningNotification);
-
-    const infoBtn = document.getElementById('demo-info-notification');
-    if (infoBtn) infoBtn.addEventListener('click', showInfoNotification);
-
-    const laroBtn = document.getElementById('demo-laro-notification');
-    if (laroBtn) laroBtn.addEventListener('click', showLaroNotification);
-
-    const messageBtn = document.getElementById('demo-message-notification');
-    if (messageBtn) messageBtn.addEventListener('click', function() {
-        showNewMessageNotification('John Doe', 'Hey, are you up for a game tonight?');
-    });
-
-    const inviteBtn = document.getElementById('demo-invite-notification');
-    if (inviteBtn) inviteBtn.addEventListener('click', function() {
-        showGameInvitationNotification('Mahi League', 'December 13, 10pm', 'Pallumo Court');
-    });
-
-    const followerBtn = document.getElementById('demo-follower-notification');
-    if (followerBtn) followerBtn.addEventListener('click', function() {
-        showNewFollowerNotification('Lance Nah Bro');
-    });
-
-    // Example of how to use notifications in your application
-    console.log('Notification demo loaded. You can use the following in your code:');
-    console.log('window.notifications.success({ title: "Title", message: "Message" })');
-    console.log('window.notifications.error({ title: "Title", message: "Message" })');
-    console.log('window.notifications.warning({ title: "Title", message: "Message" })');
-    console.log('window.notifications.info({ title: "Title", message: "Message" })');
-    console.log('window.notifications.laro({ title: "Title", message: "Message" })');
+    // Initialize demo
+    initDemo();
 });
+
+/**
+ * Add demo controls to the page
+ */
+function addDemoControls() {
+    // Create demo container
+    const demoContainer = document.createElement('div');
+    demoContainer.className = 'notification-demo-container';
+    demoContainer.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #1e1e1e;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        width: 300px;
+        color: white;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    `;
+
+    // Add title
+    const title = document.createElement('h3');
+    title.textContent = 'Notification Demo';
+    title.style.cssText = `
+        margin: 0 0 10px 0;
+        font-size: 16px;
+        color: #ffc925;
+    `;
+    demoContainer.appendChild(title);
+
+    // Add buttons
+    const buttonContainer = document.createElement('div');
+    buttonContainer.style.cssText = `
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    `;
+
+    // Add notification button
+    const addButton = document.createElement('button');
+    addButton.textContent = 'Add New Notification';
+    addButton.id = 'add-notification-btn';
+    addButton.style.cssText = `
+        background-color: #ffc925;
+        color: #000;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-weight: bold;
+    `;
+    buttonContainer.appendChild(addButton);
+
+    // Mark all as read button
+    const markAllButton = document.createElement('button');
+    markAllButton.textContent = 'Mark All as Read';
+    markAllButton.id = 'mark-all-btn';
+    markAllButton.style.cssText = `
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        cursor: pointer;
+    `;
+    buttonContainer.appendChild(markAllButton);
+
+    // Clear all button
+    const clearAllButton = document.createElement('button');
+    clearAllButton.textContent = 'Clear All Notifications';
+    clearAllButton.id = 'clear-all-btn';
+    clearAllButton.style.cssText = `
+        background-color: #ff3b30;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        cursor: pointer;
+    `;
+    buttonContainer.appendChild(clearAllButton);
+
+    demoContainer.appendChild(buttonContainer);
+
+    // Add to page
+    document.body.appendChild(demoContainer);
+}
+
+/**
+ * Initialize demo functionality
+ */
+function initDemo() {
+    // Add notification button
+    const addButton = document.getElementById('add-notification-btn');
+    if (addButton) {
+        addButton.addEventListener('click', function() {
+            addRandomNotification();
+        });
+    }
+
+    // Mark all as read button
+    const markAllButton = document.getElementById('mark-all-btn');
+    if (markAllButton) {
+        markAllButton.addEventListener('click', function() {
+            window.notificationService.markAllAsRead();
+        });
+    }
+
+    // Clear all button
+    const clearAllButton = document.getElementById('clear-all-btn');
+    if (clearAllButton) {
+        clearAllButton.addEventListener('click', function() {
+            window.notificationService.clearNotifications();
+        });
+    }
+}
+
+/**
+ * Add a random notification
+ */
+function addRandomNotification() {
+    const notificationTypes = [
+        {
+            type: 'login',
+            content: 'You approved a login from a new device.',
+            avatar: '/static/img/avatar1.jpg'
+        },
+        {
+            type: 'game',
+            content: 'Your game at Quezon City Circle is starting in 30 minutes.',
+            avatar: '/static/img/laro-icon.png'
+        },
+        {
+            type: 'login',
+            content: 'Someone tried to access your account from an unknown location.',
+            avatar: '/static/img/avatar2.jpg'
+        },
+        {
+            isAlert: true,
+            content: 'Your subscription will expire in 3 days. Renew now to avoid interruption.',
+        },
+        {
+            type: 'game',
+            content: 'You have been invited to join a game at Brgy. Palumco.',
+            avatar: '/static/img/avatar3.jpg'
+        }
+    ];
+
+    // Select a random notification type
+    const randomIndex = Math.floor(Math.random() * notificationTypes.length);
+    const notification = notificationTypes[randomIndex];
+
+    // Add the notification
+    window.notificationService.addNotification(notification);
+}

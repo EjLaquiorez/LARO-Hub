@@ -35,3 +35,9 @@ def profile_view(request):
     View function for the profile page.
     """
     return render(request, 'profile.html')
+
+def notifications_view(request):
+    """
+    View function for the notifications page.
+    """
+    return render(request, 'notifications.html')

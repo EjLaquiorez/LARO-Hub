@@ -56,6 +56,12 @@ if (typeof refreshAccessToken !== 'function') {
 document.addEventListener("DOMContentLoaded", async () => {
     let currentUser = null;
 
+    // Initialize notification dropdown
+    initNotificationDropdown();
+
+    // Display username in the profile link
+    displayUsername();
+
     try {
         console.log("Profile page loaded, checking authentication...");
 
@@ -309,4 +315,231 @@ function generateQRCode(url) {
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
     });
+}
+
+/**
+ * Display the username in the profile navigation link
+ */
+function displayUsername() {
+    const usernameDisplay = document.getElementById('username-display');
+    if (!usernameDisplay) return;
+
+    try {
+        // Get user data from localStorage
+        const userData = localStorage.getItem('currentUser');
+
+        if (userData) {
+            const user = JSON.parse(userData);
+
+            // Check if username exists
+            if (user && user.username) {
+                usernameDisplay.textContent = user.username.toUpperCase();
+            } else if (user && user.email) {
+                // Fallback to email if username is not available
+                const emailUsername = user.email.split('@')[0];
+                usernameDisplay.textContent = emailUsername.toUpperCase();
+            }
+        }
+    } catch (error) {
+        console.error('Error displaying username:', error);
+        // Keep default "PROFILE" text if there's an error
+    }
+}
+
+/**
+ * Initialize notification dropdown functionality
+ */
+function initNotificationDropdown() {
+    const notificationBell = document.getElementById('notification-bell');
+    const notificationDropdown = document.querySelector('.notification-dropdown');
+    const notificationList = document.querySelector('.notification-list');
+    const notificationBadge = document.querySelector('.notification-badge');
+
+    if (!notificationBell || !notificationDropdown || !notificationList) return;
+
+    // Update notification badge count
+    function updateNotificationBadge() {
+        const unreadCount = window.notificationService.getUnreadCount();
+        if (unreadCount > 0) {
+            notificationBadge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+            notificationBadge.style.display = 'flex';
+        } else {
+            notificationBadge.style.display = 'none';
+        }
+    }
+
+    // Render notifications in the dropdown
+    function renderNotifications(filter = 'all') {
+        // Clear existing notifications
+        notificationList.innerHTML = '';
+
+        // Get notifications from service
+        let notifications = window.notificationService.getNotifications();
+
+        // Apply filter if needed
+        if (filter === 'unread') {
+            notifications = notifications.filter(notification => !notification.read);
+        }
+
+        // If no notifications, show a message
+        if (notifications.length === 0) {
+            notificationList.innerHTML = `
+                <div class="no-notifications">
+                    <p>No notifications to display</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Create notification items
+        notifications.forEach(notification => {
+            const notificationItem = document.createElement('div');
+            notificationItem.className = `notification-item${notification.read ? '' : ' unread'}`;
+            notificationItem.dataset.id = notification.id;
+
+            // Format timestamp
+            const timestamp = formatTimestamp(notification.timestamp);
+
+            // Create avatar element
+            let avatarHtml = '';
+            if (notification.isAlert) {
+                avatarHtml = `
+                    <div class="notification-avatar alert-icon">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                    </div>
+                `;
+            } else {
+                avatarHtml = `
+                    <div class="notification-avatar">
+                        <img src="${notification.avatar || '/static/img/laro-icon.png'}" alt="Avatar">
+                    </div>
+                `;
+            }
+
+            // Create content
+            notificationItem.innerHTML = `
+                ${avatarHtml}
+                <div class="notification-content">
+                    <p>${notification.content}</p>
+                    <span class="notification-time">${timestamp}</span>
+                </div>
+                ${!notification.read ? '<div class="notification-status"><span class="status-dot"></span></div>' : ''}
+            `;
+
+            // Add click event to mark as read
+            notificationItem.addEventListener('click', function() {
+                const id = parseInt(this.dataset.id);
+                window.notificationService.markAsRead(id);
+                this.classList.remove('unread');
+                const statusDot = this.querySelector('.status-dot');
+                if (statusDot) {
+                    statusDot.parentElement.remove();
+                }
+                updateNotificationBadge();
+            });
+
+            notificationList.appendChild(notificationItem);
+        });
+    }
+
+    // Format timestamp to relative time (e.g., "2h ago")
+    function formatTimestamp(timestamp) {
+        const date = new Date(timestamp);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffSec = Math.floor(diffMs / 1000);
+        const diffMin = Math.floor(diffSec / 60);
+        const diffHour = Math.floor(diffMin / 60);
+        const diffDay = Math.floor(diffHour / 24);
+
+        if (diffDay > 0) {
+            return diffDay === 1 ? '1d' : `${diffDay}d`;
+        } else if (diffHour > 0) {
+            return `${diffHour}h`;
+        } else if (diffMin > 0) {
+            return `${diffMin}m`;
+        } else {
+            return 'Just now';
+        }
+    }
+
+    // Initial render
+    updateNotificationBadge();
+    renderNotifications();
+
+    // Add listener for notification changes
+    window.notificationService.addListener(() => {
+        updateNotificationBadge();
+        if (notificationDropdown.classList.contains('show')) {
+            // If dropdown is open, re-render with current filter
+            const activeFilter = document.querySelector('.notification-option.active');
+            const filter = activeFilter.textContent.trim().toLowerCase();
+            renderNotifications(filter);
+        }
+    });
+
+    // Toggle dropdown when clicking the bell
+    notificationBell.addEventListener('click', function(e) {
+        e.preventDefault();
+        notificationDropdown.classList.toggle('show');
+
+        // If showing dropdown, re-render notifications
+        if (notificationDropdown.classList.contains('show')) {
+            renderNotifications();
+        }
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function closeDropdown(event) {
+        if (notificationDropdown.classList.contains('show') &&
+            !notificationDropdown.contains(event.target) &&
+            !notificationBell.contains(event.target)) {
+            notificationDropdown.classList.remove('show');
+        }
+    });
+
+    // Handle notification option buttons (All/Unread)
+    const notificationOptions = document.querySelectorAll('.notification-option');
+    notificationOptions.forEach(option => {
+        option.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent closing the dropdown
+
+            // Remove active class from all options
+            notificationOptions.forEach(opt => opt.classList.remove('active'));
+
+            // Add active class to clicked option
+            this.classList.add('active');
+
+            // Filter notifications based on option
+            const filter = this.textContent.trim().toLowerCase();
+            renderNotifications(filter);
+        });
+    });
+
+    // Handle "See previous notifications" button
+    const seePreviousButton = document.querySelector('.see-previous');
+    if (seePreviousButton) {
+        seePreviousButton.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent closing the dropdown
+
+            // In a real app, this would load more notifications
+            // For demo, we'll just show a message
+            this.textContent = 'Loading...';
+
+            setTimeout(() => {
+                this.textContent = 'No more notifications';
+                this.disabled = true;
+            }, 1000);
+        });
+    }
+
+    // Handle "See all" link
+    const seeAllLink = document.querySelector('.see-all');
+    if (seeAllLink) {
+        seeAllLink.addEventListener('click', function(e) {
+            // Mark all as read before navigating
+            window.notificationService.markAllAsRead();
+            updateNotificationBadge();
+        });
+    }
 }

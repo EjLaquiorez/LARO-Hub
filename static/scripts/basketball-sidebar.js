@@ -101,8 +101,9 @@ const basketballCourts = {
 };
 
 document.addEventListener("DOMContentLoaded", function() {
-  // Make initializeMap globally accessible
+  // Make functions globally accessible
   window.initializeMap = initializeMap;
+  window.showCourtDetails = showCourtDetails;
 
   // Check if the quick join overlay is visible
   const quickJoinOverlay = document.getElementById("quick-join-overlay");
@@ -143,6 +144,7 @@ document.addEventListener("DOMContentLoaded", function() {
  * Initialize the map with basketball court markers
  */
 function initializeMap() {
+  const mapContainer = document.querySelector('.map-container');
   const map = L.map('map').setView([9.7870, 118.7400], 13);
 
   // Add the tile layer for the map with a light style
@@ -174,6 +176,15 @@ function initializeMap() {
       showCourtDetails(court);
     });
   }
+
+  // Remove loading indicator after map is loaded
+  map.whenReady(() => {
+    setTimeout(() => {
+      if (mapContainer) {
+        mapContainer.classList.add('loaded');
+      }
+    }, 500); // Short delay for smoother transition
+  });
 
   // Add map control event listeners
   document.getElementById('zoom-in').addEventListener('click', () => {
@@ -491,16 +502,28 @@ function filterCourtsByType(filterType) {
  * @param {Object} court - Basketball court data
  */
 function showCourtDetails(court) {
+  // Get sidebar element
+  const sidebar = document.getElementById("court-sidebar");
+
+  // Add loading state
+  sidebar.classList.add("loading");
+
   // Show the sidebar
-  document.getElementById("court-sidebar").classList.add("active");
+  sidebar.classList.add("active");
 
   // Adjust layout for sidebar
   adjustMapLayout();
 
-  // Set court image and basic info
-  document.getElementById("court-image").src = court.image;
-  document.getElementById("barangay-name").innerText = court.barangay;
-  document.getElementById("court-name").innerText = court.name;
+  // Small delay for smoother animation
+  setTimeout(() => {
+    // Set court image and basic info
+    document.getElementById("court-image").src = court.image;
+    document.getElementById("barangay-name").innerText = court.barangay;
+    document.getElementById("court-name").innerText = court.name;
+
+    // Remove loading state after content is loaded
+    sidebar.classList.remove("loading");
+  }, 300);
 
   // Set court status
   const statusIndicator = document.querySelector(".status-indicator");
