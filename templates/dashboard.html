@@ -9,6 +9,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/static/styles/dashboard.css" />
     <link rel="stylesheet" href="/static/styles/quickjoin.css" />
+    <link rel="stylesheet" href="/static/styles/invite-modal.css" />
     <!-- Leaflet Map CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- Bootstrap Icons -->
@@ -165,6 +166,114 @@
                 <div class="nearby-courts-grid" id="nearby-courts-grid">
                     <!-- Court cards will be dynamically generated here -->
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invite Popup -->
+    <div id="invite-popup" class="popup-overlay" style="display: none;">
+        <div class="popup-content invite-content">
+            <!-- Header with Title and Close Button -->
+            <div class="invite-header">
+                <div class="invite-title">
+                    <i class="bi bi-people"></i>
+                    <h2>CREATE INVITATION</h2>
+                </div>
+                <button id="close-invite-popup" class="close-btn" title="Close">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <!-- Invitation Form -->
+            <div class="invite-form-container">
+                <div class="location-selection">
+                    <h3>SELECT LOCATION</h3>
+                    <div class="location-cards">
+                        <div class="location-card" data-location="Brgy. Palumco">
+                            <img src="/static/img/palumco.jpg" alt="Brgy. Palumco">
+                            <div class="location-info">
+                                <h4>Brgy. Palumco</h4>
+                                <p>Outdoor Basketball Court</p>
+                                <div class="location-details">
+                                    <span><i class="bi bi-geo-alt"></i> 2.5 km away</span>
+                                    <span><i class="bi bi-star-fill"></i> 4.5</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="location-card" data-location="Quezon City Circle">
+                            <img src="/static/img/qc-circle.jpg" alt="Quezon City Circle">
+                            <div class="location-info">
+                                <h4>Quezon City Circle</h4>
+                                <p>Public Basketball Court</p>
+                                <div class="location-details">
+                                    <span><i class="bi bi-geo-alt"></i> 5.1 km away</span>
+                                    <span><i class="bi bi-star-fill"></i> 4.2</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="location-card" data-location="UP Diliman">
+                            <img src="/static/img/up-diliman.jpg" alt="UP Diliman">
+                            <div class="location-info">
+                                <h4>UP Diliman</h4>
+                                <p>University Basketball Court</p>
+                                <div class="location-details">
+                                    <span><i class="bi bi-geo-alt"></i> 7.3 km away</span>
+                                    <span><i class="bi bi-star-fill"></i> 4.8</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="invitation-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="invitation-date">Date</label>
+                            <input type="date" id="invitation-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="invitation-time">Time</label>
+                            <input type="time" id="invitation-time" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="game-type">Game Type</label>
+                            <select id="game-type" required>
+                                <option value="" disabled selected>Select game type</option>
+                                <option value="basketball">Basketball</option>
+                                <option value="volleyball">Volleyball</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="event-name">Event Name</label>
+                            <input type="text" id="event-name" placeholder="Give your game a name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="event-notes">Notes (Optional)</label>
+                            <textarea id="event-notes" placeholder="Add any additional information"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="share-options-btn" class="secondary-btn">
+                            <i class="bi bi-share"></i> Sharing Options
+                        </button>
+                        <button type="button" id="invite-players-btn" class="secondary-btn">
+                            <i class="bi bi-person-plus"></i> Invite Players
+                        </button>
+                        <button type="submit" class="primary-btn">
+                            <i class="bi bi-send"></i> Send Invite
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

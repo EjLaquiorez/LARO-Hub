@@ -651,10 +651,73 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Navigation Redirect Buttons
-    document.querySelector(".btn.invite").addEventListener("click", () => {
-        window.location.href = "/invite.html";
+    // Invite Modal
+    const inviteBtn = document.querySelector(".btn.invite");
+    const invitePopup = document.getElementById("invite-popup");
+    const closeInvitePopupBtn = document.getElementById("close-invite-popup");
+
+    inviteBtn.addEventListener("click", () => showPopup(invitePopup));
+
+    if (closeInvitePopupBtn) {
+        closeInvitePopupBtn.addEventListener("click", () => closePopup(invitePopup));
+    }
+
+    window.addEventListener("click", (e) => {
+        if (e.target === invitePopup) closePopup(invitePopup);
     });
+
+    // Handle location card selection
+    const locationCards = document.querySelectorAll('.location-card');
+    locationCards.forEach(card => {
+        card.addEventListener('click', function() {
+            // Remove selected class from all cards
+            locationCards.forEach(c => c.classList.remove('selected'));
+            // Add selected class to clicked card
+            this.classList.add('selected');
+        });
+    });
+
+    // Handle invitation form submission
+    const invitationForm = document.getElementById('invitation-form');
+    if (invitationForm) {
+        invitationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get selected location
+            const selectedLocation = document.querySelector('.location-card.selected');
+            if (!selectedLocation) {
+                alert('Please select a location');
+                return;
+            }
+
+            // Get form data
+            const location = selectedLocation.getAttribute('data-location');
+            const date = document.getElementById('invitation-date').value;
+            const time = document.getElementById('invitation-time').value;
+            const gameType = document.getElementById('game-type').value;
+            const eventName = document.getElementById('event-name').value;
+            const notes = document.getElementById('event-notes').value;
+
+            // Create invitation object
+            const invitation = {
+                location,
+                date,
+                time,
+                gameType,
+                eventName,
+                notes
+            };
+
+            // Store invitation data (in a real app, this would be sent to a server)
+            console.log('Invitation created:', invitation);
+
+            // Show success message
+            alert('Invitation sent successfully!');
+
+            // Close the popup
+            closePopup(invitePopup);
+        });
+    }
 
     document.querySelector(".btn.change-sport").addEventListener("click", () => {
         window.location.href = "/change-sport.html";
