@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/styles/profile-responsive.css">
+    <link rel="stylesheet" href="/static/styles/no-chart-animation.css">
     <script src="/static/scripts/usercheck.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -15,24 +16,29 @@
     <div class="background-text2">LARO</div>
     <nav class="navbar">
         <div class="logo">
-            <a href="/">LARO</a>
+            <a href="/dashboard/">LARO</a>
         </div>
         <div class="search-bar">
-            <input type="text" placeholder="Search Laro">
+            <input type="text" placeholder="SEARCH LARO">
         </div>
         <ul class="nav-links">
             <li><a href="/booking.html">BOOKING</a></li>
             <li><a href="/notifications.html">NOTIFICATIONS</a></li>
             <li><a href="/profile.html" class="active">PROFILE</a></li>
         </ul>
+        <div class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </nav>
 
     <!-- Main Content -->
     <div class="myprofile">
         <div class="profile-card">
-            <div class="left-panel">
-                <div class="icon-row">
-                    <img src="/static/img/kai-sotto.jpg" id="profile-icon" alt="profile-icon">
+            <!-- Left Section with Profile Info -->
+            <div class="profile-top-section">
+                <div class="left-panel">
                     <div class="settings-icon" id="settings-icon">
                         <i class="fas fa-cog"></i>
                         <div class="settings-dropdown">
@@ -45,33 +51,43 @@
                             <div class="dropdown-item" id="privacy-settings">
                                 <i class="fas fa-lock"></i> Privacy Settings
                             </div>
+                            <div class="dropdown-item" id="logout">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="name-row">
-                    <p id="full-name">Kai Sutto</p>
-                    <p id="username">@GinulayAngMunggo</p>
-                </div>
 
-                <div class="bio-row">
-                    <p>Basketball is my game.</p>
-                </div>
-                <div class="hr"></div>
-                <div class="stat-row">
-                    <ul>
-                        <li>AGE - 21</li>
-                        <li>HEIGHT - 5'11"</li>
-                        <li>WEIGHT - 90 kg</li>
-                        <li>GENDER - MALE</li>
-                    </ul>
-                </div>
+                    <div class="icon-row">
+                        <img src="/static/img/kai-sotto.jpg" id="profile-icon" alt="profile-icon">
+                    </div>
 
-                <div class="share-profile">
-                    <button id="share-btn" class="share-btn">
-                        <i class="fas fa-share-alt"></i> Share Profile
-                    </button>
+                    <div class="name-row">
+                        <p id="full-name">Kai Sutto</p>
+                        <p id="username">@GinulayAngMunggo</p>
+                    </div>
+
+                    <div class="bio-row">
+                        <p>Basketball is my game.</p>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="stat-row">
+                        <ul>
+                            <li><span class="stat-label">AGE</span>21</li>
+                            <li><span class="stat-label">HEIGHT</span>5'11"</li>
+                            <li><span class="stat-label">WEIGHT</span>90 kg</li>
+                            <li><span class="stat-label">GENDER</span>MALE</li>
+                        </ul>
+                    </div>
+
+                    <div class="share-profile">
+                        <button id="share-btn" class="share-btn">
+                            <i class="fas fa-share-alt"></i> Share Profile
+                        </button>
+                    </div>
                 </div>
             </div>
+
+            <!-- Right Section with Stats and Content -->
             <div class="right-panel">
                 <div class="followers-row">
                     <div class="follow-col">
@@ -98,37 +114,111 @@
                         <i class="fas fa-table-tennis"></i>
                     </div>
                 </div>
-                <div class="sport-chart">
-                    <canvas id="donutChart"></canvas>
-                </div>
                 <div class="sport-row">
                     <p>BASKETBALL</p>
                 </div>
                 <div class="position-row">
                     <p>POINT GUARD</p>
                 </div>
-            </div>
 
-        </div>
-        <div class="game-history">
-            <p>HISTORY</p>
-            <div class="history-list">
-                <p>MOST RECENT</p>
-                <div class="list-item"></div>
-                <div class="list-item"></div>
-                <div class="list-item"></div>
-                <div class="list-item"></div>
-                <div class="list-item"></div>
-                <div class="list-item"></div>
-                <div class="list-item"></div>
-                <div class="list-item"></div>
-                <div class="list-item"></div>
-                <div class="list-item"></div>
-                <div class="list-item"></div>
-                <div class="list-item"></div>
-                <div class="list-item"></div>
-                <div class="list-item"></div>
-                <div class="list-item"></div>
+                <!-- Bottom Section with Game History -->
+                <div class="profile-bottom-section">
+                    <div class="section-tabs">
+                        <div class="tab active" data-tab="history">
+                            <i class="fas fa-history"></i> HISTORY
+                        </div>
+                        <div class="tab" data-tab="stats">
+                            <i class="fas fa-chart-line"></i> STATS
+                        </div>
+                        <div class="tab" data-tab="achievements">
+                            <i class="fas fa-trophy"></i> ACHIEVEMENTS
+                        </div>
+                    </div>
+
+                    <div class="tab-content history-content active">
+                        <p class="section-title">MOST RECENT GAMES</p>
+                        <div class="history-list">
+                            <div class="list-item">
+                                <div class="game-date">May 10, 2025</div>
+                                <div class="game-details">
+                                    <div class="game-location">Makati Sports Club</div>
+                                    <div class="game-score">Win: 86-72</div>
+                                </div>
+                            </div>
+                            <div class="list-item">
+                                <div class="game-date">May 3, 2025</div>
+                                <div class="game-details">
+                                    <div class="game-location">BGC High Street Court</div>
+                                    <div class="game-score">Loss: 65-78</div>
+                                </div>
+                            </div>
+                            <div class="list-item">
+                                <div class="game-date">Apr 25, 2025</div>
+                                <div class="game-details">
+                                    <div class="game-location">Alabang Town Center</div>
+                                    <div class="game-score">Win: 92-88</div>
+                                </div>
+                            </div>
+                            <div class="list-item">
+                                <div class="game-date">Apr 18, 2025</div>
+                                <div class="game-details">
+                                    <div class="game-location">Quezon City Circle</div>
+                                    <div class="game-score">Win: 75-70</div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="view-all-btn">VIEW ALL GAMES</button>
+                    </div>
+
+                    <div class="tab-content stats-content">
+                        <p class="section-title">PLAYER STATISTICS</p>
+                        <div class="stats-flex-container">
+                            <div class="stats-chart-column">
+                                <div class="sport-chart">
+                                    <canvas id="donutChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="stats-cards-column">
+                                <div class="stats-container">
+                                    <div class="stat-card">
+                                        <div class="stat-value">18.5</div>
+                                        <div class="stat-label">PPG</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value">7.2</div>
+                                        <div class="stat-label">RPG</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value">5.8</div>
+                                        <div class="stat-label">APG</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value">1.3</div>
+                                        <div class="stat-label">SPG</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content achievements-content">
+                        <p class="section-title">PLAYER ACHIEVEMENTS</p>
+                        <div class="achievements-list">
+                            <div class="achievement-item">
+                                <i class="fas fa-medal"></i>
+                                <span>MVP - Summer League 2024</span>
+                            </div>
+                            <div class="achievement-item">
+                                <i class="fas fa-trophy"></i>
+                                <span>Champion - Barangay Cup 2024</span>
+                            </div>
+                            <div class="achievement-item">
+                                <i class="fas fa-star"></i>
+                                <span>All-Star Selection 2023</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -222,6 +312,8 @@
     <script src="/static/scripts/donutChart.js"></script>
     <script src="/static/scripts/sport-icons.js"></script>
     <script src="/static/scripts/responsive-profile-nav.js"></script>
+    <script src="/static/scripts/profile-tabs.js"></script>
+    <script src="/static/scripts/mobile-menu.js"></script>
     <!-- Testing utility for clearing localStorage -->
     <script src="/static/scripts/clear-storage.js"></script>
 </body>

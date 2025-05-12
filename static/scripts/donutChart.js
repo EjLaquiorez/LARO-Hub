@@ -4,9 +4,11 @@ const centerTextPlugin = {
         const { width, height, ctx } = chart;
         ctx.restore();
 
-        // Draw percentage text
-        const fontSize = (height / 100).toFixed(2);
-        ctx.font = `bold ${fontSize}em 'cocogoose'`;
+        // Calculate responsive font size based on chart dimensions
+        // Use a more responsive approach for smaller screens
+        const fontSize = Math.min(width, height) / 8;
+        const fontSizeEm = (fontSize / 16).toFixed(2); // Convert to em for better scaling
+        ctx.font = `bold ${fontSizeEm}em 'cocogoose'`;
 
         // Create gradient for text
         const gradient = ctx.createLinearGradient(0, 0, width, 0);
@@ -15,12 +17,14 @@ const centerTextPlugin = {
         ctx.fillStyle = gradient;
 
         ctx.textBaseline = "middle";
+        ctx.textAlign = "center"; // Center text horizontally
 
         const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
         const value = chart.data.datasets[0].data[0];
         const percentage = ((value / total) * 100).toFixed(1) + '%';
 
-        const textX = Math.round((width - ctx.measureText(percentage).width) / 2);
+        // Center position
+        const textX = width / 2;
         const textY = height / 2;
 
         // Add text shadow
@@ -69,11 +73,14 @@ new Chart(ctx, {
         radius: '90%',
         responsive: true,
         maintainAspectRatio: true,
-        animation: {
-            animateScale: true,
-            animateRotate: true,
-            duration: 1000,
-            easing: 'easeOutCubic'
+        animation: false, // Disable all animations
+        layout: {
+            padding: {
+                top: 5,
+                right: 5,
+                bottom: 5,
+                left: 5
+            }
         },
         plugins: {
             legend: {
@@ -84,13 +91,13 @@ new Chart(ctx, {
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 titleFont: {
                     family: 'cocogoose',
-                    size: 14
+                    size: 12
                 },
                 bodyFont: {
                     family: 'cocogoose',
-                    size: 12
+                    size: 10
                 },
-                padding: 10,
+                padding: 8,
                 cornerRadius: 8,
                 displayColors: true,
                 callbacks: {
@@ -103,6 +110,11 @@ new Chart(ctx, {
                     }
                 }
             }
+        },
+        // Ensure chart is properly sized on all devices
+        onResize: function(chart, size) {
+            // Recalculate font size when chart is resized
+            chart.update();
         }
     },
     plugins: [centerTextPlugin]

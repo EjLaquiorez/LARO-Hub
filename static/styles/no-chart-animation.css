@@ -1,0 +1,29 @@
+/* Disable animations for chart elements */
+.sport-chart canvas {
+    transition: none !important;
+    animation: none !important;
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Ensure chart container doesn't have animations */
+.sport-chart {
+    transition: none !important;
+    animation: none !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+/* Ensure chart is responsive */
+@media (max-width: 576px) {
+    .sport-chart canvas {
+        max-height: 180px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .sport-chart canvas {
+        max-height: 160px !important;
+    }
+}

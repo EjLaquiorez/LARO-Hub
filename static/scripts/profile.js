@@ -1,3 +1,58 @@
+// Import functions from usercheck.js if they're not already available
+// These functions should be available since usercheck.js is loaded before profile.js
+// But we'll define fallbacks just in case
+if (typeof isTokenValid !== 'function') {
+    function isTokenValid(token) {
+        try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(
+                atob(base64).split('').map(c =>
+                    '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+                ).join('')
+            );
+            const payload = JSON.parse(jsonPayload);
+            const now = Math.floor(Date.now() / 1000);
+            return payload.exp > now;
+        } catch (e) {
+            return false;
+        }
+    }
+}
+
+if (typeof refreshAccessToken !== 'function') {
+    function refreshAccessToken() {
+        return new Promise((resolve, reject) => {
+            const refreshToken = localStorage.getItem("refresh");
+            if (!refreshToken) {
+                reject(new Error("No refresh token found"));
+                return;
+            }
+
+            fetch("/api/token/refresh/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ refresh: refreshToken })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.access) {
+                    localStorage.setItem("access", data.access);
+                    resolve(data.access);
+                } else {
+                    reject(new Error("Failed to refresh token"));
+                }
+            })
+            .catch(error => {
+                console.error('Error refreshing token:', error);
+                reject(error);
+            });
+        });
+    }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     let currentUser = null;
 
@@ -14,10 +69,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         // Check if token is valid
-        if (!isTokenValid(token)) {
+        if (typeof isTokenValid === 'function' && !isTokenValid(token)) {
             console.log("Token expired, attempting to refresh...");
             try {
-                await refreshAccessToken();
+                if (typeof refreshAccessToken === 'function') {
+                    await refreshAccessToken();
+                } else {
+                    throw new Error("refreshAccessToken function not available");
+                }
             } catch (error) {
                 console.error("Token refresh failed:", error);
                 // Redirect to login page
@@ -84,6 +143,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const editProfileBtn = document.getElementById("edit-profile");
     const changePasswordBtn = document.getElementById("change-password");
     const privacySettingsBtn = document.getElementById("privacy-settings");
+    const logoutBtn = document.getElementById("logout");
 
     // Edit Profile button in dropdown
     editProfileBtn.addEventListener("click", () => {
@@ -98,6 +158,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Privacy Settings button
     privacySettingsBtn.addEventListener("click", () => {
         alert("Privacy Settings functionality will be implemented soon!");
+    });
+
+    // Logout button
+    logoutBtn.addEventListener("click", () => {
+        // Clear all authentication tokens from localStorage
+        localStorage.removeItem("access");
+        localStorage.removeItem("refresh");
+        localStorage.removeItem("currentUser");
+
+        console.log("User logged out successfully");
+
+        // Redirect to login page
+        window.location.href = "/login.html";
     });
 
     // Share Profile button
