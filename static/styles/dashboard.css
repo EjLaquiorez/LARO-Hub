@@ -188,7 +188,7 @@ body::before {
 
 /* Mobile nav background */
 .navbar.mobile-active {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: transparent;
 }
 
 .navbar .nav-links li a {

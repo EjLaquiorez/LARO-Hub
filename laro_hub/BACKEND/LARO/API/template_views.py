@@ -24,11 +24,11 @@ def signup_view(request):
     """
     return render(request, 'signup.html')
 
-def booking_view(request):
+def overview_view(request):
     """
-    View function for the booking page.
+    View function for the overview page.
     """
-    return render(request, 'booking.html')
+    return render(request, 'overview.html')
 
 def profile_view(request):
     """

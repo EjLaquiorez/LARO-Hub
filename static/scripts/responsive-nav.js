@@ -23,17 +23,23 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
 
         // Insert before the first child of navbar
-        navbar.insertBefore(menuToggle, navbar.firstChild);
+        navbar.appendChild(menuToggle);
 
         // Add event listener
         menuToggle.addEventListener('click', toggleMobileMenu);
     };
 
     // Toggle mobile menu
-    const toggleMobileMenu = () => {
+    const toggleMobileMenu = (event) => {
+        if (event) {
+            event.stopPropagation();
+        }
+
         const navLinks = document.querySelector('.nav-links');
         const menuToggle = document.querySelector('.menu-toggle');
         const navbar = document.querySelector('.navbar');
+
+        if (!navLinks || !menuToggle || !navbar) return;
 
         navLinks.classList.toggle('active');
         menuToggle.classList.toggle('active');
@@ -56,6 +62,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const navLinks = document.querySelector('.nav-links');
         const menuToggle = document.querySelector('.menu-toggle');
         const navbar = document.querySelector('.navbar');
+
+        if (!navLinks || !navbar) return;
 
         // Reset menu state on larger screens
         if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
@@ -91,6 +99,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const menuToggle = document.querySelector('.menu-toggle');
         const navbar = document.querySelector('.navbar');
 
+        if (!navLinks || !menuToggle || !navbar) return;
+
         if (navLinks.classList.contains('active') &&
             !navLinks.contains(event.target) &&
             !menuToggle.contains(event.target)) {
@@ -108,6 +118,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const navLinks = document.querySelector('.nav-links');
         const menuToggle = document.querySelector('.menu-toggle');
         const navbar = document.querySelector('.navbar');
+
+        if (!navLinks || !menuToggle || !navbar) return;
 
         if (window.innerWidth <= 768 && navLinks.classList.contains('active')) {
             navLinks.classList.remove('active');
@@ -127,11 +139,47 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     };
 
+    // Handle notification bell
+    const setupNotificationBell = () => {
+        const notificationBell = document.getElementById('notification-bell');
+        const notificationDropdown = document.querySelector('.notification-dropdown');
+
+        if (notificationBell && notificationDropdown) {
+            notificationBell.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                notificationDropdown.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (notificationDropdown.classList.contains('show') &&
+                    !notificationDropdown.contains(e.target) &&
+                    !notificationBell.contains(e.target)) {
+                    notificationDropdown.classList.remove('show');
+                }
+            });
+        }
+    };
+
+    // Add scroll event to handle navbar effects
+    const handleScroll = () => {
+        const navbar = document.querySelector('.navbar');
+
+        if (navbar) {
+            // Keep navbar transparent regardless of scroll position
+            navbar.style.backgroundColor = 'transparent';
+            navbar.style.boxShadow = 'none';
+        }
+    };
+
     // Initialize
     handleResize();
     addNavLinkListeners();
+    setupNotificationBell();
 
     // Event listeners
     window.addEventListener('resize', handleResize);
     document.addEventListener('click', handleClickOutside);
+    window.addEventListener('scroll', handleScroll);
 });

@@ -39,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         navLinks.classList.toggle('active');
         menuToggle.classList.toggle('active');
-        navbar.classList.toggle('mobile-active');
 
         // Add animation to hamburger menu
         if (menuToggle.classList.contains('active')) {
@@ -62,7 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Reset menu state on larger screens
         if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
             navLinks.classList.remove('active');
-            navbar.classList.remove('mobile-active');
             if (menuToggle) {
                 menuToggle.classList.remove('active');
                 menuToggle.querySelector('span:nth-child(1)').style.transform = 'none';
@@ -98,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function() {
             !menuToggle.contains(event.target)) {
             navLinks.classList.remove('active');
             menuToggle.classList.remove('active');
-            navbar.classList.remove('mobile-active');
             menuToggle.querySelector('span:nth-child(1)').style.transform = 'none';
             menuToggle.querySelector('span:nth-child(2)').style.opacity = '1';
             menuToggle.querySelector('span:nth-child(3)').style.transform = 'none';
@@ -114,7 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (window.innerWidth <= 768 && navLinks.classList.contains('active')) {
             navLinks.classList.remove('active');
             menuToggle.classList.remove('active');
-            navbar.classList.remove('mobile-active');
             menuToggle.querySelector('span:nth-child(1)').style.transform = 'none';
             menuToggle.querySelector('span:nth-child(2)').style.opacity = '1';
             menuToggle.querySelector('span:nth-child(3)').style.transform = 'none';

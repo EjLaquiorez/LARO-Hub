@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LARO - Overview</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/styles/dashboard.css">
+    <link rel="stylesheet" href="/static/styles/overview.css">
+</head>
+<body class="overview-page">
+    <!-- Background Elements -->
+    <div class="background-text2">LARO</div>
+    <div class="background-overlay"></div>
+    <div class="background-pattern"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="/dashboard/">LARO</a>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="SEARCH LARO">
+        </div>
+        <ul class="nav-links">
+            <li><a href="/overview.html" class="active" title="Overview"><i class="bi bi-info-circle-fill"></i></a></li>
+            <li class="notification-item">
+                <a href="#" id="notification-bell">
+                    <i class="bi bi-bell-fill"></i>
+                    <span class="notification-badge">1</span>
+                </a>
+                <!-- Notification Dropdown Panel -->
+                <div class="notification-dropdown">
+                    <div class="notification-header">
+                        <h3>Notifications</h3>
+                        <div class="notification-actions">
+                            <button class="notification-option active">All</button>
+                            <button class="notification-option">Unread</button>
+                        </div>
+                    </div>
+                    <div class="notification-subheader">
+                        <span>Earlier</span>
+                        <a href="/notifications.html" class="see-all">See all</a>
+                    </div>
+                    <div class="notification-list">
+                        <!-- Sample notifications -->
+                        <div class="notification-item unread">
+                            <div class="notification-avatar">
+                                <img src="/static/img/avatar1.jpg" alt="User">
+                            </div>
+                            <div class="notification-content">
+                                <p>You approved a login.</p>
+                                <span class="notification-time">10h</span>
+                            </div>
+                            <div class="notification-status">
+                                <span class="status-dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="profile-item">
+                <a href="/profile.html">
+                    <i class="bi bi-person-circle"></i>
+                    <span id="username-display">PROFILE</span>
+                </a>
+            </li>
+        </ul>
+        <div class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="overview-container">
+        <div class="overview-header">
+            <div class="header-content">
+                <h1>WELCOME TO <span>LARO</span></h1>
+                <p>The ultimate basketball community platform</p>
+                <div class="header-line"></div>
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="overview-hero">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h2>CONNECT. PLAY. DOMINATE.</h2>
+                    <p>LARO brings basketball enthusiasts together, making it easier than ever to find games, track your stats, and build your basketball community.</p>
+                    <div class="hero-buttons">
+                        <a href="#features" class="btn-primary">EXPLORE FEATURES</a>
+                        <a href="/dashboard/" class="btn-secondary">GO TO DASHBOARD</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="/static/img/basketball-hero.png" alt="Basketball Player">
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="overview-stats" id="stats">
+            <div class="section-title">
+                <h2>LARO COMMUNITY</h2>
+                <div class="title-line"></div>
+            </div>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">500+</div>
+                        <h3>Active Players</h3>
+                        <p>Join a growing community of basketball enthusiasts in your area</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="bi bi-calendar-event"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">20+</div>
+                        <h3>Weekly Games</h3>
+                        <p>Find games happening every day across different courts</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="bi bi-geo-alt-fill"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">15</div>
+                        <h3>Basketball Courts</h3>
+                        <p>Discover courts near you for quick join and booking</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="overview-features" id="features">
+            <div class="section-title">
+                <h2>KEY FEATURES</h2>
+                <div class="title-line"></div>
+            </div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="bi bi-lightning-fill"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Quick Join</h4>
+                        <p>Find and join basketball games happening right now near you. No more searching for pickup games - see who's playing and join instantly.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="bi bi-calendar-plus"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Create Games</h4>
+                        <p>Organize your own basketball games and invite players. Set the time, location, and game type, then share with friends or open to the community.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="bi bi-trophy-fill"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Track Stats</h4>
+                        <p>Keep track of your performance and game history. Monitor your progress, see your strengths, and identify areas for improvement.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h4>Team Building</h4>
+                        <p>Create or join teams for regular play and tournaments. Build your squad, compete together, and climb the LARO rankings.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works Section -->
+        <div class="how-it-works">
+            <div class="section-title">
+                <h2>HOW IT WORKS</h2>
+                <div class="title-line"></div>
+            </div>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Create Your Profile</h4>
+                        <p>Sign up and customize your player profile with your skills, position, and availability.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Find Games</h4>
+                        <p>Use Quick Join to discover games happening near you or create your own game event.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Play & Connect</h4>
+                        <p>Join the game, meet new players, and build your basketball network.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Track Progress</h4>
+                        <p>Record your stats, review your game history, and improve your skills.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <div class="cta-content">
+                <h2>READY TO ELEVATE YOUR GAME?</h2>
+                <p>Join the LARO community today and transform your basketball experience.</p>
+                <a href="/dashboard/" class="cta-button">GET STARTED</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/scripts/responsive-nav.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Notification bell functionality
+            const notificationBell = document.getElementById('notification-bell');
+            const notificationDropdown = document.querySelector('.notification-dropdown');
+
+            if (notificationBell && notificationDropdown) {
+                notificationBell.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    notificationDropdown.classList.toggle('show');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!notificationDropdown.contains(e.target) && !notificationBell.contains(e.target)) {
+                        notificationDropdown.classList.remove('show');
+                    }
+                });
+            }
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+
+                        // Close mobile menu if open
+                        const navLinks = document.querySelector('.nav-links');
+                        const menuToggle = document.querySelector('.menu-toggle');
+
+                        if (window.innerWidth <= 768 && navLinks.classList.contains('active') && menuToggle) {
+                            navLinks.classList.remove('active');
+                            menuToggle.classList.remove('active');
+                            document.querySelector('.navbar').classList.remove('mobile-active');
+
+                            // Reset hamburger icon
+                            menuToggle.querySelector('span:nth-child(1)').style.transform = 'none';
+                            menuToggle.querySelector('span:nth-child(2)').style.opacity = '1';
+                            menuToggle.querySelector('span:nth-child(3)').style.transform = 'none';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
