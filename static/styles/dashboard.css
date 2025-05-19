@@ -12,6 +12,12 @@
     font-style: normal;
 }
 
+/* CSS Variables */
+:root {
+    --header-height: 70px;
+    --header-height-mobile: 60px;
+}
+
 /* Prevent scrolling on html and body */
 html, body {
     overflow: hidden;
@@ -435,9 +441,11 @@ body::before {
     width: 100%;
     max-width: 1600px;
     margin: 0 auto;
-    margin-top: 5rem; /* Space for navbar */
-    max-height: calc(100vh - 6rem); /* Ensure it fits in viewport without scrolling */
+    margin-top: var(--header-height); /* Space for header - using CSS variable */
+    max-height: calc(100vh - var(--header-height)); /* Ensure it fits in viewport without scrolling */
     overflow: hidden;
+    position: relative;
+    z-index: 1;
 }
 
 /* Panels */
@@ -1464,8 +1472,12 @@ body::before {
         display: flex; /* Show when active class is added */
     }
 
+    :root {
+        --header-height: var(--header-height-mobile);
+    }
+
     .dashboard {
-        padding-top: 9rem;
+        padding-top: 1rem;
         gap: 2rem;
     }
 
@@ -1495,7 +1507,7 @@ body::before {
     }
 
     .dashboard {
-        padding-top: 7rem;
+        padding-top: 0.5rem;
     }
 
     .nearby-courts,
@@ -1573,8 +1585,8 @@ body::before {
     }
 
     .dashboard {
-        padding-top: 6rem;
-        padding-bottom: 2rem;
+        padding-top: 0.5rem;
+        padding-bottom: 1rem;
     }
 
     .nearby-courts,

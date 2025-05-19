@@ -3,40 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="/static/styles/profile-responsive.css">
     <link rel="stylesheet" href="/static/styles/no-chart-animation.css">
-    <script src="/static/scripts/usercheck.js"></script>
+    <link rel="stylesheet" href="/static/styles/profile-dropdown.css">
+    <link rel="stylesheet" href="/static/styles/new-navigation.css">
+
+    <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <title>My Profile</title>
+
+    <!-- Core Services -->
+    <script src="/static/scripts/usercheck.js"></script>
+    <script src="/static/scripts/api-service.js"></script>
+    <script src="/static/scripts/notification-service.js"></script>
+    <script src="/static/scripts/notification-component.js"></script>
+    <script src="/static/scripts/notification-system.js"></script>
 </head>
 <body>
-    <!-- Navigation Bar -->
+    <!-- Background Text -->
     <div class="background-text2">LARO</div>
-    <nav class="navbar">
-        <div class="logo">
-            <a href="/dashboard/">LARO</a>
+
+    <!-- New Header Navigation -->
+    <header class="main-header">
+        <!-- Primary Navigation Bar -->
+        <div class="nav-container">
+            <!-- Logo Section with Overview Icon -->
+            <div class="header-logo-container">
+                <div class="header-logo">
+                    <a href="/dashboard/" aria-label="LARO Home" data-page="dashboard">
+                        <span class="logo-text">LARO</span>
+                    </a>
+                </div>
+
+                <!-- Overview Link (now next to logo) -->
+                <div class="overview-link">
+                    <a href="/overview.html" class="nav-link" title="Overview" data-page="overview">
+                        <i class="bi bi-info-circle-fill"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Side Tools -->
+            <div class="header-tools">
+                <!-- Search Tool -->
+                <div class="search-tool">
+                    <button class="search-toggle" aria-label="Toggle search">
+                        <i class="bi bi-search"></i>
+                    </button>
+                    <div class="search-panel">
+                        <div class="search-input-wrapper">
+                            <input type="text" class="search-input" placeholder="Search LARO" aria-label="Search">
+                            <button class="search-submit" aria-label="Submit search">
+                                <i class="bi bi-search"></i>
+                            </button>
+                            <button class="search-close" aria-label="Close search">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification Bell -->
+                <div class="notification-tool">
+                    <button id="notification-bell" class="notification-toggle" aria-label="Notifications">
+                        <i class="bi bi-bell-fill"></i>
+                        <span class="notification-badge">0</span>
+                    </button>
+
+                    <!-- Notification Dropdown Panel -->
+                    <div class="notification-dropdown">
+                        <div class="notification-header">
+                            <h3>Notifications</h3>
+                            <div class="notification-actions">
+                                <button class="notification-option active">All</button>
+                                <button class="notification-option">Unread</button>
+                            </div>
+                        </div>
+                        <div class="notification-subheader">
+                            <span>Earlier</span>
+                            <a href="/notifications/" class="see-all">See all</a>
+                        </div>
+                        <div class="notification-list">
+                            <!-- Notifications will be dynamically populated here -->
+                            <div class="no-notifications">
+                                <p>Loading notifications...</p>
+                            </div>
+                        </div>
+                        <div class="notification-footer">
+                            <button class="see-previous">Mark all as read</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Profile -->
+                <div class="profile-tool">
+                    <button id="profile-dropdown-toggle" class="profile-toggle" aria-label="User profile">
+                        <i class="bi bi-person-circle"></i>
+                        <span id="username-display" class="username-display">PROFILE</span>
+                    </button>
+
+                    <!-- Profile Dropdown Menu -->
+                    <div class="profile-dropdown">
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <i class="bi bi-person-circle"></i>
+                            </div>
+                            <div class="profile-info">
+                                <h3 id="profile-name">User Name</h3>
+                                <p id="profile-email">user@example.com</p>
+                            </div>
+                        </div>
+                        <ul class="profile-menu">
+                            <li><a href="/profile.html" data-page="profile"><i class="bi bi-person"></i> View Profile</a></li>
+                            <li><a href="/profile.html#settings" data-page="profile"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li><a href="#" data-action="logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="search-bar">
-            <input type="text" placeholder="SEARCH LARO">
+
+        <!-- Mobile Navigation Panel -->
+        <div class="mobile-nav">
+            <div class="mobile-nav-container">
+                <ul class="mobile-menu">
+                    <li class="mobile-item">
+                        <a href="/dashboard/" class="mobile-link" data-page="dashboard">
+                            <i class="bi bi-house-fill"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="mobile-item">
+                        <a href="/overview.html" class="mobile-link" data-page="overview">
+                            <i class="bi bi-info-circle-fill"></i>
+                            <span>Overview</span>
+                        </a>
+                    </li>
+                    <li class="mobile-item">
+                        <a href="/courts.html" class="mobile-link" data-page="courts">
+                            <i class="bi bi-map-fill"></i>
+                            <span>Courts</span>
+                        </a>
+                    </li>
+                    <li class="mobile-item">
+                        <a href="/games.html" class="mobile-link" data-page="games">
+                            <i class="bi bi-calendar-event-fill"></i>
+                            <span>Games</span>
+                        </a>
+                    </li>
+                    <li class="mobile-item">
+                        <a href="/profile.html" class="mobile-link" data-page="profile">
+                            <i class="bi bi-person-fill"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <ul class="nav-links">
-            <li class="profile-item">
-                <a href="/profile.html" class="active">
-                    <i class="bi bi-person-circle"></i>
-                    <span id="username-display">PROFILE</span>
-                </a>
-            </li>
-        </ul>
-        <div class="menu-toggle">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-    </nav>
+    </header>
 
     <!-- Main Content -->
     <div class="myprofile">
@@ -316,9 +446,11 @@
     <script src="/static/scripts/profile.js"></script>
     <script src="/static/scripts/donutChart.js"></script>
     <script src="/static/scripts/sport-icons.js"></script>
-    <script src="/static/scripts/responsive-profile-nav.js"></script>
     <script src="/static/scripts/profile-tabs.js"></script>
-    <script src="/static/scripts/mobile-menu.js"></script>
+    <script src="/static/scripts/new-navigation.js"></script>
+    <script src="/static/scripts/logout-handler.js"></script>
+    <!-- Notification initializer -->
+    <script src="/static/scripts/notification-initializer.js"></script>
     <!-- Testing utility for clearing localStorage -->
     <script src="/static/scripts/clear-storage.js"></script>
 </body>
