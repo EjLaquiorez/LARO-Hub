@@ -8,12 +8,13 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from django.db.models import Q
 
 import asyncio
 from typing import AsyncGenerator
 
-from .models import User, Game, Team, Court, Conversation, Message
-from .serializers import UserSerializer, GameMatchSerializer, ConversationSerializer, MessageSerializer
+from .models import User, Game, Team, Court, Conversation, Message, Notification
+from .serializers import UserSerializer, GameMatchSerializer, ConversationSerializer, MessageSerializer, NotificationSerializer
 from datetime import datetime
 from django.db.models import Q
 
@@ -729,6 +730,322 @@ class ConversationAPI(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
+class NotificationAPI(APIView):
+    """
+    API endpoints for managing user notifications
+    """
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                'Authorization',
+                openapi.IN_HEADER,
+                description="Token format: Bearer <token>",
+                type=openapi.TYPE_STRING,
+                required=True
+            ),
+            openapi.Parameter(
+                'unread_only',
+                openapi.IN_QUERY,
+                description="Filter to show only unread notifications",
+                type=openapi.TYPE_BOOLEAN,
+                required=False
+            ),
+            openapi.Parameter(
+                'type',
+                openapi.IN_QUERY,
+                description="Filter by notification type",
+                type=openapi.TYPE_STRING,
+                required=False
+            )
+        ],
+        responses={
+            200: NotificationSerializer(many=True),
+            401: 'Unauthorized'
+        },
+        security=[{'Bearer': []}],
+        operation_description="Get all notifications for the current user"
+    )
+    def get(self, request):
+        """Get all notifications for the current user"""
+        # Get query parameters
+        unread_only = request.query_params.get('unread_only', 'false').lower() == 'true'
+        notification_type = request.query_params.get('type')
+
+        # Build query
+        query = Q(user=request.user)
+        if unread_only:
+            query &= Q(is_read=False)
+        if notification_type:
+            query &= Q(type=notification_type)
+
+        # Get notifications
+        notifications = Notification.objects.filter(query)
+        serializer = NotificationSerializer(notifications, many=True)
+
+        return Response(serializer.data)
+
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                'Authorization',
+                openapi.IN_HEADER,
+                description="Token format: Bearer <token>",
+                type=openapi.TYPE_STRING,
+                required=True
+            )
+        ],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['type', 'title', 'content'],
+            properties={
+                'type': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Notification type',
+                    enum=['message', 'game_invitation', 'game_update', 'system']
+                ),
+                'title': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Notification title'
+                ),
+                'content': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Notification content'
+                ),
+                'related_object_id': openapi.Schema(
+                    type=openapi.TYPE_INTEGER,
+                    description='ID of related object (optional)'
+                ),
+                'related_object_type': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Type of related object (optional)'
+                ),
+                'data': openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    description='Additional data (optional)'
+                )
+            }
+        ),
+        responses={
+            201: NotificationSerializer,
+            400: 'Bad Request',
+            401: 'Unauthorized'
+        },
+        security=[{'Bearer': []}],
+        operation_description="Create a new notification"
+    )
+    def post(self, request):
+        """Create a new notification"""
+        # Add user to the data
+        data = {
+            **request.data,
+            'user': request.user.id
+        }
+
+        serializer = NotificationSerializer(data=data)
+        if serializer.is_valid():
+            notification = serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class NotificationDetailAPI(APIView):
+    """
+    API endpoints for managing a specific notification
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get_notification(self, pk, user):
+        """Helper method to get a notification by ID"""
+        try:
+            return Notification.objects.get(pk=pk, user=user)
+        except Notification.DoesNotExist:
+            return None
+
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                'id',
+                openapi.IN_PATH,
+                description="Notification ID",
+                type=openapi.TYPE_INTEGER,
+                required=True
+            ),
+            openapi.Parameter(
+                'Authorization',
+                openapi.IN_HEADER,
+                description="Token format: Bearer <token>",
+                type=openapi.TYPE_STRING,
+                required=True
+            )
+        ],
+        responses={
+            200: NotificationSerializer,
+            404: 'Notification not found',
+            401: 'Unauthorized'
+        },
+        security=[{'Bearer': []}],
+        operation_description="Get a specific notification"
+    )
+    def get(self, request, pk):
+        """Get a specific notification"""
+        notification = self.get_notification(pk, request.user)
+        if not notification:
+            return Response(
+                {'error': 'Notification not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = NotificationSerializer(notification)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                'id',
+                openapi.IN_PATH,
+                description="Notification ID",
+                type=openapi.TYPE_INTEGER,
+                required=True
+            ),
+            openapi.Parameter(
+                'Authorization',
+                openapi.IN_HEADER,
+                description="Token format: Bearer <token>",
+                type=openapi.TYPE_STRING,
+                required=True
+            )
+        ],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'is_read': openapi.Schema(
+                    type=openapi.TYPE_BOOLEAN,
+                    description='Mark notification as read'
+                )
+            }
+        ),
+        responses={
+            200: NotificationSerializer,
+            404: 'Notification not found',
+            400: 'Bad Request',
+            401: 'Unauthorized'
+        },
+        security=[{'Bearer': []}],
+        operation_description="Update a notification (mark as read)"
+    )
+    def patch(self, request, pk):
+        """Update a notification (mark as read)"""
+        notification = self.get_notification(pk, request.user)
+        if not notification:
+            return Response(
+                {'error': 'Notification not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = NotificationSerializer(
+            notification,
+            data=request.data,
+            partial=True
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                'id',
+                openapi.IN_PATH,
+                description="Notification ID",
+                type=openapi.TYPE_INTEGER,
+                required=True
+            ),
+            openapi.Parameter(
+                'Authorization',
+                openapi.IN_HEADER,
+                description="Token format: Bearer <token>",
+                type=openapi.TYPE_STRING,
+                required=True
+            )
+        ],
+        responses={
+            204: 'No Content',
+            404: 'Notification not found',
+            401: 'Unauthorized'
+        },
+        security=[{'Bearer': []}],
+        operation_description="Delete a notification"
+    )
+    def delete(self, request, pk):
+        """Delete a notification"""
+        notification = self.get_notification(pk, request.user)
+        if not notification:
+            return Response(
+                {'error': 'Notification not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        notification.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+@swagger_auto_schema(
+    method='post',
+    manual_parameters=[
+        openapi.Parameter(
+            'Authorization',
+            openapi.IN_HEADER,
+            description="Token format: Bearer <token>",
+            type=openapi.TYPE_STRING,
+            required=True
+        )
+    ],
+    responses={
+        200: 'All notifications marked as read',
+        401: 'Unauthorized'
+    },
+    security=[{'Bearer': []}],
+    operation_description="Mark all notifications as read"
+)
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def mark_all_notifications_read(request):
+    """Mark all notifications as read for the current user"""
+    Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
+    return Response({'message': 'All notifications marked as read'})
+
+@swagger_auto_schema(
+    method='get',
+    manual_parameters=[
+        openapi.Parameter(
+            'Authorization',
+            openapi.IN_HEADER,
+            description="Token format: Bearer <token>",
+            type=openapi.TYPE_STRING,
+            required=True
+        )
+    ],
+    responses={
+        200: 'Returns unread notification count',
+        401: 'Unauthorized'
+    },
+    security=[{'Bearer': []}],
+    operation_description="Get unread notification count"
+)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def unread_notification_count(request):
+    """Get the count of unread notifications for the current user"""
+    count = Notification.objects.filter(user=request.user, is_read=False).count()
+    return Response({'count': count})
+
 class MessageAPI(APIView):
     """
     API endpoints for managing messages within conversations
@@ -835,9 +1152,27 @@ class MessageAPI(APIView):
             })
 
             if serializer.is_valid():
-                serializer.save()
+                message = serializer.save()
                 # Update conversation timestamp
                 conversation.save()  # This triggers auto_now update
+
+                # Create notification for the recipient
+                recipient = conversation.participants.exclude(id=request.user.id).first()
+                if recipient:
+                    Notification.objects.create(
+                        user=recipient,
+                        type='message',
+                        title=f'New message from {request.user.firstname}',
+                        content=message.content[:50] + ('...' if len(message.content) > 50 else ''),
+                        related_object_id=conversation.id,
+                        related_object_type='conversation',
+                        data={
+                            'sender_id': request.user.id,
+                            'sender_name': f"{request.user.firstname} {request.user.lastname}",
+                            'message_id': message.id
+                        }
+                    )
+
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
 
             return Response(

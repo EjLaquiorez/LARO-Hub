@@ -527,14 +527,28 @@ document.addEventListener("DOMContentLoaded", () => {
             if (userData) {
                 const user = JSON.parse(userData);
 
-                // Check if username exists
-                if (user && user.username) {
-                    usernameDisplay.textContent = user.username.toUpperCase();
+                // Check if firstname exists
+                if (user && user.firstname) {
+                    usernameDisplay.textContent = user.firstname.toUpperCase();
                 } else if (user && user.email) {
-                    // Fallback to email if username is not available
+                    // Fallback to email if firstname is not available
                     const emailUsername = user.email.split('@')[0];
                     usernameDisplay.textContent = emailUsername.toUpperCase();
                 }
+            } else {
+                // If no user data in localStorage, try to fetch from API
+                window.apiService.getCurrentUser()
+                    .then(user => {
+                        if (user && user.firstname) {
+                            usernameDisplay.textContent = user.firstname.toUpperCase();
+                            // Store user data for future use
+                            localStorage.setItem('currentUser', JSON.stringify(user));
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching user data:', error);
+                        // Keep default "PROFILE" text if there's an error
+                    });
             }
         } catch (error) {
             console.error('Error displaying username:', error);

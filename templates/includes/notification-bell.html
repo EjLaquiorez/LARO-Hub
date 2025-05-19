@@ -1,0 +1,30 @@
+<!-- Notification Bell Component -->
+<li class="notification-item">
+    <a href="#" id="notification-bell">
+        <i class="bi bi-bell-fill"></i>
+        <span class="notification-badge">0</span>
+    </a>
+    <!-- Notification Dropdown Panel -->
+    <div class="notification-dropdown">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <div class="notification-actions">
+                <button class="notification-option active">All</button>
+                <button class="notification-option">Unread</button>
+            </div>
+        </div>
+        <div class="notification-subheader">
+            <span>Earlier</span>
+            <a href="/notifications/" class="see-all">See all</a>
+        </div>
+        <div class="notification-list">
+            <!-- Notifications will be dynamically populated here -->
+            <div class="no-notifications">
+                <p>Loading notifications...</p>
+            </div>
+        </div>
+        <div class="notification-footer">
+            <button class="see-previous">Mark all as read</button>
+        </div>
+    </div>
+</li>

@@ -18,9 +18,12 @@
     <link rel="stylesheet" href="/static/styles/notifications-page.css">
     <link rel="stylesheet" href="/static/styles/notifications.css">
 
-    <!-- User check JS -->
+    <!-- Core Services -->
+    <script src="/static/scripts/api-service.js"></script>
     <script src="/static/scripts/usercheck.js"></script>
     <script src="/static/scripts/notification-service.js"></script>
+    <script src="/static/scripts/notification-component.js"></script>
+    <script src="/static/scripts/notification-system.js"></script>
 </head>
 <body>
     <!-- Background Text -->
@@ -36,10 +39,11 @@
         </div>
         <ul class="nav-links">
             <li><a href="/overview.html" title="Overview"><i class="bi bi-info-circle-fill"></i></a></li>
+            <!-- Notification Bell Component -->
             <li class="notification-item">
                 <a href="#" id="notification-bell">
                     <i class="bi bi-bell-fill"></i>
-                    <span class="notification-badge">1</span>
+                    <span class="notification-badge">0</span>
                 </a>
                 <!-- Notification Dropdown Panel -->
                 <div class="notification-dropdown">
@@ -52,70 +56,16 @@
                     </div>
                     <div class="notification-subheader">
                         <span>Earlier</span>
-                        <a href="/notifications.html" class="see-all">See all</a>
+                        <a href="/notifications/" class="see-all">See all</a>
                     </div>
                     <div class="notification-list">
-                        <!-- Sample notifications -->
-                        <div class="notification-item unread">
-                            <div class="notification-avatar">
-                                <img src="/static/img/avatar1.jpg" alt="User">
-                            </div>
-                            <div class="notification-content">
-                                <p>You approved a login.</p>
-                                <span class="notification-time">10h</span>
-                            </div>
-                            <div class="notification-status">
-                                <span class="status-dot"></span>
-                            </div>
-                        </div>
-                        <div class="notification-item">
-                            <div class="notification-avatar">
-                                <img src="/static/img/laro-icon.png" alt="LARO">
-                            </div>
-                            <div class="notification-content">
-                                <p>Your last game got 22 views before it expired. You can create a new game.</p>
-                                <span class="notification-time">12h</span>
-                            </div>
-                        </div>
-                        <div class="notification-item unread">
-                            <div class="notification-avatar">
-                                <img src="/static/img/avatar2.jpg" alt="User">
-                            </div>
-                            <div class="notification-content">
-                                <p>You approved a login.</p>
-                                <span class="notification-time">21h</span>
-                            </div>
-                            <div class="notification-status">
-                                <span class="status-dot"></span>
-                            </div>
-                        </div>
-                        <div class="notification-item unread">
-                            <div class="notification-avatar">
-                                <img src="/static/img/avatar3.jpg" alt="User">
-                            </div>
-                            <div class="notification-content">
-                                <p>You approved a login.</p>
-                                <span class="notification-time">1d</span>
-                            </div>
-                            <div class="notification-status">
-                                <span class="status-dot"></span>
-                            </div>
-                        </div>
-                        <div class="notification-item unread">
-                            <div class="notification-avatar alert-icon">
-                                <i class="bi bi-exclamation-triangle-fill"></i>
-                            </div>
-                            <div class="notification-content">
-                                <p>Reminder: The files you requested are only available to download for 24 more hours.</p>
-                                <span class="notification-time">1d</span>
-                            </div>
-                            <div class="notification-status">
-                                <span class="status-dot"></span>
-                            </div>
+                        <!-- Notifications will be dynamically populated here -->
+                        <div class="no-notifications">
+                            <p>Loading notifications...</p>
                         </div>
                     </div>
                     <div class="notification-footer">
-                        <button class="see-previous">See previous notifications</button>
+                        <button class="see-previous">Mark all as read</button>
                     </div>
                 </div>
             </li>
@@ -292,5 +242,7 @@
     <!-- Custom JS -->
     <script src="/static/scripts/notifications-page.js"></script>
     <script src="/static/scripts/responsive-nav.js"></script>
+    <!-- Notification initializer -->
+    <script src="/static/scripts/notification-initializer.js"></script>
 </body>
 </html>

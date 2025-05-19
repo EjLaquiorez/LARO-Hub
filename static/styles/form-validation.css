@@ -1,0 +1,63 @@
+/* Form Validation Styles */
+
+.form-error {
+    background-color: #f44336;
+    color: white;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.form-success {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Input validation styles */
+input:invalid, select:invalid, textarea:invalid {
+    border-color: #f44336;
+}
+
+/* Error message for individual fields */
+.field-error {
+    color: #f44336;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    display: none;
+}
+
+/* Show field error when input is invalid and has been interacted with */
+input:invalid:not(:focus):not(:placeholder-shown) + .field-error,
+select:invalid:not(:focus):not(:placeholder-shown) + .field-error,
+textarea:invalid:not(:focus):not(:placeholder-shown) + .field-error {
+    display: block;
+}
+
+/* Loading spinner for buttons */
+button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.bi-arrow-repeat.spinning {
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

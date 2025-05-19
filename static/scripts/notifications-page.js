@@ -108,15 +108,27 @@ function initNotificationsPage() {
 
     // Mark all notifications as read when viewing the notifications page
     if (window.notificationService) {
-        window.notificationService.markAllAsRead();
-
-        // Update notification counts on tabs
+        // Don't automatically mark all as read, just update the counts
         updateNotificationCounts();
 
         // Listen for notification changes
         window.notificationService.addListener(() => {
             updateNotificationCounts();
         });
+
+        // Add a "Mark All as Read" button to the page
+        const notificationsHeader = document.querySelector('.notifications-header');
+        if (notificationsHeader) {
+            const markAllReadBtn = document.createElement('button');
+            markAllReadBtn.className = 'btn btn-warning mark-all-read-btn';
+            markAllReadBtn.innerHTML = '<i class="bi bi-check-all"></i> Mark All as Read';
+            markAllReadBtn.addEventListener('click', async () => {
+                await window.notificationService.markAllAsRead();
+                showNotification('success', 'All notifications marked as read', '');
+                updateNotificationCounts();
+            });
+            notificationsHeader.appendChild(markAllReadBtn);
+        }
     }
 }
 
@@ -128,15 +140,22 @@ function updateNotificationCounts() {
 
     // Get notifications by type
     const notifications = window.notificationService.getNotifications();
-    const loginNotifications = notifications.filter(n => n.type === 'login' && !n.read);
-    const gameNotifications = notifications.filter(n => n.type === 'game' && !n.read);
-    const alertNotifications = notifications.filter(n => n.isAlert && !n.read);
 
-    // Update invitations tab (login notifications for demo)
-    updateTabBadge('invitations-tab', loginNotifications.length);
+    // Count notifications by type
+    const messageNotifications = notifications.filter(n => n.type === 'message' && !n.is_read);
+    const invitationNotifications = notifications.filter(n => n.type === 'game_invitation' && !n.is_read);
+    const updateNotifications = notifications.filter(n =>
+        (n.type === 'game_update' || n.type === 'system') && !n.is_read
+    );
 
-    // Update updates tab (game notifications for demo)
-    updateTabBadge('updates-tab', gameNotifications.length + alertNotifications.length);
+    // Update messages tab
+    updateTabBadge('messages-tab', messageNotifications.length);
+
+    // Update invitations tab
+    updateTabBadge('invitations-tab', invitationNotifications.length);
+
+    // Update updates tab
+    updateTabBadge('updates-tab', updateNotifications.length);
 }
 
 /**
@@ -200,9 +219,57 @@ async function populateUsers() {
                 </div>
             </li>`;
 
-        // In a real app, this would fetch from an API
-        // For demo purposes, we'll use mock data
-        const users = await getMockUsers();
+        // Try to fetch real conversations from the API
+        let users = [];
+
+        try {
+            // Get the auth token
+            const token = localStorage.getItem('access');
+
+            if (token) {
+                // Fetch conversations
+                const response = await fetch('/api/conversations/', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const conversations = await response.json();
+
+                    // Transform conversations into user list
+                    if (conversations && conversations.length > 0) {
+                        const currentUserId = JSON.parse(localStorage.getItem('user'))?.id;
+
+                        users = conversations.map(conversation => {
+                            // Find the other participant (not the current user)
+                            const otherParticipant = conversation.participants.find(id => id !== currentUserId);
+
+                            // Get the last message if available
+                            const lastMessage = conversation.last_message;
+
+                            return {
+                                id: conversation.id,
+                                participant_id: otherParticipant,
+                                firstname: `User ${otherParticipant}`, // We would need to fetch user details separately
+                                lastname: '',
+                                profile_picture: 'https://via.placeholder.com/50',
+                                last_message: lastMessage ? lastMessage.content : null,
+                                time_ago: lastMessage ? formatTimestamp(lastMessage.timestamp) : 'No messages',
+                                unread_count: conversation.unread_count || 0
+                            };
+                        });
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching conversations:', error);
+        }
+
+        // If no real conversations, use mock data
+        if (users.length === 0) {
+            users = await getMockUsers();
+        }
 
         if (!users || users.length === 0) {
             usersList.innerHTML = '<li class="list-group-item">No conversations found</li>';

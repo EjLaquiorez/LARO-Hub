@@ -12,14 +12,24 @@
     <link rel="stylesheet" href="/static/styles/create-game-modal.css" />
     <link rel="stylesheet" href="/static/styles/location-carousel.css" />
     <link rel="stylesheet" href="/static/styles/modal-common.css" />
+    <link rel="stylesheet" href="/static/styles/auth.css" />
+    <link rel="stylesheet" href="/static/styles/profile-dropdown.css" />
+    <link rel="stylesheet" href="/static/styles/game-details.css" />
+    <link rel="stylesheet" href="/static/styles/form-validation.css" />
     <!-- Leaflet Map CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
 
-    <!-- User check JS -->
-    <script src="/static/scripts/usercheck.js"></script>
+    <!-- Core Services -->
+    <script src="/static/scripts/api-service.js"></script>
     <script src="/static/scripts/notification-service.js"></script>
+    <script src="/static/scripts/notification-component.js"></script>
+    <script src="/static/scripts/notification-system.js"></script>
+    <script src="/static/scripts/usercheck.js"></script>
+    <script src="/static/scripts/game-service.js"></script>
+    <script src="/static/scripts/court-service.js"></script>
+    <script src="/static/scripts/team-service.js"></script>
 </head>
 
 <body>
@@ -34,10 +44,11 @@
         </div>
         <ul class="nav-links">
             <li><a href="/overview.html" title="Overview"><i class="bi bi-info-circle-fill"></i></a></li>
+            <!-- Notification Bell Component -->
             <li class="notification-item">
                 <a href="#" id="notification-bell">
                     <i class="bi bi-bell-fill"></i>
-                    <span class="notification-badge">1</span>
+                    <span class="notification-badge">0</span>
                 </a>
                 <!-- Notification Dropdown Panel -->
                 <div class="notification-dropdown">
@@ -53,75 +64,38 @@
                         <a href="/notifications/" class="see-all">See all</a>
                     </div>
                     <div class="notification-list">
-                        <!-- Sample notifications -->
-                        <div class="notification-item unread">
-                            <div class="notification-avatar">
-                                <img src="/static/img/avatar1.jpg" alt="User">
-                            </div>
-                            <div class="notification-content">
-                                <p>You approved a login.</p>
-                                <span class="notification-time">10h</span>
-                            </div>
-                            <div class="notification-status">
-                                <span class="status-dot"></span>
-                            </div>
-                        </div>
-                        <div class="notification-item">
-                            <div class="notification-avatar">
-                                <img src="/static/img/laro-icon.png" alt="LARO">
-                            </div>
-                            <div class="notification-content">
-                                <p>Your last game got 22 views before it expired. You can create a new game.</p>
-                                <span class="notification-time">12h</span>
-                            </div>
-                        </div>
-                        <div class="notification-item unread">
-                            <div class="notification-avatar">
-                                <img src="/static/img/avatar2.jpg" alt="User">
-                            </div>
-                            <div class="notification-content">
-                                <p>You approved a login.</p>
-                                <span class="notification-time">21h</span>
-                            </div>
-                            <div class="notification-status">
-                                <span class="status-dot"></span>
-                            </div>
-                        </div>
-                        <div class="notification-item unread">
-                            <div class="notification-avatar">
-                                <img src="/static/img/avatar3.jpg" alt="User">
-                            </div>
-                            <div class="notification-content">
-                                <p>You approved a login.</p>
-                                <span class="notification-time">1d</span>
-                            </div>
-                            <div class="notification-status">
-                                <span class="status-dot"></span>
-                            </div>
-                        </div>
-                        <div class="notification-item unread">
-                            <div class="notification-avatar alert-icon">
-                                <i class="bi bi-exclamation-triangle-fill"></i>
-                            </div>
-                            <div class="notification-content">
-                                <p>Reminder: The files you requested are only available to download for 24 more hours.</p>
-                                <span class="notification-time">1d</span>
-                            </div>
-                            <div class="notification-status">
-                                <span class="status-dot"></span>
-                            </div>
+                        <!-- Notifications will be dynamically populated here -->
+                        <div class="no-notifications">
+                            <p>Loading notifications...</p>
                         </div>
                     </div>
                     <div class="notification-footer">
-                        <button class="see-previous">See previous notifications</button>
+                        <button class="see-previous">Mark all as read</button>
                     </div>
                 </div>
             </li>
             <li class="profile-item">
-                <a href="/profile.html">
+                <a href="#" id="profile-dropdown-toggle">
                     <i class="bi bi-person-circle"></i>
                     <span id="username-display">PROFILE</span>
                 </a>
+                <!-- Profile Dropdown Menu -->
+                <div class="profile-dropdown">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i class="bi bi-person-circle"></i>
+                        </div>
+                        <div class="profile-info">
+                            <h3 id="profile-name">User Name</h3>
+                            <p id="profile-email">user@example.com</p>
+                        </div>
+                    </div>
+                    <ul class="profile-menu">
+                        <li><a href="/profile.html"><i class="bi bi-person"></i> View Profile</a></li>
+                        <li><a href="/profile.html#settings"><i class="bi bi-gear"></i> Settings</a></li>
+                        <li><a href="#" data-action="logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                    </ul>
+                </div>
             </li>
         </ul>
     </nav>
@@ -284,36 +258,36 @@
 
                         <div class="location-carousel">
                             <div class="location-cards">
-                                <div class="location-card" data-location="Brgy. Palumco">
-                                    <img src="/static/img/palumco.jpg" alt="Brgy. Palumco">
+                                <div class="location-card" data-location="Palumco Basketball Court" data-court-id="1">
+                                    <img src="/static/img/palumco.jpg" alt="Palumco Basketball Court">
                                     <div class="location-info">
-                                        <h4>Brgy. Palumco</h4>
-                                        <p>Outdoor Basketball Court</p>
+                                        <h4>Palumco Basketball Court</h4>
+                                        <p>Tiniguiban</p>
                                         <div class="location-details">
-                                            <span><i class="bi bi-geo-alt"></i> 2.5 km away</span>
+                                            <span><i class="bi bi-geo-alt"></i> 1.2 km away</span>
                                             <span><i class="bi bi-star-fill"></i> 4.5</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="location-card" data-location="Quezon City Circle">
-                                    <img src="/static/img/qc-circle.jpg" alt="Quezon City Circle">
+                                <div class="location-card" data-location="San Pedro Covered Court" data-court-id="2">
+                                    <img src="/static/img/qc-circle.jpg" alt="San Pedro Covered Court">
                                     <div class="location-info">
-                                        <h4>Quezon City Circle</h4>
-                                        <p>Public Basketball Court</p>
+                                        <h4>San Pedro Covered Court</h4>
+                                        <p>San Pedro</p>
                                         <div class="location-details">
-                                            <span><i class="bi bi-geo-alt"></i> 5.1 km away</span>
+                                            <span><i class="bi bi-geo-alt"></i> 2.5 km away</span>
                                             <span><i class="bi bi-star-fill"></i> 4.2</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="location-card" data-location="UP Diliman">
-                                    <img src="/static/img/up-diliman.jpg" alt="UP Diliman">
+                                <div class="location-card" data-location="Sicsican Basketball Court" data-court-id="3">
+                                    <img src="/static/img/up-diliman.jpg" alt="Sicsican Basketball Court">
                                     <div class="location-info">
-                                        <h4>UP Diliman</h4>
-                                        <p>University Basketball Court</p>
+                                        <h4>Sicsican Basketball Court</h4>
+                                        <p>Sicsican</p>
                                         <div class="location-details">
-                                            <span><i class="bi bi-geo-alt"></i> 7.3 km away</span>
-                                            <span><i class="bi bi-star-fill"></i> 4.8</span>
+                                            <span><i class="bi bi-geo-alt"></i> 3.8 km away</span>
+                                            <span><i class="bi bi-star-fill"></i> 3.8</span>
                                         </div>
                                     </div>
                                 </div>
@@ -336,38 +310,47 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="invitation-date">Date</label>
-                            <input type="date" id="invitation-date" required>
+                            <input type="date" id="invitation-date" name="date" required>
+                            <div id="date-error" class="field-error"></div>
                         </div>
                         <div class="form-group">
                             <label for="invitation-time">Time</label>
-                            <input type="time" id="invitation-time" required>
+                            <input type="time" id="invitation-time" name="time" required>
+                            <div id="time-error" class="field-error"></div>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group full-width">
                             <label for="game-type">Game Type</label>
-                            <select id="game-type" required>
+                            <select id="game-type" name="game_type" required>
                                 <option value="" disabled selected>Select game type</option>
-                                <option value="basketball">Basketball</option>
-                                <option value="volleyball">Volleyball</option>
+                                <option value="casual">Casual Game</option>
+                                <option value="competitive">Competitive Game</option>
+                                <option value="practice">Practice Session</option>
+                                <option value="tournament">Tournament Game</option>
                             </select>
+                            <div id="game-type-error" class="field-error"></div>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group full-width">
                             <label for="event-name">Event Name</label>
-                            <input type="text" id="event-name" placeholder="Give your game a name" required>
+                            <input type="text" id="event-name" name="title" placeholder="Give your game a name" required>
+                            <div id="event-name-error" class="field-error"></div>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group full-width">
-                            <label for="event-notes">Notes (Optional)</label>
-                            <textarea id="event-notes" placeholder="Add any additional information"></textarea>
+                            <label for="event-notes">Description (Optional)</label>
+                            <textarea id="event-notes" name="description" placeholder="Add any additional information"></textarea>
                         </div>
                     </div>
+
+                    <!-- Hidden field for court ID -->
+                    <input type="hidden" id="court-id" name="court_id">
                 </form>
             </div>
 
@@ -546,8 +529,17 @@
     <script src="/static/scripts/basketball-sidebar.js"></script>
     <script src="/static/scripts/responsive-nav.js"></script>
     <script src="/static/scripts/location-carousel.js"></script>
-    <!-- Testing utility for clearing localStorage -->
+    <script src="/static/scripts/profile-dropdown.js"></script>
+    <script src="/static/scripts/logout-handler.js"></script>
+    <script src="/static/scripts/game-details.js"></script>
+    <script src="/static/scripts/upcoming-games.js"></script>
+    <script src="/static/scripts/create-game.js"></script>
+    <!-- Notification initializer -->
+    <script src="/static/scripts/notification-initializer.js"></script>
+    <!-- Testing utilities -->
     <script src="/static/scripts/clear-storage.js"></script>
+    <script src="/static/scripts/test-implementation.js"></script>
+    <script src="/static/scripts/notification-demo.js"></script>
 
 
 </body>

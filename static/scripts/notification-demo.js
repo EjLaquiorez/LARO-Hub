@@ -1,6 +1,6 @@
 /**
  * LARO-Hub Notification Demo
- * This file demonstrates how to use the notification service
+ * This file demonstrates how to use the notification service and test the notification system
  */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -10,11 +10,121 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    // Add demo controls to the page
-    addDemoControls();
+    // Check if test container exists
+    const testContainer = document.getElementById('test-container');
+    if (testContainer) {
+        // Create a row container for notification buttons
+        const notificationButtonsRow = document.createElement('div');
+        notificationButtonsRow.style.gridColumn = '1 / span 2';
+        notificationButtonsRow.style.display = 'grid';
+        notificationButtonsRow.style.gridTemplateColumns = 'repeat(2, 1fr)';
+        notificationButtonsRow.style.gap = '8px';
+        notificationButtonsRow.style.marginTop = '4px';
 
-    // Initialize demo
-    initDemo();
+        // Add a "Clear All Notifications" button
+        const clearAllButton = document.createElement('button');
+        clearAllButton.textContent = 'Clear All Notifications';
+        clearAllButton.id = 'clear-all-notifications-btn';
+
+        // Apply LARO-Hub design system styling with red color scheme
+        clearAllButton.style.padding = '10px 8px';
+        clearAllButton.style.backgroundColor = '#ff3b30'; // Red color
+        clearAllButton.style.color = '#fff';
+        clearAllButton.style.border = 'none';
+        clearAllButton.style.borderRadius = '8px';
+        clearAllButton.style.cursor = 'pointer';
+        clearAllButton.style.fontWeight = 'bold';
+        clearAllButton.style.fontFamily = 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif';
+        clearAllButton.style.fontSize = '12px';
+        clearAllButton.style.textAlign = 'center';
+        clearAllButton.style.transition = 'all 0.3s ease';
+        clearAllButton.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.2)';
+        clearAllButton.style.width = '100%';
+        clearAllButton.style.height = '100%';
+
+        // Add hover effect for the clear button
+        clearAllButton.onmouseover = () => {
+            clearAllButton.style.backgroundColor = '#e0352b'; // Darker red on hover
+            clearAllButton.style.transform = 'translateY(-2px)';
+            clearAllButton.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
+        };
+
+        clearAllButton.onmouseout = () => {
+            clearAllButton.style.backgroundColor = '#ff3b30';
+            clearAllButton.style.transform = 'translateY(0)';
+            clearAllButton.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.2)';
+        };
+
+        // Add click event to clear all notifications
+        clearAllButton.addEventListener('click', function() {
+            if (window.notificationService) {
+                window.notificationService.clearNotifications();
+
+                // Update badge count
+                if (window.notificationComponent) {
+                    window.notificationComponent.updateBadge(0);
+                }
+
+                // Show toast notification
+                if (window.notifications) {
+                    window.notifications.info({
+                        title: 'Notifications Cleared',
+                        message: 'All notifications have been cleared',
+                        duration: 3000
+                    });
+                }
+            }
+        });
+
+        // Add a "Notification Demo" button
+        const demoButton = document.createElement('button');
+        demoButton.textContent = 'Notification Demo';
+        demoButton.id = 'notification-demo-btn';
+
+        // Apply LARO-Hub design system styling
+        demoButton.style.padding = '10px 8px';
+        demoButton.style.backgroundColor = '#3897f0';
+        demoButton.style.color = '#fff';
+        demoButton.style.border = 'none';
+        demoButton.style.borderRadius = '8px';
+        demoButton.style.cursor = 'pointer';
+        demoButton.style.fontWeight = 'bold';
+        demoButton.style.fontFamily = 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif';
+        demoButton.style.fontSize = '12px';
+        demoButton.style.textAlign = 'center';
+        demoButton.style.transition = 'all 0.3s ease';
+        demoButton.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.2)';
+        demoButton.style.width = '100%';
+        demoButton.style.height = '100%';
+
+        // Add hover effect
+        demoButton.onmouseover = () => {
+            demoButton.style.backgroundColor = '#2d7dd2';
+            demoButton.style.transform = 'translateY(-2px)';
+            demoButton.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
+        };
+
+        demoButton.onmouseout = () => {
+            demoButton.style.backgroundColor = '#3897f0';
+            demoButton.style.transform = 'translateY(0)';
+            demoButton.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.2)';
+        };
+
+        demoButton.addEventListener('click', function() {
+            addRandomNotification();
+        });
+
+        // Add buttons to the row container (clear button first, then demo button)
+        notificationButtonsRow.appendChild(clearAllButton);
+        notificationButtonsRow.appendChild(demoButton);
+
+        // Add the row container to the test container
+        testContainer.appendChild(notificationButtonsRow);
+    } else {
+        // If test container doesn't exist, add demo controls to the page
+        addDemoControls();
+        initDemo();
+    }
 });
 
 /**
@@ -140,28 +250,54 @@ function initDemo() {
 function addRandomNotification() {
     const notificationTypes = [
         {
-            type: 'login',
-            content: 'You approved a login from a new device.',
-            avatar: '/static/img/avatar1.jpg'
+            type: 'message',
+            title: 'New Message',
+            content: 'You have a new message from John Doe.',
+            data: {
+                sender_id: 1,
+                sender_name: 'John Doe',
+                message_id: Math.floor(Math.random() * 1000)
+            }
         },
         {
-            type: 'game',
-            content: 'Your game at Quezon City Circle is starting in 30 minutes.',
-            avatar: '/static/img/laro-icon.png'
+            type: 'game_invitation',
+            title: 'Game Invitation',
+            content: 'You have been invited to join a basketball game at Palumco Court.',
+            data: {
+                game_id: Math.floor(Math.random() * 1000),
+                game_title: 'Weekend Friendly Match',
+                inviter_name: 'Michael Jordan'
+            }
         },
         {
-            type: 'login',
-            content: 'Someone tried to access your account from an unknown location.',
-            avatar: '/static/img/avatar2.jpg'
+            type: 'game_update',
+            title: 'Game Update',
+            content: 'Your scheduled game has been rescheduled to 7:00 PM.',
+            data: {
+                game_id: Math.floor(Math.random() * 1000),
+                game_title: 'Basketball Tournament',
+                update_type: 'time_change'
+            }
         },
         {
-            isAlert: true,
-            content: 'Your subscription will expire in 3 days. Renew now to avoid interruption.',
+            type: 'system',
+            title: 'System Notification',
+            content: 'Your account has been successfully verified.',
+            data: {
+                action_required: false,
+                priority: 'low'
+            }
         },
         {
-            type: 'game',
-            content: 'You have been invited to join a game at Brgy. Palumco.',
-            avatar: '/static/img/avatar3.jpg'
+            type: 'message',
+            title: 'New Group Message',
+            content: 'You have a new message in the Basketball Team group.',
+            data: {
+                sender_id: 2,
+                sender_name: 'Basketball Team',
+                message_id: Math.floor(Math.random() * 1000),
+                is_group: true
+            }
         }
     ];
 
@@ -171,4 +307,18 @@ function addRandomNotification() {
 
     // Add the notification
     window.notificationService.addNotification(notification);
+
+    // Update badge count
+    if (window.notificationComponent) {
+        window.notificationComponent.updateBadge(window.notificationService.getUnreadCount());
+    }
+
+    // Show toast notification
+    if (window.notifications) {
+        window.notifications.info({
+            title: 'Demo Notification',
+            message: `Created a new ${notification.type} notification`,
+            duration: 3000
+        });
+    }
 }

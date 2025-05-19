@@ -348,6 +348,13 @@ body::before {
     background-color: #2a2a2a;
 }
 
+.notification-list .no-notifications {
+    padding: 20px;
+    text-align: center;
+    color: #aaa;
+    font-style: italic;
+}
+
 .notification-avatar {
     width: 40px;
     height: 40px;

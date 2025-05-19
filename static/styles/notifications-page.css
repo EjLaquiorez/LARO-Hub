@@ -409,7 +409,9 @@ body::before {
 
 .notifications-header {
     margin-bottom: 30px;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .notifications-header h1 {
@@ -419,6 +421,25 @@ body::before {
     margin: 0;
     letter-spacing: 2px;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.mark-all-read-btn {
+    background-color: #ffc925;
+    color: #000;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-family: 'American Captain', sans-serif;
+    letter-spacing: 1px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.mark-all-read-btn:hover {
+    background-color: #e6b722;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* Tabs Styling */
