@@ -216,6 +216,8 @@ document.addEventListener('DOMContentLoaded', function() {
             activePage = 'games';
         } else if (currentPath === '/profile.html' || currentPath.includes('profile')) {
             activePage = 'profile';
+        } else if (currentPath === '/notifications/' || currentPath === '/notifications.html' || currentPath.includes('notifications')) {
+            activePage = 'notifications';
         }
 
         // Update all navigation links

@@ -17,6 +17,15 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/static/styles/dashboard.css">
     <link rel="stylesheet" href="/static/styles/overview.css">
+    <link rel="stylesheet" href="/static/styles/profile-dropdown.css">
+    <link rel="stylesheet" href="/static/styles/new-navigation.css">
+
+    <!-- Core Services -->
+    <script src="/static/scripts/api-service.js"></script>
+    <script src="/static/scripts/usercheck.js"></script>
+    <script src="/static/scripts/notification-service.js"></script>
+    <script src="/static/scripts/notification-component.js"></script>
+    <script src="/static/scripts/notification-system.js"></script>
 </head>
 <body class="overview-page">
     <!-- Background Elements -->
@@ -24,64 +33,150 @@
     <div class="background-overlay"></div>
     <div class="background-pattern"></div>
 
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="logo">
-            <a href="/dashboard/">LARO</a>
-        </div>
-        <div class="search-bar">
-            <input type="text" placeholder="SEARCH LARO">
-        </div>
-        <ul class="nav-links">
-            <li><a href="/overview.html" class="active" title="Overview"><i class="bi bi-info-circle-fill"></i></a></li>
-            <li class="notification-item">
-                <a href="#" id="notification-bell">
-                    <i class="bi bi-bell-fill"></i>
-                    <span class="notification-badge">1</span>
-                </a>
-                <!-- Notification Dropdown Panel -->
-                <div class="notification-dropdown">
-                    <div class="notification-header">
-                        <h3>Notifications</h3>
-                        <div class="notification-actions">
-                            <button class="notification-option active">All</button>
-                            <button class="notification-option">Unread</button>
-                        </div>
-                    </div>
-                    <div class="notification-subheader">
-                        <span>Earlier</span>
-                        <a href="/notifications.html" class="see-all">See all</a>
-                    </div>
-                    <div class="notification-list">
-                        <!-- Sample notifications -->
-                        <div class="notification-item unread">
-                            <div class="notification-avatar">
-                                <img src="/static/img/avatar1.jpg" alt="User">
-                            </div>
-                            <div class="notification-content">
-                                <p>You approved a login.</p>
-                                <span class="notification-time">10h</span>
-                            </div>
-                            <div class="notification-status">
-                                <span class="status-dot"></span>
-                            </div>
+    <!-- New Header Navigation -->
+    <header class="main-header">
+        <!-- Primary Navigation Bar -->
+        <div class="nav-container">
+            <!-- Logo Section with Overview Icon -->
+            <div class="header-logo-container">
+                <div class="header-logo">
+                    <a href="/dashboard/" aria-label="LARO Home" data-page="dashboard">
+                        <span class="logo-text">LARO</span>
+                    </a>
+                </div>
+
+                <!-- Overview Link (now next to logo) -->
+                <div class="overview-link">
+                    <a href="/overview.html" class="nav-link active" title="Overview" data-page="overview">
+                        <i class="bi bi-info-circle-fill"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Side Tools -->
+            <div class="header-tools">
+                <!-- Search Tool -->
+                <div class="search-tool">
+                    <button class="search-toggle" aria-label="Toggle search">
+                        <i class="bi bi-search"></i>
+                    </button>
+                    <div class="search-panel">
+                        <div class="search-input-wrapper">
+                            <input type="text" class="search-input" placeholder="Search LARO" aria-label="Search">
+                            <button class="search-submit" aria-label="Submit search">
+                                <i class="bi bi-search"></i>
+                            </button>
+                            <button class="search-close" aria-label="Close search">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
-            </li>
-            <li class="profile-item">
-                <a href="/profile.html">
-                    <i class="bi bi-person-circle"></i>
-                    <span id="username-display">PROFILE</span>
-                </a>
-            </li>
-        </ul>
-        <div class="menu-toggle">
-            <span></span>
-            <span></span>
-            <span></span>
+
+                <!-- Notification Bell -->
+                <div class="notification-tool">
+                    <button id="notification-bell" class="notification-toggle" aria-label="Notifications" data-page="notifications">
+                        <i class="bi bi-bell-fill"></i>
+                        <span class="notification-badge">0</span>
+                    </button>
+
+                    <!-- Notification Dropdown Panel -->
+                    <div class="notification-dropdown">
+                        <div class="notification-header">
+                            <h3>Notifications</h3>
+                            <div class="notification-actions">
+                                <button class="notification-option active">All</button>
+                                <button class="notification-option">Unread</button>
+                            </div>
+                        </div>
+                        <div class="notification-subheader">
+                            <span>Earlier</span>
+                            <a href="/notifications/" class="see-all">See all</a>
+                        </div>
+                        <div class="notification-list">
+                            <!-- Notifications will be dynamically populated here -->
+                            <div class="no-notifications">
+                                <p>Loading notifications...</p>
+                            </div>
+                        </div>
+                        <div class="notification-footer">
+                            <button class="see-previous">Mark all as read</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Profile -->
+                <div class="profile-tool">
+                    <button id="profile-dropdown-toggle" class="profile-toggle" aria-label="User profile">
+                        <i class="bi bi-person-circle"></i>
+                        <span id="username-display" class="username-display">PROFILE</span>
+                    </button>
+
+                    <!-- Profile Dropdown Menu -->
+                    <div class="profile-dropdown">
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <i class="bi bi-person-circle"></i>
+                            </div>
+                            <div class="profile-info">
+                                <h3 id="profile-name">User Name</h3>
+                                <p id="profile-email">user@example.com</p>
+                            </div>
+                        </div>
+                        <ul class="profile-menu">
+                            <li><a href="/profile.html" data-page="profile"><i class="bi bi-person"></i> View Profile</a></li>
+                            <li><a href="/profile.html#settings" data-page="profile"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li><a href="#" data-action="logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-    </nav>
+
+        <!-- Mobile Navigation Panel -->
+        <div class="mobile-nav">
+            <div class="mobile-nav-container">
+                <ul class="mobile-menu">
+                    <li class="mobile-item">
+                        <a href="/dashboard/" class="mobile-link" data-page="dashboard">
+                            <i class="bi bi-house-fill"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="mobile-item">
+                        <a href="/overview.html" class="mobile-link active" data-page="overview">
+                            <i class="bi bi-info-circle-fill"></i>
+                            <span>Overview</span>
+                        </a>
+                    </li>
+                    <li class="mobile-item">
+                        <a href="/courts.html" class="mobile-link" data-page="courts">
+                            <i class="bi bi-map-fill"></i>
+                            <span>Courts</span>
+                        </a>
+                    </li>
+                    <li class="mobile-item">
+                        <a href="/games.html" class="mobile-link" data-page="games">
+                            <i class="bi bi-calendar-event-fill"></i>
+                            <span>Games</span>
+                        </a>
+                    </li>
+                    <li class="mobile-item">
+                        <a href="/notifications/" class="mobile-link" data-page="notifications">
+                            <i class="bi bi-bell-fill"></i>
+                            <span>Notifications</span>
+                        </a>
+                    </li>
+                    <li class="mobile-item">
+                        <a href="/profile.html" class="mobile-link" data-page="profile">
+                            <i class="bi bi-person-fill"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
 
     <!-- Main Content -->
     <div class="overview-container">
@@ -115,6 +210,7 @@
             <div class="section-title">
                 <h2>LARO COMMUNITY</h2>
                 <div class="title-line"></div>
+                <p class="section-subtitle">Join our thriving basketball community and experience the game like never before. Connect with players, find courts, and elevate your basketball journey.</p>
             </div>
             <div class="stats-container">
                 <div class="stat-card">
@@ -155,6 +251,7 @@
             <div class="section-title">
                 <h2>KEY FEATURES</h2>
                 <div class="title-line"></div>
+                <p class="section-subtitle">LARO offers a comprehensive set of tools designed to enhance your basketball experience. From finding games to tracking your progress, we've got you covered.</p>
             </div>
             <div class="features-grid">
                 <div class="feature-item">
@@ -201,6 +298,7 @@
             <div class="section-title">
                 <h2>HOW IT WORKS</h2>
                 <div class="title-line"></div>
+                <p class="section-subtitle">Getting started with LARO is simple. Follow these four easy steps to begin your basketball journey and connect with players in your area.</p>
             </div>
             <div class="steps-container">
                 <div class="step">
@@ -238,35 +336,21 @@
         <div class="cta-section">
             <div class="cta-content">
                 <h2>READY TO ELEVATE YOUR GAME?</h2>
-                <p>Join the LARO community today and transform your basketball experience.</p>
-                <a href="/dashboard/" class="cta-button">GET STARTED</a>
+                <p>Join the LARO community today and transform your basketball experience. Connect with players, find courts, and take your game to the next level!</p>
+                <a href="/dashboard/" class="cta-button">GET STARTED NOW</a>
             </div>
         </div>
     </div>
 
     <!-- Scripts -->
-    <script src="/static/scripts/responsive-nav.js"></script>
+    <script src="/static/scripts/new-navigation.js"></script>
+    <script src="/static/scripts/logout-handler.js"></script>
+    <!-- Notification initializer -->
+    <script src="/static/scripts/notification-initializer.js"></script>
+    <!-- Testing utility for clearing localStorage -->
+    <script src="/static/scripts/clear-storage.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Notification bell functionality
-            const notificationBell = document.getElementById('notification-bell');
-            const notificationDropdown = document.querySelector('.notification-dropdown');
-
-            if (notificationBell && notificationDropdown) {
-                notificationBell.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    notificationDropdown.classList.toggle('show');
-                });
-
-                // Close dropdown when clicking outside
-                document.addEventListener('click', function(e) {
-                    if (!notificationDropdown.contains(e.target) && !notificationBell.contains(e.target)) {
-                        notificationDropdown.classList.remove('show');
-                    }
-                });
-            }
-
             // Smooth scrolling for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
@@ -277,24 +361,23 @@
 
                     if (targetElement) {
                         window.scrollTo({
-                            top: targetElement.offsetTop - 80,
+                            top: targetElement.offsetTop - 100, // Adjusted for new header height
                             behavior: 'smooth'
                         });
 
-                        // Close mobile menu if open
-                        const navLinks = document.querySelector('.nav-links');
-                        const menuToggle = document.querySelector('.menu-toggle');
-
-                        if (window.innerWidth <= 768 && navLinks.classList.contains('active') && menuToggle) {
-                            navLinks.classList.remove('active');
-                            menuToggle.classList.remove('active');
-                            document.querySelector('.navbar').classList.remove('mobile-active');
-
-                            // Reset hamburger icon
-                            menuToggle.querySelector('span:nth-child(1)').style.transform = 'none';
-                            menuToggle.querySelector('span:nth-child(2)').style.opacity = '1';
-                            menuToggle.querySelector('span:nth-child(3)').style.transform = 'none';
+                        // Close mobile navigation if open
+                        const mobileNav = document.querySelector('.mobile-nav');
+                        if (mobileNav && mobileNav.classList.contains('active')) {
+                            mobileNav.classList.remove('active');
+                            document.body.style.overflow = '';
                         }
+
+                        // Close all dropdowns
+                        const dropdowns = document.querySelectorAll('.notification-dropdown, .profile-dropdown, .search-panel');
+                        dropdowns.forEach(dropdown => {
+                            dropdown.classList.remove('show');
+                            dropdown.classList.remove('active');
+                        });
                     }
                 });
             });
