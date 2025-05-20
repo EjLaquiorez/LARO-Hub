@@ -41,3 +41,9 @@ def notifications_view(request):
     View function for the notifications page.
     """
     return render(request, 'notifications.html')
+
+def user_profile_view(request):
+    """
+    View function for the user profile page.
+    """
+    return render(request, 'user_profile.html')

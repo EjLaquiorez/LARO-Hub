@@ -22,7 +22,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "firstname", "lastname", "middlename", "email", "password"]
+        fields = [
+            "id", "firstname", "lastname", "middlename", "email", "password",
+            "phone_number", "profile_picture", "bio", "birth_date",
+            "height", "position", "experience_level", "role", "skill_level", "availability"
+        ]
         extra_kwargs = {
             'password': {'write_only': True}  # Ensures password is never included in responses
         }
@@ -40,13 +44,27 @@ class UserSerializer(serializers.ModelSerializer):
         Returns:
             Newly created User instance
         """
+        # Extract required fields
+        email = validated_data.pop('email')
+        password = validated_data.pop('password')
+        firstname = validated_data.pop('firstname')
+        lastname = validated_data.pop('lastname')
+        middlename = validated_data.pop('middlename', '')
+
+        # Create user with required fields
         user = User.objects.create_user(
-            email=validated_data['email'],
-            password=validated_data['password'],
-            firstname=validated_data['firstname'],
-            lastname=validated_data['lastname'],
-            middlename=validated_data.get('middlename', '')
+            email=email,
+            password=password,
+            firstname=firstname,
+            lastname=lastname,
+            middlename=middlename
         )
+
+        # Add additional fields if provided
+        for field, value in validated_data.items():
+            setattr(user, field, value)
+
+        user.save()
         return user
 
     def update(self, instance, validated_data):

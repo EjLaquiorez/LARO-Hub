@@ -1,0 +1,394 @@
+/*
+ * LARO-Hub User Profile Sections
+ * Styles for Game History and Statistics sections
+ */
+
+/* Game History Section */
+.game-history-container {
+    margin-bottom: 30px;
+}
+
+.game-history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.game-history-header h3 {
+    color: var(--primary);
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.game-filter {
+    display: flex;
+    gap: 10px;
+}
+
+.game-filter-button {
+    background: none;
+    border: 1px solid rgba(255, 201, 37, 0.3);
+    color: var(--gray-400);
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.game-filter-button:hover {
+    background-color: rgba(255, 201, 37, 0.1);
+    color: var(--primary);
+}
+
+.game-filter-button.active {
+    background-color: var(--primary);
+    color: var(--black);
+    border-color: var(--primary);
+}
+
+.game-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.game-item {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-left: 4px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.game-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.game-item.win {
+    border-left-color: var(--success);
+}
+
+.game-item.loss {
+    border-left-color: var(--danger);
+}
+
+.game-date {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.game-date .date {
+    font-weight: 600;
+    color: var(--gray-200);
+}
+
+.game-date .game-type {
+    background-color: rgba(255, 201, 37, 0.2);
+    color: var(--primary);
+    padding: 3px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    text-transform: capitalize;
+}
+
+.game-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.game-details .location {
+    color: var(--gray-400);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.game-details .location i {
+    color: var(--primary);
+}
+
+.game-details .opponent {
+    font-weight: 600;
+    color: var(--gray-200);
+}
+
+.game-details .opponent span {
+    color: var(--gray-500);
+    margin-right: 5px;
+}
+
+.game-details .score {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.game-details .score.win {
+    color: var(--success);
+}
+
+.game-details .score.loss {
+    color: var(--danger);
+}
+
+.game-stats {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 10px;
+}
+
+.game-stats .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.game-stats .stat-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.game-stats .stat-label {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    margin-top: 3px;
+}
+
+.game-history-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.pagination-button {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: var(--gray-300);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagination-button:hover {
+    background-color: rgba(255, 201, 37, 0.2);
+    color: var(--primary);
+}
+
+.pagination-button.active {
+    background-color: var(--primary);
+    color: var(--black);
+    border-color: var(--primary);
+}
+
+.no-games {
+    text-align: center;
+    padding: 30px;
+    color: var(--gray-400);
+}
+
+/* Statistics Section */
+.statistics-container {
+    margin-bottom: 30px;
+}
+
+.statistics-header {
+    margin-bottom: 20px;
+}
+
+.statistics-header h3 {
+    color: var(--primary);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.statistics-header p {
+    color: var(--gray-400);
+    margin: 0;
+}
+
+.statistics-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid rgba(255, 201, 37, 0.1);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 201, 37, 0.3);
+}
+
+.stat-card .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 5px;
+}
+
+.stat-card .stat-label {
+    color: var(--gray-400);
+    font-size: 0.9rem;
+}
+
+.statistics-charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.chart-container {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid rgba(255, 201, 37, 0.1);
+    height: 350px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.chart-container h4 {
+    color: var(--primary);
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.chart-container canvas {
+    width: 100% !important;
+    height: calc(100% - 40px) !important;
+    max-height: 280px;
+}
+
+.chart-placeholder {
+    width: 100%;
+    height: 250px;
+    background-color: rgba(255, 201, 37, 0.05);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--gray-500);
+}
+
+.averages-container {
+    margin-top: 30px;
+}
+
+.averages-container h4 {
+    color: var(--primary);
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.averages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+}
+
+.average-item {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    border: 1px solid rgba(255, 201, 37, 0.1);
+}
+
+.average-item .avg-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 5px;
+}
+
+.average-item .avg-label {
+    color: var(--gray-400);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .game-history-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .game-filter {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+
+    .game-details {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .game-details .score {
+        align-self: flex-end;
+    }
+
+    .statistics-charts {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-container {
+        height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-stats {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .statistics-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .averages-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .chart-container {
+        height: 250px;
+    }
+
+    .chart-container canvas {
+        max-height: 200px;
+    }
+}

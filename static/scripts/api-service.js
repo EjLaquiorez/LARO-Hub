@@ -325,7 +325,7 @@ class ApiService {
      */
     async getCurrentUser() {
         try {
-            return await this.authRequest('/users/me/');
+            return await this.authRequest('/current-user/');
         } catch (error) {
             console.warn('Error fetching current user, checking localStorage:', error);
 
@@ -348,6 +348,85 @@ class ApiService {
             localStorage.setItem('currentUser', JSON.stringify(mockUser));
 
             return mockUser;
+        }
+    }
+
+    /**
+     * Update user profile
+     * @param {number} userId - User ID
+     * @param {Object} userData - User data to update
+     * @returns {Promise<Object>} Updated user data
+     */
+    async updateUserProfile(userId, userData) {
+        try {
+            const updatedUser = await this.authRequest(`/users/${userId}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+
+            // Update stored user data
+            localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+
+            return updatedUser;
+        } catch (error) {
+            console.error('Error updating user profile:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Upload profile picture
+     * @param {number} userId - User ID
+     * @param {File} imageFile - Image file to upload
+     * @returns {Promise<Object>} Updated user data with new profile picture URL
+     */
+    async uploadProfilePicture(userId, imageFile) {
+        try {
+            // Create form data
+            const formData = new FormData();
+            formData.append('profile_picture', imageFile);
+
+            // Upload image
+            const updatedUser = await this.authRequest(`/users/${userId}/`, {
+                method: 'PUT',
+                body: formData
+                // Note: Don't set Content-Type header when using FormData
+                // The browser will set it automatically with the correct boundary
+            });
+
+            // Update stored user data
+            localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+
+            return updatedUser;
+        } catch (error) {
+            console.error('Error uploading profile picture:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Change user password
+     * @param {number} userId - User ID
+     * @param {string} newPassword - New password
+     * @returns {Promise<Object>} Updated user data
+     */
+    async changePassword(userId, newPassword) {
+        try {
+            const updatedUser = await this.authRequest(`/users/${userId}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ password: newPassword })
+            });
+
+            return updatedUser;
+        } catch (error) {
+            console.error('Error changing password:', error);
+            throw error;
         }
     }
 }

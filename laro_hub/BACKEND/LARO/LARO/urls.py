@@ -22,7 +22,7 @@ from drf_yasg import openapi
 from rest_framework import permissions
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
-from API.template_views import index_view, dashboard_view, login_view, signup_view, overview_view, profile_view, notifications_view
+from API.template_views import index_view, dashboard_view, login_view, signup_view, overview_view, profile_view, notifications_view, user_profile_view
 
 # Swagger settings
 swagger_settings = {
@@ -99,4 +99,6 @@ urlpatterns = [
     path('profile.html', profile_view, name='profile_html'),
     path('notifications/', notifications_view, name='notifications'),
     path('notifications.html', notifications_view, name='notifications_html'),
+    path('user_profile/', user_profile_view, name='user_profile'),
+    path('user_profile.html', user_profile_view, name='user_profile_html'),
 ]
