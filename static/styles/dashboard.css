@@ -457,12 +457,18 @@ body::before {
     font-size: clamp(1rem, 2vw, 1.5rem);
     font-weight: bold;
     border: none;
-    border-radius: clamp(0.5rem, 1vw, 1rem);
+    border-radius: clamp(1.5rem, 3vw, 3.125rem);
     cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+                background-color 0.3s ease,
+                box-shadow 0.3s ease;
     text-align: center;
     color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    font-family: 'American Captain', sans-serif;
+    letter-spacing: 2.7px;
+    position: relative;
+    overflow: hidden;
 }
 
 .nearby-courts {
@@ -644,14 +650,9 @@ body::before {
     background: rgba(0, 0, 0, 0.6);
 }
 
-.btn:not(.nearby-courts, .upcoming-game, .quick-join, .create-game, .change-sport):hover {
-    transform: scale(1.05);
-    opacity: 0.9;
-}
-
-.upcoming-game:hover {
+.btn:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 25px rgba(173, 40, 49, 0.4);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
 }
 
 /* Upcoming Game Button */

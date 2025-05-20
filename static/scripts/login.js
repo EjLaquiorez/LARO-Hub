@@ -50,7 +50,7 @@ function attachLoginFormEvents() {
 
     signupLink?.addEventListener("click", (event) => {
         // Instead of showing inline form, redirect to the dedicated signup page
-        window.location.href = "/signup.html";
+        window.location.href = "/signup/";
     });
 }
 
@@ -63,25 +63,37 @@ async function handleLoginSubmit(event) {
     submitButton.textContent = 'Logging in...';
     submitButton.disabled = true;
 
+    // Get error message container
+    const errorMessage = document.getElementById("error-message");
+
+    // Hide error message if it was previously shown
+    if (errorMessage) {
+        errorMessage.style.display = 'none';
+    }
+
     try {
         const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value.trim();
 
         // Validate inputs
         if (!isValidEmail(email)) {
-            displayError("Invalid email format.", "login-form");
+            if (errorMessage) {
+                errorMessage.textContent = "Invalid email format.";
+                errorMessage.style.display = 'block';
+            } else {
+                alert("Invalid email format.");
+            }
             return;
         }
 
         if (!password) {
-            displayError("Password cannot be empty.", "login-form");
+            if (errorMessage) {
+                errorMessage.textContent = "Password cannot be empty.";
+                errorMessage.style.display = 'block';
+            } else {
+                alert("Password cannot be empty.");
+            }
             return;
-        }
-
-        // Clear any previous error
-        const errorMsg = document.getElementById("error-msg");
-        if (errorMsg) {
-            errorMsg.textContent = '';
         }
 
         // Attempt login using auth service
@@ -91,8 +103,14 @@ async function handleLoginSubmit(event) {
         window.location.href = "/dashboard/";
     } catch (error) {
         // Display error message
-        displayError(error.message || "Login failed. Please check your credentials.", "login-form");
         console.error("Login error:", error);
+
+        if (errorMessage) {
+            errorMessage.textContent = error.message || "Login failed. Please check your credentials.";
+            errorMessage.style.display = 'block';
+        } else {
+            alert(error.message || "Login failed. Please check your credentials.");
+        }
     } finally {
         // Restore button state
         submitButton.textContent = originalButtonText;
@@ -103,35 +121,10 @@ async function handleLoginSubmit(event) {
 // These functions have been removed as we now redirect to signup.html
 // instead of showing an inline registration form
 
-function togglePasswordVisibility() {
-    const passwordInput = document.getElementById("password");
-    const toggleIcon = document.getElementById("toggle-icon");
-
-    if (passwordInput) {
-        const isHidden = passwordInput.type === "password";
-        passwordInput.type = isHidden ? "text" : "password";
-        toggleIcon.className = isHidden ? "fas fa-eye-slash" : "fas fa-eye";  // Change icon
-    }
-}
-
 
 function isValidEmail(email) {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
-}
-
-function displayError(message, formId) {
-    const form = document.getElementById(formId);
-    let errorMsg = document.getElementById("error-msg");
-
-    if (!errorMsg) {
-        errorMsg = document.createElement("p");
-        errorMsg.id = "error-msg";
-        errorMsg.style.color = "red";
-        form.prepend(errorMsg);
-    }
-
-    errorMsg.textContent = message;
 }
 
 // Token validation is now handled by the auth service

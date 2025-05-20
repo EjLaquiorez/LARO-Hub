@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/static/styles/create-game-modal.css" />
     <link rel="stylesheet" href="/static/styles/location-carousel.css" />
     <link rel="stylesheet" href="/static/styles/modal-common.css" />
+    <link rel="stylesheet" href="/static/styles/add-court.css" />
     <!-- Leaflet Map CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- Bootstrap Icons -->
@@ -284,7 +285,7 @@
 
                         <div class="location-carousel">
                             <div class="location-cards">
-                                <div class="location-card" data-location="Brgy. Palumco">
+                                <div class="location-card" data-location="Brgy. Palumco" data-court-id="1">
                                     <img src="/static/img/palumco.jpg" alt="Brgy. Palumco">
                                     <div class="location-info">
                                         <h4>Brgy. Palumco</h4>
@@ -295,7 +296,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="location-card" data-location="Quezon City Circle">
+                                <div class="location-card" data-location="Quezon City Circle" data-court-id="2">
                                     <img src="/static/img/qc-circle.jpg" alt="Quezon City Circle">
                                     <div class="location-info">
                                         <h4>Quezon City Circle</h4>
@@ -306,7 +307,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="location-card" data-location="UP Diliman">
+                                <div class="location-card" data-location="UP Diliman" data-court-id="3">
                                     <img src="/static/img/up-diliman.jpg" alt="UP Diliman">
                                     <div class="location-info">
                                         <h4>UP Diliman</h4>
@@ -349,9 +350,36 @@
                             <label for="game-type">Game Type</label>
                             <select id="game-type" required>
                                 <option value="" disabled selected>Select game type</option>
-                                <option value="basketball">Basketball</option>
-                                <option value="volleyball">Volleyball</option>
+                                <option value="3v3">3v3</option>
+                                <option value="5v5">5v5</option>
+                                <option value="casual">Casual</option>
+                                <option value="competitive">Competitive</option>
                             </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="team1">Team 1</label>
+                            <select id="team1" required>
+                                <option value="" disabled selected>Select team 1</option>
+                                <!-- Teams will be loaded dynamically -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="team2">Team 2</label>
+                            <select id="team2" required>
+                                <option value="" disabled selected>Select team 2</option>
+                                <!-- Teams will be loaded dynamically -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="court-id">Court ID</label>
+                            <input type="hidden" id="court-id" required>
+                            <p class="selected-court-info">No court selected. Please select a location above.</p>
                         </div>
                     </div>
 
@@ -439,9 +467,14 @@
                 <div class="court-list">
                     <div class="court-list-header">
                         <h3>NEARBY COURTS</h3>
-                        <button class="toggle-sidebar-btn" id="toggle-sidebar" title="View Court Details">
-                            <i class="bi bi-info-circle"></i>
-                        </button>
+                        <div class="court-list-actions">
+                            <button class="add-court-btn" id="add-court-btn" title="Add New Court">
+                                <i class="bi bi-plus-circle"></i>
+                            </button>
+                            <button class="toggle-sidebar-btn" id="toggle-sidebar" title="View Court Details">
+                                <i class="bi bi-info-circle"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="court-cards" id="court-cards-container">
                         <!-- Court cards will be dynamically generated here -->
@@ -540,12 +573,109 @@
         </div>
     </div>
 
+    <!-- Add Court Modal -->
+    <div id="add-court-modal" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <!-- Header with Title and Close Button -->
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="bi bi-plus-circle"></i>
+                    <h2>ADD BASKETBALL COURT</h2>
+                </div>
+                <button id="close-add-court-modal" class="close-btn" title="Close">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <!-- Court Creation Form -->
+            <div class="modal-body add-court-form-container">
+                <form id="add-court-form">
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="court-name">Court Name</label>
+                            <input type="text" id="court-name-input" placeholder="Enter court name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="court-location">Location</label>
+                            <input type="text" id="court-location-input" placeholder="Enter location (e.g., Barangay, City)" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="court-rental-fee">Rental Fee (₱)</label>
+                            <input type="number" id="court-rental-fee" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="court-availability">Availability</label>
+                            <input type="text" id="court-availability" placeholder="e.g., Open 6AM - 10PM">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label>Court Location on Map</label>
+                            <div class="map-search-container">
+                                <input type="text" id="map-search-input" placeholder="Search for a location...">
+                                <button type="button" id="map-search-btn">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                            <div id="court-location-map" style="height: 300px; width: 100%; border-radius: 10px;"></div>
+                            <p class="map-help-text">Click on the map to set the court location and automatically get the address</p>
+                            <input type="hidden" id="court-latitude" required>
+                            <input type="hidden" id="court-longitude" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="court-features">Features (Optional)</label>
+                            <div class="features-checkboxes">
+                                <div class="feature-checkbox">
+                                    <input type="checkbox" id="feature-covered" name="features" value="Covered Court">
+                                    <label for="feature-covered">Covered Court</label>
+                                </div>
+                                <div class="feature-checkbox">
+                                    <input type="checkbox" id="feature-lighting" name="features" value="Night Lighting">
+                                    <label for="feature-lighting">Night Lighting</label>
+                                </div>
+                                <div class="feature-checkbox">
+                                    <input type="checkbox" id="feature-standard" name="features" value="Standard Size">
+                                    <label for="feature-standard">Standard Size</label>
+                                </div>
+                                <div class="feature-checkbox">
+                                    <input type="checkbox" id="feature-water" name="features" value="Water Fountain">
+                                    <label for="feature-water">Water Fountain</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Footer with action buttons -->
+            <div class="modal-footer">
+                <button type="button" id="cancel-add-court" class="action-btn secondary">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </button>
+                <button type="submit" id="submit-add-court" class="action-btn primary">
+                    <i class="bi bi-plus-circle"></i> Add Court
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
-    <script src="/static/scripts/dashboard.js"></script>
+    <script type="module" src="/static/scripts/dashboard.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="/static/scripts/basketball-sidebar.js"></script>
+    <script type="module" src="/static/scripts/basketball-sidebar.js"></script>
     <script src="/static/scripts/responsive-nav.js"></script>
-    <script src="/static/scripts/location-carousel.js"></script>
+    <script type="module" src="/static/scripts/location-carousel.js"></script>
+    <script type="module" src="/static/scripts/add-court.js"></script>
     <!-- Testing utility for clearing localStorage -->
     <script src="/static/scripts/clear-storage.js"></script>
 

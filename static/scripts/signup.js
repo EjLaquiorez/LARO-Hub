@@ -49,6 +49,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
 
+            // Hide any previous error message
+            if (errorMessage) {
+                errorMessage.style.display = 'none';
+            }
+
             // Validate password length
             if (password.length < 8) {
                 if (errorMessage) {
@@ -82,6 +87,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     errorMessage.style.display = 'block';
                 } else {
                     alert('Please enter both first and last name!');
+                }
+                return;
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                if (errorMessage) {
+                    errorMessage.textContent = 'Please enter a valid email address!';
+                    errorMessage.style.display = 'block';
+                } else {
+                    alert('Please enter a valid email address!');
                 }
                 return;
             }
@@ -135,6 +152,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     name: error.name
                 });
 
+                // Log the response if available
+                if (error.response) {
+                    console.error('Response data:', error.response);
+                }
+
                 // Display error message
                 let errorText = 'Registration failed. Please try again.';
 
@@ -150,6 +172,37 @@ document.addEventListener('DOMContentLoaded', function() {
                         errorText = 'Last name error: ' + error.message;
                     } else {
                         errorText = error.message;
+                    }
+                }
+
+                // Check if we have a response object with more details
+                if (error.response) {
+                    console.log('Error response:', error.response);
+
+                    // Handle email already exists error
+                    if (error.response.email && Array.isArray(error.response.email)) {
+                        errorText = error.response.email[0];
+                        if (errorText.includes('already exists')) {
+                            errorText = 'This email is already registered. Please use a different email or try logging in.';
+                        }
+                    }
+
+                    // Handle other field errors
+                    if (error.response.password && Array.isArray(error.response.password)) {
+                        errorText = 'Password error: ' + error.response.password[0];
+                    }
+
+                    if (error.response.firstname && Array.isArray(error.response.firstname)) {
+                        errorText = 'First name error: ' + error.response.firstname[0];
+                    }
+
+                    if (error.response.lastname && Array.isArray(error.response.lastname)) {
+                        errorText = 'Last name error: ' + error.response.lastname[0];
+                    }
+
+                    // Handle non-field errors
+                    if (error.response.non_field_errors && Array.isArray(error.response.non_field_errors)) {
+                        errorText = error.response.non_field_errors[0];
                     }
                 }
 

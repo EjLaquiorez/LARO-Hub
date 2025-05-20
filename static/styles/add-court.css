@@ -1,0 +1,161 @@
+/**
+ * Add Court Modal Styles
+ * Styles for the add court modal and related components
+ */
+
+/* Add Court Form Container */
+.add-court-form-container {
+    padding: 20px;
+}
+
+/* Map Help Text */
+.map-help-text {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #aaa;
+    font-style: italic;
+}
+
+/* Map Search Container */
+.map-search-container {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+#map-search-input {
+    flex: 1;
+    padding: 10px 15px;
+    border-radius: 10px 0 0 10px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: #fff;
+    font-size: 16px;
+}
+
+#map-search-btn {
+    background-color: #AD2831;
+    color: white;
+    border: none;
+    border-radius: 0 10px 10px 0;
+    padding: 0 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#map-search-btn:hover {
+    background-color: #8C1C24;
+}
+
+#map-search-btn:disabled {
+    background-color: #666;
+    cursor: wait;
+}
+
+/* Location Input Loading State */
+#court-location-input:disabled {
+    background-color: #444;
+    color: #aaa;
+    cursor: wait;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23aaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+}
+
+/* Features Checkboxes */
+.features-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.feature-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #333;
+    padding: 8px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.feature-checkbox:hover {
+    background-color: #444;
+}
+
+.feature-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #AD2831;
+}
+
+.feature-checkbox label {
+    margin-bottom: 0 !important;
+    color: #fff !important;
+    font-family: inherit !important;
+    letter-spacing: normal !important;
+    font-weight: normal !important;
+}
+
+/* Add Court Button in Court List */
+.court-list-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.add-court-btn {
+    background-color: #AD2831;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-court-btn:hover {
+    background-color: #8C1C24;
+    transform: translateY(-2px);
+}
+
+.add-court-btn i {
+    font-size: 1.2rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .features-checkboxes {
+        gap: 10px;
+    }
+
+    .feature-checkbox {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+
+    .feature-checkbox input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .features-checkboxes {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .add-court-btn, .toggle-sidebar-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .add-court-btn i, .toggle-sidebar-btn i {
+        font-size: 1rem;
+    }
+}

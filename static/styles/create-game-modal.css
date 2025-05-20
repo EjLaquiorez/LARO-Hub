@@ -191,6 +191,33 @@
     resize: vertical;
 }
 
+/* Selected court info styles */
+.selected-court-info {
+    background-color: #333;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid #444;
+    color: #aaa;
+    margin: 0;
+    font-size: 15px;
+}
+
+.selected-court-info.court-selected {
+    color: #fff;
+    border-color: #ffc925;
+    background-color: rgba(255, 201, 37, 0.1);
+    position: relative;
+    padding-left: 35px;
+}
+
+.selected-court-info.court-selected::before {
+    content: '\f00c';
+    font-family: "Bootstrap Icons";
+    position: absolute;
+    left: 12px;
+    color: #ffc925;
+}
+
 /* Custom styling for date and time inputs */
 .form-group input[type="date"],
 .form-group input[type="time"] {

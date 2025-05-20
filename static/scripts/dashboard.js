@@ -31,6 +31,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const quickJoinBtn = document.querySelector(".btn.quick-join");
     const closeQuickJoinBtn = document.getElementById("close-quick-join");
 
+    const changeSportBtn = document.querySelector(".btn.change-sport");
+
     // Function to format date as YYYY-MM-DD (defined early for use in sample data)
     function formatDate(date) {
         const year = date.getFullYear();
@@ -591,9 +593,38 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (createGameBtn) {
             createGameBtn.addEventListener("click", () => {
                 try {
-                    alert("Create Game functionality will be implemented soon!");
+                    // Close the upcoming games popup
+                    closePopup(upcomingPopup);
+
+                    // Open the create game popup
+                    const createGamePopup = document.getElementById("create-game-popup");
+                    if (createGamePopup) {
+                        showPopup(createGamePopup);
+
+                        // Reset form if needed
+                        const invitationForm = document.getElementById('invitation-form');
+                        if (invitationForm) invitationForm.reset();
+
+                        // Clear any previously selected location
+                        const locationCards = document.querySelectorAll('.location-card');
+                        locationCards.forEach(c => c.classList.remove('selected'));
+
+                        // Reset selected court info
+                        const selectedCourtInfo = document.querySelector('.selected-court-info');
+                        if (selectedCourtInfo) {
+                            selectedCourtInfo.textContent = 'No court selected. Please select a location above.';
+                            selectedCourtInfo.classList.remove('court-selected');
+                        }
+
+                        // Fetch teams for dropdowns
+                        fetchTeams();
+                    } else {
+                        console.error("Create game popup not found");
+                        alert("Create Game functionality is not available at the moment.");
+                    }
                 } catch (error) {
                     console.error("Error in create game button handler:", error);
+                    alert("An error occurred while opening the create game form.");
                 }
             });
         }
@@ -871,6 +902,78 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Populate Nearby Courts grid
     const courtsGrid = nearbyPopup.querySelector("#nearby-courts-grid");
 
+    // Function to show popup with animation
+    function showPopup(popup) {
+        if (popup) {
+            popup.style.display = "flex";
+            document.body.style.overflow = "hidden"; // Prevent scrolling
+
+            // Add animation to popup content
+            const popupContent = popup.querySelector('.popup-content');
+            if (popupContent) {
+                popupContent.style.animation = 'fadeIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)';
+            }
+        }
+    }
+
+    // Function to close popup
+    function closePopup(popup) {
+        if (popup) {
+            popup.style.display = "none";
+            document.body.style.overflow = "hidden"; // Keep dashboard unscrollable
+
+            // Reset animation for next open
+            const popupContent = popup.querySelector('.popup-content');
+            if (popupContent) {
+                popupContent.style.animation = '';
+            }
+        }
+    }
+
+    // Add event listeners for main dashboard buttons
+    if (upcomingGameBtn) {
+        upcomingGameBtn.addEventListener("click", () => {
+            showPopup(upcomingPopup);
+        });
+    }
+
+    if (closeUpcomingPopupBtn) {
+        closeUpcomingPopupBtn.addEventListener("click", () => {
+            closePopup(upcomingPopup);
+        });
+    }
+
+    if (nearbyCourtsBtn) {
+        nearbyCourtsBtn.addEventListener("click", () => {
+            showPopup(nearbyPopup);
+        });
+    }
+
+    if (closeNearbyPopupBtn) {
+        closeNearbyPopupBtn.addEventListener("click", () => {
+            closePopup(nearbyPopup);
+        });
+    }
+
+    if (quickJoinBtn) {
+        quickJoinBtn.addEventListener("click", () => {
+            showPopup(quickJoinOverlay);
+        });
+    }
+
+    if (closeQuickJoinBtn) {
+        closeQuickJoinBtn.addEventListener("click", () => {
+            closePopup(quickJoinOverlay);
+        });
+    }
+
+    if (changeSportBtn) {
+        changeSportBtn.addEventListener("click", () => {
+            // Show a message that this feature is coming soon
+            alert("Sport switching feature coming soon!");
+        });
+    }
+
     // Function to update the nearby courts list
     function updateNearbyCourtsList() {
         // Call the function to generate court cards
@@ -1010,67 +1113,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    // Helper functions
-    const showPopup = (popup) => {
-        popup.style.display = "flex";
-        document.body.style.overflow = "hidden"; // Prevent body scrolling when modal is open
-
-        // Add animation class to modal content
-        const popupContent = popup.querySelector('.popup-content');
-        if (popupContent) {
-            popupContent.style.animation = 'fadeIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)';
-        }
-    };
-
-    const closePopup = (popup) => {
-        popup.style.display = "none";
-        document.body.style.overflow = "hidden"; // Keep body unscrollable for dashboard
-
-        // Reset animation for next open
-        const popupContent = popup.querySelector('.popup-content');
-        if (popupContent) {
-            popupContent.style.animation = '';
-        }
-    };
-
-    // Event Listeners - Upcoming
-    upcomingGameBtn.addEventListener("click", () => showPopup(upcomingPopup));
-    closeUpcomingPopupBtn.addEventListener("click", () => closePopup(upcomingPopup));
+    // Add click outside to close popups
     window.addEventListener("click", (e) => {
         if (e.target === upcomingPopup) closePopup(upcomingPopup);
-    });
-
-    // Event Listeners - Nearby
-    nearbyCourtsBtn.addEventListener("click", () => showPopup(nearbyPopup));
-    closeNearbyPopupBtn.addEventListener("click", () => closePopup(nearbyPopup));
-    window.addEventListener("click", (e) => {
         if (e.target === nearbyPopup) closePopup(nearbyPopup);
-    });
-
-    // Quick Join overlay toggle
-    quickJoinBtn.addEventListener("click", () => {
-        showPopup(quickJoinOverlay);
-        // Initialize the map when the quick join overlay is shown
-        if (typeof initializeMap === 'function') {
-            setTimeout(() => {
-                window.dispatchEvent(new Event('resize'));
-            }, 100);
-        }
-    });
-
-    closeQuickJoinBtn.addEventListener("click", () => {
-        // Close the sidebar if it's open
-        const sidebar = document.getElementById("court-sidebar");
-        if (sidebar && sidebar.classList.contains("active")) {
-            sidebar.classList.remove("active");
-            if (typeof adjustMapLayout === 'function') {
-                adjustMapLayout();
-            }
-        }
-        closePopup(quickJoinOverlay);
-    });
-
-    window.addEventListener("click", (e) => {
         if (e.target === quickJoinOverlay) {
             // Close the sidebar if it's open
             const sidebar = document.getElementById("court-sidebar");
@@ -1082,13 +1128,101 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
             closePopup(quickJoinOverlay);
         }
+        if (e.target === createGamePopup) closePopup(createGamePopup);
     });
+
+
 
     // Create Game Modal
     const createGameBtn = document.querySelector(".btn.create-game");
     const createGamePopup = document.getElementById("create-game-popup");
     const closeCreateGamePopupBtn = document.getElementById("close-create-game-popup");
     const createGameSubmitBtn = document.getElementById("create-game-submit-btn");
+
+    // Function to fetch teams and populate dropdowns
+    async function fetchTeams() {
+        try {
+            const teams = await gameService.getTeams();
+            const team1Select = document.getElementById('team1');
+            const team2Select = document.getElementById('team2');
+
+            if (team1Select && team2Select && teams && teams.length > 0) {
+                // Clear existing options except the first one
+                team1Select.innerHTML = '<option value="" disabled selected>Select team 1</option>';
+                team2Select.innerHTML = '<option value="" disabled selected>Select team 2</option>';
+
+                // Add teams to dropdowns
+                teams.forEach(team => {
+                    const option1 = document.createElement('option');
+                    option1.value = team.id;
+                    option1.textContent = team.team_name;
+                    team1Select.appendChild(option1);
+
+                    const option2 = document.createElement('option');
+                    option2.value = team.id;
+                    option2.textContent = team.team_name;
+                    team2Select.appendChild(option2);
+                });
+            } else {
+                console.warn('No teams found or team selects not available');
+
+                // Add sample teams if no teams are available
+                const sampleTeams = [
+                    { id: 1, team_name: 'Team Alpha' },
+                    { id: 2, team_name: 'Team Beta' },
+                    { id: 3, team_name: 'Team Gamma' },
+                    { id: 4, team_name: 'Team Delta' }
+                ];
+
+                if (team1Select && team2Select) {
+                    team1Select.innerHTML = '<option value="" disabled selected>Select team 1</option>';
+                    team2Select.innerHTML = '<option value="" disabled selected>Select team 2</option>';
+
+                    sampleTeams.forEach(team => {
+                        const option1 = document.createElement('option');
+                        option1.value = team.id;
+                        option1.textContent = team.team_name;
+                        team1Select.appendChild(option1);
+
+                        const option2 = document.createElement('option');
+                        option2.value = team.id;
+                        option2.textContent = team.team_name;
+                        team2Select.appendChild(option2);
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching teams:', error);
+
+            // Add sample teams as fallback
+            const sampleTeams = [
+                { id: 1, team_name: 'Team Alpha' },
+                { id: 2, team_name: 'Team Beta' },
+                { id: 3, team_name: 'Team Gamma' },
+                { id: 4, team_name: 'Team Delta' }
+            ];
+
+            const team1Select = document.getElementById('team1');
+            const team2Select = document.getElementById('team2');
+
+            if (team1Select && team2Select) {
+                team1Select.innerHTML = '<option value="" disabled selected>Select team 1</option>';
+                team2Select.innerHTML = '<option value="" disabled selected>Select team 2</option>';
+
+                sampleTeams.forEach(team => {
+                    const option1 = document.createElement('option');
+                    option1.value = team.id;
+                    option1.textContent = team.team_name;
+                    team1Select.appendChild(option1);
+
+                    const option2 = document.createElement('option');
+                    option2.value = team.id;
+                    option2.textContent = team.team_name;
+                    team2Select.appendChild(option2);
+                });
+            }
+        }
+    }
 
     // Show create game modal
     createGameBtn.addEventListener("click", () => {
@@ -1100,6 +1234,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Clear any previously selected location
         const locationCards = document.querySelectorAll('.location-card');
         locationCards.forEach(c => c.classList.remove('selected'));
+
+        // Reset selected court info
+        const selectedCourtInfo = document.querySelector('.selected-court-info');
+        if (selectedCourtInfo) {
+            selectedCourtInfo.textContent = 'No court selected. Please select a location above.';
+            selectedCourtInfo.classList.remove('court-selected');
+        }
+
+        // Fetch teams for dropdowns
+        fetchTeams();
     });
 
     // Close create game modal with button
@@ -1120,12 +1264,23 @@ document.addEventListener("DOMContentLoaded", async () => {
             locationCards.forEach(c => c.classList.remove('selected'));
             // Add selected class to clicked card
             this.classList.add('selected');
+
+            // Update the court ID field
+            const courtId = this.getAttribute('data-court-id');
+            const courtIdField = document.getElementById('court-id');
+            const selectedCourtInfo = document.querySelector('.selected-court-info');
+
+            if (courtId && courtIdField && selectedCourtInfo) {
+                courtIdField.value = courtId;
+                selectedCourtInfo.textContent = `Selected court: ${this.querySelector('.location-info h4').textContent}`;
+                selectedCourtInfo.classList.add('court-selected');
+            }
         });
     });
 
     // Handle game creation form submission
     if (createGameSubmitBtn) {
-        createGameSubmitBtn.addEventListener('click', function(e) {
+        createGameSubmitBtn.addEventListener('click', async function(e) {
             e.preventDefault();
 
             // Get selected location
@@ -1139,10 +1294,19 @@ document.addEventListener("DOMContentLoaded", async () => {
             const date = document.getElementById('invitation-date').value;
             const time = document.getElementById('invitation-time').value;
             const gameType = document.getElementById('game-type').value;
+            const team1 = document.getElementById('team1').value;
+            const team2 = document.getElementById('team2').value;
+            const courtId = document.getElementById('court-id').value;
             const eventName = document.getElementById('event-name').value;
 
-            if (!date || !time || !gameType || !eventName) {
+            if (!date || !time || !gameType || !team1 || !team2 || !courtId) {
                 alert('Please fill in all required fields');
+                return;
+            }
+
+            // Validate that team1 and team2 are different
+            if (team1 === team2) {
+                alert('Team 1 and Team 2 cannot be the same team');
                 return;
             }
 
@@ -1150,24 +1314,74 @@ document.addEventListener("DOMContentLoaded", async () => {
             const location = selectedLocation.getAttribute('data-location');
             const notes = document.getElementById('event-notes').value;
 
-            // Create game object
-            const game = {
-                location,
+            // Create game object for API
+            const gameData = {
                 date,
                 time,
-                gameType,
-                eventName,
-                notes
+                location,
+                game_type: gameType,
+                team1: parseInt(team1),
+                team2: parseInt(team2),
+                court: parseInt(courtId),
+                status: 'pending'
             };
 
-            // Store game data (in a real app, this would be sent to a server)
-            console.log('Game created:', game);
+            try {
+                // Show loading state
+                createGameSubmitBtn.disabled = true;
+                createGameSubmitBtn.innerHTML = '<i class="bi bi-hourglass"></i> Creating...';
 
-            // Show success message
-            alert('Game created successfully!');
+                // Call API to create game
+                const createdGame = await gameService.createGame(gameData);
 
-            // Close the popup
-            closePopup(createGamePopup);
+                console.log('Game created:', createdGame);
+
+                // Show success notification
+                if (window.notificationService) {
+                    window.notificationService.addNotification({
+                        type: 'success',
+                        content: `Game "${eventName}" created successfully!`,
+                        isAlert: false,
+                        avatar: '/static/img/laro-icon.png'
+                    });
+                }
+
+                // Show success message
+                alert('Game created successfully!');
+
+                // Update the schedules array with the new game
+                const newGame = {
+                    id: createdGame.game_id || Date.now(),
+                    date,
+                    time,
+                    location: createdGame.location || location,
+                    barangay: location.split(',')[0] || '',
+                    players: "0/10", // Initial players
+                    status: "upcoming",
+                    type: gameType
+                };
+
+                schedules.unshift(newGame);
+
+                // Update the calendar and schedule list
+                if (calendarDays && scheduleList) {
+                    generateCalendar(currentMonth, currentYear);
+                    populateScheduleList();
+                }
+
+                // Update the next game date
+                updateNextGameDate();
+
+                // Close the popup
+                closePopup(createGamePopup);
+            } catch (error) {
+                console.error('Error creating game:', error);
+                alert(`Failed to create game: ${error.message || 'Unknown error'}`);
+            } finally {
+                // Reset button state
+                createGameSubmitBtn.disabled = false;
+                createGameSubmitBtn.innerHTML = '<i class="bi bi-plus-circle"></i> Create Game';
+            }
         });
     }
 
@@ -1187,9 +1401,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    document.querySelector(".btn.change-sport").addEventListener("click", () => {
-        window.location.href = "/change-sport/";
-    });
+
 
     // Highlight Active Nav Link
     const navLinks = document.querySelectorAll(".nav-links a");

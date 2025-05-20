@@ -43,10 +43,10 @@ class AuthService {
      */
     isTokenValid(token) {
         if (!token) return false;
-        
+
         const payload = this.parseJwt(token);
         if (!payload) return false;
-        
+
         const now = Math.floor(Date.now() / 1000);
         return payload.exp > now;
     }
@@ -76,7 +76,7 @@ class AuthService {
         if (this.isTokenValid(this.accessToken)) {
             return this.accessToken;
         }
-        
+
         // If token is invalid but we have a refresh token, try to refresh
         if (this.refreshToken) {
             try {
@@ -87,7 +87,7 @@ class AuthService {
                 throw new Error('Authentication failed. Please log in again.');
             }
         }
-        
+
         throw new Error('Not authenticated');
     }
 
@@ -116,17 +116,17 @@ class AuthService {
                 }
 
                 const data = await response.json();
-                
+
                 // Update tokens
                 this.accessToken = data.access;
                 localStorage.setItem('access', data.access);
-                
+
                 // If we got a new refresh token, update it
                 if (data.refresh) {
                     this.refreshToken = data.refresh;
                     localStorage.setItem('refresh', data.refresh);
                 }
-                
+
                 resolve();
             } catch (error) {
                 console.error('Error refreshing token:', error);
@@ -147,6 +147,8 @@ class AuthService {
      */
     async login(email, password) {
         try {
+            console.log('Sending login request to:', '/api/login/');
+
             const response = await fetch('/api/login/', {
                 method: 'POST',
                 headers: {
@@ -155,26 +157,49 @@ class AuthService {
                 body: JSON.stringify({ email, password }),
             });
 
+            // Log the response status
+            console.log('Login response status:', response.status);
+
+            // Get the response data
+            const responseData = await response.json();
+            console.log('Login response data:', responseData);
+
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Login failed');
+                // Create a more detailed error message
+                let errorMessage = 'Login failed';
+
+                if (responseData.error) {
+                    errorMessage = responseData.error;
+                } else if (typeof responseData === 'object') {
+                    // Try to extract any field errors
+                    const fieldErrors = Object.entries(responseData)
+                        .filter(([key, value]) => Array.isArray(value) && value.length > 0)
+                        .map(([key, value]) => `${key}: ${value.join(', ')}`)
+                        .join('; ');
+
+                    if (fieldErrors) {
+                        errorMessage = fieldErrors;
+                    }
+                }
+
+                const error = new Error(errorMessage);
+                error.response = responseData;
+                throw error;
             }
 
-            const data = await response.json();
-            
             // Store tokens and user data
-            this.accessToken = data.tokens.access;
-            this.refreshToken = data.tokens.refresh;
-            this.user = data.user;
-            
-            localStorage.setItem('access', data.tokens.access);
-            localStorage.setItem('refresh', data.tokens.refresh);
-            localStorage.setItem('currentUser', JSON.stringify(data.user));
-            
+            this.accessToken = responseData.tokens.access;
+            this.refreshToken = responseData.tokens.refresh;
+            this.user = responseData.user;
+
+            localStorage.setItem('access', responseData.tokens.access);
+            localStorage.setItem('refresh', responseData.tokens.refresh);
+            localStorage.setItem('currentUser', JSON.stringify(responseData.user));
+
             // Notify listeners
             this.notifyListeners();
-            
-            return data.user;
+
+            return responseData.user;
         } catch (error) {
             console.error('Login error:', error);
             throw error;
@@ -188,6 +213,12 @@ class AuthService {
      */
     async register(userData) {
         try {
+            console.log('Sending registration request to:', '/api/register/');
+            console.log('Registration data:', {
+                ...userData,
+                password: '********' // Don't log the actual password
+            });
+
             const response = await fetch('/api/register/', {
                 method: 'POST',
                 headers: {
@@ -196,26 +227,58 @@ class AuthService {
                 body: JSON.stringify(userData),
             });
 
+            // Log the response status
+            console.log('Registration response status:', response.status);
+
+            // Get the response data
+            const responseData = await response.json();
+            console.log('Registration response data:', responseData);
+
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Registration failed');
+                // Create a more detailed error message
+                let errorMessage = 'Registration failed';
+
+                if (responseData.error) {
+                    errorMessage = responseData.error;
+                } else if (responseData.email) {
+                    // Handle field-specific errors
+                    errorMessage = `Email error: ${responseData.email}`;
+                } else if (responseData.password) {
+                    errorMessage = `Password error: ${responseData.password}`;
+                } else if (responseData.firstname) {
+                    errorMessage = `First name error: ${responseData.firstname}`;
+                } else if (responseData.lastname) {
+                    errorMessage = `Last name error: ${responseData.lastname}`;
+                } else if (typeof responseData === 'object') {
+                    // Try to extract any field errors
+                    const fieldErrors = Object.entries(responseData)
+                        .filter(([key, value]) => Array.isArray(value) && value.length > 0)
+                        .map(([key, value]) => `${key}: ${value.join(', ')}`)
+                        .join('; ');
+
+                    if (fieldErrors) {
+                        errorMessage = fieldErrors;
+                    }
+                }
+
+                const error = new Error(errorMessage);
+                error.response = responseData;
+                throw error;
             }
 
-            const data = await response.json();
-            
             // Store tokens and user data
-            this.accessToken = data.tokens.access;
-            this.refreshToken = data.tokens.refresh;
-            this.user = data.user;
-            
-            localStorage.setItem('access', data.tokens.access);
-            localStorage.setItem('refresh', data.tokens.refresh);
-            localStorage.setItem('currentUser', JSON.stringify(data.user));
-            
+            this.accessToken = responseData.tokens.access;
+            this.refreshToken = responseData.tokens.refresh;
+            this.user = responseData.user;
+
+            localStorage.setItem('access', responseData.tokens.access);
+            localStorage.setItem('refresh', responseData.tokens.refresh);
+            localStorage.setItem('currentUser', JSON.stringify(responseData.user));
+
             // Notify listeners
             this.notifyListeners();
-            
-            return data.user;
+
+            return responseData.user;
         } catch (error) {
             console.error('Registration error:', error);
             throw error;
@@ -243,11 +306,11 @@ class AuthService {
             this.accessToken = null;
             this.refreshToken = null;
             this.user = null;
-            
+
             localStorage.removeItem('access');
             localStorage.removeItem('refresh');
             localStorage.removeItem('currentUser');
-            
+
             // Notify listeners
             this.notifyListeners();
         }
@@ -263,25 +326,25 @@ class AuthService {
         try {
             // Get a valid access token
             const token = await this.getAccessToken();
-            
+
             // Set up headers with authentication
             const headers = {
                 ...options.headers,
                 'Authorization': `Bearer ${token}`,
             };
-            
+
             // Make the request
             const response = await fetch(url, {
                 ...options,
                 headers,
             });
-            
+
             // Handle 401 Unauthorized by logging out
             if (response.status === 401) {
                 this.logout();
                 throw new Error('Authentication failed. Please log in again.');
             }
-            
+
             return response;
         } catch (error) {
             console.error('API request error:', error);
@@ -294,18 +357,18 @@ class AuthService {
      */
     checkTokenExpiration() {
         if (!this.accessToken) return;
-        
+
         const payload = this.parseJwt(this.accessToken);
         if (!payload) return;
-        
+
         const expiresIn = payload.exp - Math.floor(Date.now() / 1000);
-        
+
         // If token is expired, try to refresh immediately
         if (expiresIn <= 0) {
             this.refreshAccessToken().catch(() => this.logout());
             return;
         }
-        
+
         // Set up timer to refresh token before it expires
         // Refresh when 90% of the token lifetime has passed
         const refreshTime = expiresIn * 0.9 * 1000;

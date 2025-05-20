@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // Make functions globally accessible
   window.initializeMap = initializeMap;
   window.showCourtDetails = showCourtDetails;
+  window.generateCourtCards = generateCourtCards;
 
   // Check if the quick join overlay is visible
   const quickJoinOverlay = document.getElementById("quick-join-overlay");
@@ -222,6 +223,25 @@ function setupEventListeners() {
       filterCourtsByType(filterType);
     });
   });
+
+  // Add Court button
+  const addCourtBtn = document.getElementById("add-court-btn");
+  if (addCourtBtn) {
+    // Check if user is authenticated
+    const isAuthenticated = authService.isAuthenticated();
+
+    // Show/hide add court button based on authentication
+    if (!isAuthenticated) {
+      addCourtBtn.style.display = 'none';
+    } else {
+      addCourtBtn.addEventListener("click", function() {
+        const addCourtModal = document.getElementById("add-court-modal");
+        if (addCourtModal) {
+          addCourtModal.style.display = "flex";
+        }
+      });
+    }
+  }
 
   // Toggle sidebar
   document.getElementById("toggle-sidebar").addEventListener("click", function() {
