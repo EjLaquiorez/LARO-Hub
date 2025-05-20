@@ -1,21 +1,12 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if user is already logged in
-    const token = localStorage.getItem("access");
-    if (token) {
-        try {
-            // Simple token validation (you might want to add more robust validation)
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            const now = Math.floor(Date.now() / 1000);
+// Import auth service
+import authService from './auth-service.js';
 
-            if (payload && payload.exp > now) {
-                // Token is valid, redirect to dashboard
-                window.location.replace("/dashboard.html");
-                return;
-            }
-        } catch (e) {
-            // Invalid token format, continue with signup
-            console.error("Invalid token format:", e);
-        }
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if user is already authenticated
+    if (authService.isAuthenticated()) {
+        // User is authenticated, redirect to dashboard
+        window.location.replace("/dashboard/");
+        return;
     }
 
     // Toggle password visibility
@@ -49,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const errorMessage = document.getElementById('error-message');
 
     if (form) {
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
             // Get form values
@@ -122,43 +113,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 password: '********' // Don't log the actual password
             });
 
-            // Send registration request to API
-            fetch('/api/register/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(userData)
-            })
-            .then(response => {
-                console.log('Registration response status:', response.status);
-                return response.json().then(data => {
-                    if (!response.ok) {
-                        console.error('Registration error data:', data);
-                        if (data.email) {
-                            throw new Error('Email may already be in use.');
-                        } else if (data.password) {
-                            throw new Error('Password error: ' + data.password);
-                        } else if (data.firstname) {
-                            throw new Error('First name error: ' + data.firstname);
-                        } else if (data.lastname) {
-                            throw new Error('Last name error: ' + data.lastname);
-                        } else {
-                            throw new Error('Registration failed. Please try again.');
-                        }
-                    }
-                    return data;
-                });
-            })
-            .then(data => {
-                // Store tokens in localStorage
-                localStorage.setItem('access', data.tokens.access);
-                localStorage.setItem('refresh', data.tokens.refresh);
+            // Show loading state
+            const submitButton = form.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.textContent;
+            submitButton.textContent = 'Creating Account...';
+            submitButton.disabled = true;
 
-                // Redirect to dashboard
-                window.location.href = '/dashboard.html';
-            })
-            .catch(error => {
+            try {
+                // Register user using auth service
+                await authService.register(userData);
+
+                // Redirect to dashboard on success
+                window.location.href = '/dashboard/';
+            } catch (error) {
                 console.error('Registration error:', error);
 
                 // Log the full error for debugging
@@ -168,13 +135,35 @@ document.addEventListener('DOMContentLoaded', function() {
                     name: error.name
                 });
 
+                // Display error message
+                let errorText = 'Registration failed. Please try again.';
+
+                // Try to extract specific error messages from the error
+                if (error.message) {
+                    if (error.message.includes('email')) {
+                        errorText = 'Email may already be in use.';
+                    } else if (error.message.includes('password')) {
+                        errorText = 'Password error: ' + error.message;
+                    } else if (error.message.includes('firstname')) {
+                        errorText = 'First name error: ' + error.message;
+                    } else if (error.message.includes('lastname')) {
+                        errorText = 'Last name error: ' + error.message;
+                    } else {
+                        errorText = error.message;
+                    }
+                }
+
                 if (errorMessage) {
-                    errorMessage.textContent = error.message || 'Registration failed. Please try again.';
+                    errorMessage.textContent = errorText;
                     errorMessage.style.display = 'block';
                 } else {
-                    alert(error.message || 'Registration failed. Please try again.');
+                    alert(errorText);
                 }
-            });
+            } finally {
+                // Restore button state
+                submitButton.textContent = originalButtonText;
+                submitButton.disabled = false;
+            }
         });
     }
 });

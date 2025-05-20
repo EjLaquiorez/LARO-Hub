@@ -1,7 +1,10 @@
+// Import auth service
+import authService from './auth-service.js';
+
 document.addEventListener("DOMContentLoaded", () => {
-    const token = localStorage.getItem("access");
-    if (token && isTokenValid(token)) {
-        window.location.replace("dashboard.html");
+    // Check if user is already authenticated
+    if (authService.isAuthenticated()) {
+        window.location.replace("/dashboard/");
     }
 
     attachLoginFormEvents();
@@ -51,47 +54,50 @@ function attachLoginFormEvents() {
     });
 }
 
-function handleLoginSubmit(event) {
+async function handleLoginSubmit(event) {
     event.preventDefault();
 
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
+    // Show loading state
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    submitButton.textContent = 'Logging in...';
+    submitButton.disabled = true;
 
-    if (!isValidEmail(email)) {
-        displayError("Invalid email format.", "login-form");
-        return;
+    try {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        // Validate inputs
+        if (!isValidEmail(email)) {
+            displayError("Invalid email format.", "login-form");
+            return;
+        }
+
+        if (!password) {
+            displayError("Password cannot be empty.", "login-form");
+            return;
+        }
+
+        // Clear any previous error
+        const errorMsg = document.getElementById("error-msg");
+        if (errorMsg) {
+            errorMsg.textContent = '';
+        }
+
+        // Attempt login using auth service
+        await authService.login(email, password);
+
+        // Redirect to dashboard on success
+        window.location.href = "/dashboard/";
+    } catch (error) {
+        // Display error message
+        displayError(error.message || "Login failed. Please check your credentials.", "login-form");
+        console.error("Login error:", error);
+    } finally {
+        // Restore button state
+        submitButton.textContent = originalButtonText;
+        submitButton.disabled = false;
     }
-
-    if (!password) {
-        displayError("Password cannot be empty.", "login-form");
-        return;
-    }
-
-    fetch("/api/login/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-    })
-        .then(response => {
-            if (!response.ok) {
-                displayError("Invalid credentials.", "login-form");
-                throw new Error("Login failed");
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.tokens && data.user) {
-                localStorage.setItem("access", data.tokens.access);
-                localStorage.setItem("refresh", data.tokens.refresh);
-                localStorage.setItem("user", JSON.stringify(data.user));
-                localStorage.setItem("currentUser", JSON.stringify(data.user));
-                if (data.id) {
-                    localStorage.setItem("id", JSON.stringify(data.id));
-                }
-                window.location.href = "/dashboard.html";
-            }
-        })
-        .catch(console.error);
 }
 
 // These functions have been removed as we now redirect to signup.html
@@ -128,21 +134,4 @@ function displayError(message, formId) {
     errorMsg.textContent = message;
 }
 
-function isTokenValid(token) {
-    const payload = parseJwt(token);
-    const now = Math.floor(Date.now() / 1000);
-    return payload && payload.exp > now;
-}
-
-function parseJwt(token) {
-    try {
-        const base64Url = token.split(".")[1];
-        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-        const jsonPayload = decodeURIComponent(atob(base64).split("").map(c =>
-            "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)
-        ).join(""));
-        return JSON.parse(jsonPayload);
-    } catch (e) {
-        return null;
-    }
-}
+// Token validation is now handled by the auth service

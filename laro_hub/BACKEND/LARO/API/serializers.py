@@ -4,13 +4,13 @@ from .models import User, Game, Team, Court, Conversation, Message
 class UserSerializer(serializers.ModelSerializer):
     """
     UserSerializer handles the conversion of User model instances to/from JSON format.
-    
+
     Features:
     - Converts User model data to JSON for API responses
     - Validates incoming JSON data for user creation/updates
     - Handles password hashing during user creation and updates
     - Ensures passwords are write-only and never included in responses
-    
+
     Fields:
     - id: User's unique identifier
     - firstname: User's first name
@@ -19,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
     - email: User's email address (used for authentication)
     - password: User's password (write-only)
     """
-    
+
     class Meta:
         model = User
         fields = ["id", "firstname", "lastname", "middlename", "email", "password"]
@@ -30,13 +30,13 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """
         Creates a new user instance with a hashed password.
-        
+
         This method overrides the default create to ensure passwords are properly
         hashed using Django's password hashing system via create_user().
-        
+
         Args:
             validated_data: Dictionary of validated user data from the request
-            
+
         Returns:
             Newly created User instance
         """
@@ -52,14 +52,14 @@ class UserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         """
         Updates an existing user instance.
-        
+
         Handles password updates separately to ensure proper hashing.
         All other fields are updated normally.
-        
+
         Args:
             instance: Existing User instance to update
             validated_data: Dictionary of validated user data from the request
-            
+
         Returns:
             Updated User instance
         """
@@ -70,24 +70,31 @@ class UserSerializer(serializers.ModelSerializer):
 
 class TeamSerializer(serializers.ModelSerializer):
     captain_name = serializers.CharField(source='captain.get_full_name', read_only=True)
-    
+
     class Meta:
         model = Team
         fields = ['id', 'team_name', 'captain_name']
 
 class CourtSerializer(serializers.ModelSerializer):
+    owner_name = serializers.SerializerMethodField()
+
     class Meta:
         model = Court
-        fields = ['id', 'name', 'location']
+        fields = ['id', 'name', 'location', 'owner', 'owner_name', 'rental_fee', 'availability']
+
+    def get_owner_name(self, obj):
+        if obj.owner:
+            return f"{obj.owner.firstname} {obj.owner.lastname}"
+        return None
 
 class GameMatchSerializer(serializers.ModelSerializer):
     team1 = TeamSerializer(read_only=True)
     team2 = TeamSerializer(read_only=True)
     court = CourtSerializer(read_only=True)
-    
+
     class Meta:
         model = Game
-        fields = ['id', 'date', 'time', 'location', 'game_type', 
+        fields = ['id', 'date', 'time', 'location', 'game_type',
                  'team1', 'team2', 'status', 'court']
 
 class MessageSerializer(serializers.ModelSerializer):
@@ -99,7 +106,7 @@ class MessageSerializer(serializers.ModelSerializer):
 class ConversationSerializer(serializers.ModelSerializer):
     last_message = serializers.SerializerMethodField()
     unread_count = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Conversation
         fields = ['id', 'participants', 'created_at', 'updated_at', 'last_message', 'unread_count']

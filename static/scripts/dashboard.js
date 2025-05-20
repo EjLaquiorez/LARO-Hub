@@ -1,4 +1,10 @@
-document.addEventListener("DOMContentLoaded", () => {
+// Import services
+import authService from './auth-service.js';
+import apiService from './api-service.js';
+import gameService from './game-service.js';
+import courtService from './court-service.js';
+
+document.addEventListener("DOMContentLoaded", async () => {
     // Prevent scrolling on the dashboard
     document.body.style.overflow = 'hidden';
 
@@ -121,45 +127,142 @@ document.addEventListener("DOMContentLoaded", () => {
         ];
     })();
 
-    // Basketball court data with enhanced details
-    const basketballCourts = {
-        "tiniguiban": {
-            coords: [9.7722, 118.7460],
-            name: "Palumco Basketball Court",
-            barangay: "Tiniguiban",
-            image: "https://images.unsplash.com/photo-1505666287802-931dc83a0fe4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmFza2V0YmFsbCUyMGNvdXJ0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
-            currentPlayers: "6/10",
-            hours: "Open 6AM - 10PM",
-            rating: "4.5/5 (28 ratings)",
-            features: ["Standard Size", "Covered Court", "Night Lighting", "Water Fountain"],
-            status: "available", // available or busy
-            distance: "1.2 km"
-        },
-        "san_pedro": {
-            coords: [9.7583, 118.7606],
-            name: "San Pedro Covered Court",
-            barangay: "San Pedro",
-            image: "https://images.unsplash.com/photo-1504450758481-7338eba7524a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YmFza2V0YmFsbCUyMGNvdXJ0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
-            currentPlayers: "8/10",
-            hours: "Open 7AM - 9PM",
-            rating: "4.2/5 (15 ratings)",
-            features: ["Standard Size", "Covered Court", "Night Lighting", "Bleachers", "Restrooms"],
-            status: "busy", // available or busy
-            distance: "2.5 km"
-        },
-        "sicsican": {
-            coords: [9.7999, 118.7169],
-            name: "Sicsican Basketball Court",
-            barangay: "Sicsican",
-            image: "https://images.unsplash.com/photo-1627627256672-027a4613d028?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YmFza2V0YmFsbCUyMGNvdXJ0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
-            currentPlayers: "0/10",
-            hours: "Open 24 Hours",
-            rating: "3.8/5 (12 ratings)",
-            features: ["Standard Size", "Outdoor Court", "Night Lighting"],
-            status: "available", // available or busy
-            distance: "3.8 km"
+    // Basketball court data
+    let basketballCourts = {};
+
+    // Function to fetch courts from the API
+    async function fetchCourts() {
+        try {
+            const courts = await courtService.getCourts();
+
+            // Process courts into the format expected by the UI
+            courts.forEach(court => {
+                const courtKey = court.name.toLowerCase().replace(/\s+/g, '_');
+
+                // Default image if none provided
+                const defaultImages = [
+                    "https://images.unsplash.com/photo-1505666287802-931dc83a0fe4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmFza2V0YmFsbCUyMGNvdXJ0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+                    "https://images.unsplash.com/photo-1504450758481-7338eba7524a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YmFza2V0YmFsbCUyMGNvdXJ0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+                    "https://images.unsplash.com/photo-1627627256672-027a4613d028?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YmFza2V0YmFsbCUyMGNvdXJ0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60"
+                ];
+                const randomImage = defaultImages[Math.floor(Math.random() * defaultImages.length)];
+
+                // Extract barangay from location if available
+                const locationParts = court.location ? court.location.split(',') : [];
+                const barangay = locationParts.length > 1 ? locationParts[0].trim() : 'Unknown';
+
+                // Create court object in the format expected by the UI
+                basketballCourts[courtKey] = {
+                    id: court.id,
+                    coords: [0, 0], // Placeholder for coordinates
+                    name: court.name,
+                    barangay: barangay,
+                    image: court.image || randomImage,
+                    currentPlayers: "0/10", // Placeholder until we have real-time data
+                    hours: court.availability || "Open 24 Hours",
+                    rating: "New", // Placeholder until we have ratings
+                    features: ["Standard Size", "Basketball Court"],
+                    status: "available", // Placeholder until we have real-time data
+                    distance: "Unknown", // Placeholder until we have geolocation
+                    rental_fee: court.rental_fee || "Free"
+                };
+            });
+
+            // If no courts were found, use sample data
+            if (Object.keys(basketballCourts).length === 0) {
+                basketballCourts = {
+                    "tiniguiban": {
+                        coords: [9.7722, 118.7460],
+                        name: "Palumco Basketball Court",
+                        barangay: "Tiniguiban",
+                        image: "https://images.unsplash.com/photo-1505666287802-931dc83a0fe4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmFza2V0YmFsbCUyMGNvdXJ0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+                        currentPlayers: "6/10",
+                        hours: "Open 6AM - 10PM",
+                        rating: "4.5/5 (28 ratings)",
+                        features: ["Standard Size", "Covered Court", "Night Lighting", "Water Fountain"],
+                        status: "available", // available or busy
+                        distance: "1.2 km"
+                    },
+                    "san_pedro": {
+                        coords: [9.7583, 118.7606],
+                        name: "San Pedro Covered Court",
+                        barangay: "San Pedro",
+                        image: "https://images.unsplash.com/photo-1504450758481-7338eba7524a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YmFza2V0YmFsbCUyMGNvdXJ0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+                        currentPlayers: "8/10",
+                        hours: "Open 7AM - 9PM",
+                        rating: "4.2/5 (15 ratings)",
+                        features: ["Standard Size", "Covered Court", "Night Lighting", "Bleachers", "Restrooms"],
+                        status: "busy", // available or busy
+                        distance: "2.5 km"
+                    },
+                    "sicsican": {
+                        coords: [9.7999, 118.7169],
+                        name: "Sicsican Basketball Court",
+                        barangay: "Sicsican",
+                        image: "https://images.unsplash.com/photo-1627627256672-027a4613d028?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YmFza2V0YmFsbCUyMGNvdXJ0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+                        currentPlayers: "0/10",
+                        hours: "Open 24 Hours",
+                        rating: "3.8/5 (12 ratings)",
+                        features: ["Standard Size", "Outdoor Court", "Night Lighting"],
+                        status: "available", // available or busy
+                        distance: "3.8 km"
+                    }
+                };
+            }
+
+            // Update the UI with the courts
+            updateNearbyCourtsList();
+
+        } catch (error) {
+            console.error('Error fetching courts:', error);
+
+            // Use sample data as fallback
+            basketballCourts = {
+                "tiniguiban": {
+                    coords: [9.7722, 118.7460],
+                    name: "Palumco Basketball Court",
+                    barangay: "Tiniguiban",
+                    image: "https://images.unsplash.com/photo-1505666287802-931dc83a0fe4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmFza2V0YmFsbCUyMGNvdXJ0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+                    currentPlayers: "6/10",
+                    hours: "Open 6AM - 10PM",
+                    rating: "4.5/5 (28 ratings)",
+                    features: ["Standard Size", "Covered Court", "Night Lighting", "Water Fountain"],
+                    status: "available", // available or busy
+                    distance: "1.2 km"
+                },
+                "san_pedro": {
+                    coords: [9.7583, 118.7606],
+                    name: "San Pedro Covered Court",
+                    barangay: "San Pedro",
+                    image: "https://images.unsplash.com/photo-1504450758481-7338eba7524a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YmFza2V0YmFsbCUyMGNvdXJ0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+                    currentPlayers: "8/10",
+                    hours: "Open 7AM - 9PM",
+                    rating: "4.2/5 (15 ratings)",
+                    features: ["Standard Size", "Covered Court", "Night Lighting", "Bleachers", "Restrooms"],
+                    status: "busy", // available or busy
+                    distance: "2.5 km"
+                },
+                "sicsican": {
+                    coords: [9.7999, 118.7169],
+                    name: "Sicsican Basketball Court",
+                    barangay: "Sicsican",
+                    image: "https://images.unsplash.com/photo-1627627256672-027a4613d028?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YmFza2V0YmFsbCUyMGNvdXJ0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+                    currentPlayers: "0/10",
+                    hours: "Open 24 Hours",
+                    rating: "3.8/5 (12 ratings)",
+                    features: ["Standard Size", "Outdoor Court", "Night Lighting"],
+                    status: "available", // available or busy
+                    distance: "3.8 km"
+                }
+            };
+
+            // Update the UI with the fallback courts
+            updateNearbyCourtsList();
         }
-    };
+    }
+
+    // Fetch courts when the page loads
+    fetchCourts();
 
     // Calendar and Schedule functionality for Upcoming Games
     const calendarDays = document.getElementById("calendar-days");
@@ -521,20 +624,45 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!usernameDisplay) return;
 
         try {
-            // Get user data from localStorage
-            const userData = localStorage.getItem('currentUser');
+            // Get user data from auth service
+            const user = authService.getCurrentUser();
 
-            if (userData) {
-                const user = JSON.parse(userData);
-
+            if (user) {
                 // Check if username exists
-                if (user && user.username) {
+                if (user.username) {
                     usernameDisplay.textContent = user.username.toUpperCase();
-                } else if (user && user.email) {
-                    // Fallback to email if username is not available
+                } else if (user.firstname && user.lastname) {
+                    // Use first name if username is not available
+                    usernameDisplay.textContent = user.firstname.toUpperCase();
+                } else if (user.email) {
+                    // Fallback to email if username and name are not available
                     const emailUsername = user.email.split('@')[0];
                     usernameDisplay.textContent = emailUsername.toUpperCase();
                 }
+            } else {
+                // If no user data, try to fetch it
+                apiService.getCurrentUser()
+                    .then(userData => {
+                        if (userData) {
+                            // Store user data
+                            localStorage.setItem('currentUser', JSON.stringify(userData));
+                            // Update auth service user data
+                            authService.user = userData;
+
+                            // Update display
+                            if (userData.username) {
+                                usernameDisplay.textContent = userData.username.toUpperCase();
+                            } else if (userData.firstname && userData.lastname) {
+                                usernameDisplay.textContent = userData.firstname.toUpperCase();
+                            } else if (userData.email) {
+                                const emailUsername = userData.email.split('@')[0];
+                                usernameDisplay.textContent = emailUsername.toUpperCase();
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching user data:', error);
+                    });
             }
         } catch (error) {
             console.error('Error displaying username:', error);
@@ -743,6 +871,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // Populate Nearby Courts grid
     const courtsGrid = nearbyPopup.querySelector("#nearby-courts-grid");
 
+    // Function to update the nearby courts list
+    function updateNearbyCourtsList() {
+        // Call the function to generate court cards
+        generateNearbyCourtCards();
+
+        // Also update the court cards in the quick join overlay if it exists
+        updateQuickJoinCourtCards();
+    }
+
     // Function to generate court cards
     function generateNearbyCourtCards(searchQuery = "") {
         courtsGrid.innerHTML = "";
@@ -808,6 +945,57 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             courtsGrid.appendChild(card);
+        });
+    }
+
+    // Function to update the court cards in the quick join overlay
+    function updateQuickJoinCourtCards() {
+        const courtCardsContainer = document.getElementById("court-cards-container");
+        if (!courtCardsContainer) return;
+
+        // Clear existing cards
+        courtCardsContainer.innerHTML = "";
+
+        // Generate court cards for the quick join overlay
+        Object.keys(basketballCourts).forEach(key => {
+            const court = basketballCourts[key];
+
+            const card = document.createElement("div");
+            card.className = "court-card";
+            card.dataset.courtId = key;
+
+            // Add status class
+            card.classList.add(court.status);
+
+            card.innerHTML = `
+                <div class="court-card-image">
+                    <img src="${court.image}" alt="${court.name}">
+                </div>
+                <div class="court-card-content">
+                    <div class="court-card-title">${court.name}</div>
+                    <div class="court-card-location">${court.barangay}</div>
+                    <div class="court-card-status">
+                        <span class="status-dot ${court.status}"></span>
+                        ${court.status === 'available' ? 'Available' : 'Busy'}
+                    </div>
+                </div>
+            `;
+
+            // Add click event to show court details
+            card.addEventListener("click", () => {
+                // Remove active class from all cards
+                document.querySelectorAll(".court-card").forEach(c => c.classList.remove("active"));
+
+                // Add active class to this card
+                card.classList.add("active");
+
+                // Show court details in sidebar
+                if (typeof showCourtDetails === 'function') {
+                    showCourtDetails(court);
+                }
+            });
+
+            courtCardsContainer.appendChild(card);
         });
     }
 
@@ -1000,13 +1188,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.querySelector(".btn.change-sport").addEventListener("click", () => {
-        window.location.href = "/change-sport.html";
+        window.location.href = "/change-sport/";
     });
 
     // Highlight Active Nav Link
     const navLinks = document.querySelectorAll(".nav-links a");
-    const currentPage = window.location.pathname.split("/").pop();
+    const currentPath = window.location.pathname;
     navLinks.forEach((link) => {
-        link.classList.toggle("active", link.getAttribute("href") === currentPage);
+        const href = link.getAttribute("href");
+        // Check if the current path matches the link's href or if it's the root path and href is /dashboard/
+        const isActive = currentPath === href ||
+                        (currentPath === "/" && href === "/dashboard/") ||
+                        (currentPath.endsWith("/") && href === currentPath.slice(0, -1)) ||
+                        (!currentPath.endsWith("/") && href === currentPath + "/");
+        link.classList.toggle("active", isActive);
     });
 });
