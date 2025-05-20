@@ -139,11 +139,17 @@
 
         <!-- Profile Content -->
         <div class="profile-content">
-            <!-- Profile Tabs -->
+            <!-- Profile Tabs - Styled like modal-header -->
             <div class="profile-tabs">
-                <button class="tab-button active" data-tab="info">Profile Info</button>
-                <button class="tab-button" data-tab="history">Game History</button>
-                <button class="tab-button" data-tab="statistics">Statistics</button>
+                <div class="profile-tabs-title">
+                    <i class="bi bi-person-circle"></i>
+                    <h2>MY PROFILE</h2>
+                </div>
+                <div class="tabs-buttons">
+                    <button class="tab-button active" data-tab="info">Profile Info</button>
+                    <button class="tab-button" data-tab="history">Game History</button>
+                    <button class="tab-button" data-tab="statistics">Statistics</button>
+                </div>
             </div>
 
             <!-- Tab Content -->
@@ -315,8 +321,12 @@
                         </div>
 
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                            <button type="button" class="btn btn-secondary" id="cancel-edit-btn">Cancel</button>
+                            <button type="button" class="btn btn-secondary" id="cancel-edit-btn">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> Save Changes
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -356,7 +366,12 @@
                         </div>
 
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">Change Password</button>
+                            <button type="button" class="btn btn-secondary" id="cancel-password-btn">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-shield-lock"></i> Change Password
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -507,7 +522,9 @@
                                     <p>Permanently delete your account and all associated data</p>
                                 </div>
                                 <div class="setting-control">
-                                    <button class="btn btn-danger" id="delete-account-btn">Delete Account</button>
+                                    <button class="btn btn-danger" id="delete-account-btn">
+                                        <i class="bi bi-trash"></i> Delete Account
+                                    </button>
                                 </div>
                             </div>
                         </div>

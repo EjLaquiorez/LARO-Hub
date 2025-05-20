@@ -3,6 +3,21 @@
  * Styles for Game History and Statistics sections
  */
 
+/* Import fonts to match dashboard */
+@font-face {
+    font-family: 'American Captain';
+    src: url('../styles/fonts/AmericanCaptain.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'cocogoose';
+    src: url('../styles/fonts/Cocogoose_trial.otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
 /* Game History Section */
 .game-history-container {
     margin-bottom: 30px;
@@ -19,6 +34,8 @@
     color: var(--primary);
     font-size: 1.5rem;
     margin: 0;
+    font-family: 'American Captain', sans-serif;
+    letter-spacing: 2px;
 }
 
 .game-filter {
@@ -35,6 +52,8 @@
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 0.9rem;
+    font-family: 'American Captain', sans-serif;
+    letter-spacing: 1.2px;
 }
 
 .game-filter-button:hover {
@@ -217,6 +236,8 @@
     color: var(--primary);
     font-size: 1.5rem;
     margin-bottom: 10px;
+    font-family: 'American Captain', sans-serif;
+    letter-spacing: 2px;
 }
 
 .statistics-header p {
@@ -251,6 +272,8 @@
     font-weight: 700;
     color: var(--primary);
     margin-bottom: 5px;
+    font-family: 'American Captain', sans-serif;
+    letter-spacing: 1.5px;
 }
 
 .stat-card .stat-label {
@@ -281,6 +304,8 @@
     margin-top: 0;
     margin-bottom: 15px;
     font-size: 1.2rem;
+    font-family: 'American Captain', sans-serif;
+    letter-spacing: 1.5px;
 }
 
 .chart-container canvas {
@@ -308,6 +333,8 @@
     color: var(--primary);
     margin-bottom: 15px;
     font-size: 1.2rem;
+    font-family: 'American Captain', sans-serif;
+    letter-spacing: 1.5px;
 }
 
 .averages-grid {
@@ -329,6 +356,8 @@
     font-weight: 700;
     color: var(--primary);
     margin-bottom: 5px;
+    font-family: 'American Captain', sans-serif;
+    letter-spacing: 1.5px;
 }
 
 .average-item .avg-label {
