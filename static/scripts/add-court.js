@@ -200,7 +200,8 @@ document.addEventListener("DOMContentLoaded", function() {
         // Add new marker
         courtMarker = L.marker([lat, lng], {
             draggable: true,
-            title: "Court Location"
+            title: "Court Location",
+            zIndexOffset: 1000 // Ensure marker is above other elements
         }).addTo(addCourtMap);
 
         // Update coordinates when marker is dragged

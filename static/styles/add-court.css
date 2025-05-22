@@ -3,6 +3,16 @@
  * Styles for the add court modal and related components
  */
 
+/* Add Court Modal Z-index */
+#add-court-modal {
+    z-index: 1100 !important; /* Higher than other modals */
+}
+
+#add-court-modal .popup-content {
+    z-index: 1101 !important; /* Higher than the modal overlay */
+    position: relative;
+}
+
 /* Add Court Form Container */
 .add-court-form-container {
     padding: 20px;
@@ -20,6 +30,18 @@
 .map-search-container {
     display: flex;
     margin-bottom: 10px;
+    position: relative;
+    z-index: 10;
+}
+
+/* Ensure map controls are above other elements */
+#court-location-map .leaflet-control-container {
+    z-index: 1000 !important;
+}
+
+#court-location-map {
+    position: relative;
+    z-index: 5;
 }
 
 #map-search-input {
