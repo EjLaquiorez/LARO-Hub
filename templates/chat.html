@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat with {{ other_user.firstname|default:'...' }}</title>
+    
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts for a cleaner look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom scrollbar for a more subtle look */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* Custom font */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="w-1/4 bg-white border-r border-gray-200 flex flex-col">
+            <!-- Sidebar Header -->
+            <div class="p-2 md:p-4 border-b">
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">Chats</h1>
+                <div class="relative mt-2 md:mt-4">
+                    <input type="text" placeholder="Search" class="w-full py-1.5 md:py-2 pl-8 pr-2 rounded-full bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"/>
+                    <svg class="w-4 h-4 text-gray-400 absolute left-2.5 top-1/2 transform -translate-y-1/2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+            </div>
+            
+            <!-- Chat List -->
+            <div class="flex-1 overflow-y-auto">
+                {% for item in user_last_messages %}
+                <a href="{% url 'chat' user_id=item.user.id %}" class="flex items-center p-2 md:p-3 hover:bg-gray-50 transition {% if item.user.id == other_user.id %} bg-blue-50 border-l-4 border-blue-500 {% endif %}">
+                    <img src="https://ui-avatars.com/api/?name={{ item.user.firstname|urlencode }}&size=64&background=random" alt="{{ item.user.firstname }}'s Profile Image" class="w-10 h-10 md:w-12 md:h-12 rounded-full mr-3"/>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-center">
+                            <p class="font-semibold text-gray-800 truncate text-sm md:text-base">{{ item.user.firstname }}</p>
+                            {% if item.last_message %}
+                            <small class="text-gray-500 text-xs hidden sm:inline">{{ item.last_message.timestamp|date:"H:i" }}</small>
+                            {% endif %}
+                        </div>
+                        <p class="text-gray-600 text-xs md:text-sm truncate">
+                           {% if item.last_message %}
+                             {% if item.last_message.sender.id == request.user.id %}You: {% endif %}
+                             {{ item.last_message.content|truncatewords:5 }}
+                           {% else %}
+                             No messages yet
+                           {% endif %}
+                        </p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            
+            <!-- User Profile / Logout -->
+            <div class="p-2 md:p-4 border-t border-gray-200">
+                <div class="flex items-center">
+                     <img src="https://ui-avatars.com/api/?name={{ request.user.firstname|urlencode }}&size=64&background=random&color=fff" alt="Your Profile" class="w-10 h-10 rounded-full mr-3"/>
+                    <div class="flex-1 hidden md:block">
+                        <p class="font-semibold text-gray-800 truncate">{{ request.user.firstname|title }}</p>
+                    </div>
+                    <button id="logout-button" title="Logout" class="text-gray-500 hover:text-red-500 transition ml-auto">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="flex-1 flex flex-col">
+            {% if other_user %}
+            <!-- Chat Header -->
+            <div class="flex items-center p-3 border-b border-gray-200 bg-white">
+                 <img src="https://ui-avatars.com/api/?name={{ other_user.firstname|urlencode }}&size=64&background=random" alt="{{ other_user.firstname }}'s avatar" class="w-10 h-10 rounded-full"/>
+                <h2 class="text-lg font-semibold text-gray-800 ml-4">{{ other_user.firstname }}</h2>
+                <div class="ml-auto flex items-center space-x-4">
+                     <!-- Search Form -->
+                    <form method="GET" action="" class="hidden md:block">
+                        <input type="text" name="search" class="form-control bg-gray-100 rounded-full px-4 py-1 text-sm focus:outline-none" placeholder="Search..." value="{{ search_query }}"/>
+                    </form>
+                    <!-- Action Icons -->
+                    <button class="text-blue-500 hover:bg-blue-50 p-2 rounded-full transition">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 6.75z" /></svg>
+                    </button>
+                     <button class="text-blue-500 hover:bg-blue-50 p-2 rounded-full transition">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9A2.25 2.25 0 0013.5 5.25h-9A2.25 2.25 0 002.25 7.5v9A2.25 2.25 0 004.5 18.75z" /></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chatbox -->
+            <div id="chatbox" class="flex-1 p-4 overflow-y-auto bg-gray-50">
+                <div class="flex flex-col space-y-2">
+                    {% for message in chats %}
+                    <div class="flex {% if message.sender.id == request.user.id %} justify-end {% else %} justify-start {% endif %}">
+                         <div class="max-w-xs md:max-w-md p-3 rounded-2xl {% if message.sender.id == request.user.id %} bg-blue-500 text-white {% else %} bg-gray-200 text-gray-800 {% endif %}">
+                            <span>{{ message.content }}</span>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="no-messages text-center text-gray-500 mt-8">
+                        <p>No messages yet. Start the conversation!</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Chat Input -->
+            <div class="p-4 bg-white border-t border-gray-200">
+                <div class="flex items-center">
+                    <input type="text" id="message-input" class="flex-1 w-full py-3 px-5 rounded-full bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" placeholder="Type a message..."/>
+                    <button id="submit-button" class="ml-4 text-blue-500 hover:bg-blue-100 p-3 rounded-full transition">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                           <path d="M3.105 2.289a.75.75 0 00-.826.95l1.414 4.949a.75.75 0 00.95.826L11.25 9.25l-6.592-1.95a.75.75 0 00-.95-.826l-4.95-1.414zM11.25 10.75l-6.592 1.95a.75.75 0 01-.95.826l-4.95 1.414a.75.75 0 01-.826.95L11.25 10.75z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            {% else %}
+            <!-- Placeholder when no chat is selected -->
+            <div class="flex-1 flex items-center justify-center text-center text-gray-500">
+                <div>
+                    <svg class="w-24 h-24 mx-auto text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.794 9 8.25z" />
+                    </svg>
+                    <h2 class="mt-4 text-xl font-medium">Select a chat to start messaging</h2>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- The core WebSocket and logout logic remains unchanged -->
+    <script src="/static/scripts/logout.js"></script>
+    <script>
+        // Use user IDs for all client-side logic
+        const currentUserId = {{ request.user.id|default:'null' }};
+        const otherUserId = {{ other_user.id|default:'null' }};
+
+        if (currentUserId && otherUserId) {
+            const chatboxContainer = document.getElementById("chatbox");
+            // The actual container for messages is now nested
+            const chatbox = chatboxContainer.querySelector('.flex.flex-col');
+            const messageInput = document.getElementById("message-input");
+            const submitButton = document.getElementById("submit-button");
+
+            const chatSocket = new WebSocket(
+                `ws://${window.location.host}/ws/chat/${otherUserId}/`
+            );
+
+            // --- Helper Functions ---
+            const scrollToBottom = () => {
+                chatboxContainer.scrollTop = chatboxContainer.scrollHeight;
+            };
+            
+            // Updated function to create message elements with new Tailwind classes
+            const createMessageElement = (message, senderId) => {
+                const messageWrapper = document.createElement("div");
+                const messageDiv = document.createElement("div");
+                const messageSpan = document.createElement("span");
+
+                messageWrapper.className = senderId === currentUserId ? 'flex justify-end' : 'flex justify-start';
+                messageDiv.className = `max-w-xs md:max-w-md p-3 rounded-2xl ${senderId === currentUserId ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`;
+                messageSpan.textContent = message;
+
+                messageDiv.appendChild(messageSpan);
+                messageWrapper.appendChild(messageDiv);
+                
+                return messageWrapper;
+            };
+
+            // --- WebSocket Event Handlers ---
+            chatSocket.onopen = (e) => console.log("WebSocket connection established.");
+            chatSocket.onclose = (e) => console.error("WebSocket connection closed unexpectedly.");
+
+            chatSocket.onmessage = (e) => {
+                const data = JSON.parse(e.data);
+                if (!data.message || !data.sender_id) {
+                    console.error("Invalid message data received:", data);
+                    return;
+                }
+
+                const noMessagesEl = document.querySelector(".no-messages");
+                if (noMessagesEl) noMessagesEl.parentElement.remove();
+
+                const messageElement = createMessageElement(data.message, data.sender_id);
+                chatbox.appendChild(messageElement);
+                scrollToBottom();
+            };
+
+            // --- DOM Event Listeners ---
+            const sendMessage = () => {
+                const message = messageInput.value.trim();
+                if (message === "") return;
+
+                chatSocket.send(JSON.stringify({
+                    message: message,
+                }));
+
+                messageInput.value = "";
+                messageInput.focus();
+            };
+
+            submitButton.addEventListener("click", sendMessage);
+            messageInput.addEventListener("keyup", (e) => {
+                if (e.key === "Enter") {
+                    sendMessage();
+                }
+            });
+            
+            // Scroll to bottom on initial page load
+            window.onload = () => {
+                scrollToBottom();
+                if(messageInput) messageInput.focus();
+            };
+        }
+    </script>
+</body>
+</html>
+

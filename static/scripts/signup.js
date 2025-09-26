@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (payload && payload.exp > now) {
                 // Token is valid, redirect to dashboard
-                window.location.replace("/dashboard.html");
+                window.location.replace("/dashboard/");
                 return;
             }
         } catch (e) {
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('refresh', data.tokens.refresh);
 
                 // Redirect to dashboard
-                window.location.href = '/dashboard.html';
+                window.location.href = '/dashboard/';
             })
             .catch(error => {
                 console.error('Registration error:', error);

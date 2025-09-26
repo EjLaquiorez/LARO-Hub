@@ -34,6 +34,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'API',
+    'MSG',
     'drf_yasg',
     'rest_framework_simplejwt.token_blacklist',
 ]
@@ -81,7 +84,16 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'LARO.wsgi.application'
+# WSGI_APPLICATION = 'LARO.wsgi.application'
+
+ASGI_APPLICATION = 'LARO.asgi.application' # I am the captain now (RIP WSGI)
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -156,6 +168,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
+LOGIN_URL = '/login/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, '../../../static'),

@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/static/styles/create-game-modal.css" />
     <link rel="stylesheet" href="/static/styles/location-carousel.css" />
     <link rel="stylesheet" href="/static/styles/modal-common.css" />
+    <link rel="stylesheet" href="/static/styles/components/messages-dropdown.css" />
     <!-- Leaflet Map CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- Bootstrap Icons -->
@@ -33,9 +34,15 @@
             <input type="text" placeholder="Search Laro" />
         </div>
         <ul class="nav-links">
-            <li><a href="/overview.html" title="Overview"><i class="bi bi-info-circle-fill"></i></a></li>
+            <li><a href="/overview/" title="Overview"><i class="bi bi-info-circle-fill"></i></a></li>
+            <li class="messages-item">
+                <a href="/chat/lobby/" id="messages-icon" title="Messages">
+                    <i class="bi bi-chat-dots-fill"></i>
+                </a>
+                <!-- Messages Dropdown Panel -->
+            </li>
             <li class="notification-item">
-                <a href="#" id="notification-bell">
+                <a href="/notifications/" id="notification-bell">
                     <i class="bi bi-bell-fill"></i>
                     <span class="notification-badge">1</span>
                 </a>
@@ -118,7 +125,7 @@
                 </div>
             </li>
             <li class="profile-item">
-                <a href="/profile.html">
+                <a href="/profile/">
                     <i class="bi bi-person-circle"></i>
                     <span id="username-display">PROFILE</span>
                 </a>
@@ -548,7 +555,8 @@
     <script src="/static/scripts/location-carousel.js"></script>
     <!-- Testing utility for clearing localStorage -->
     <script src="/static/scripts/clear-storage.js"></script>
-
+    <script src="/static/scripts/messages.js"></script>
+    <script src="/static/scripts/logout.js"></script>
 
 </body>
 

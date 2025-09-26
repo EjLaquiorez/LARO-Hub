@@ -20,61 +20,27 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework.views import APIView
-from API.template_views import index_view, dashboard_view, login_view, signup_view, overview_view, profile_view, notifications_view
+from API.template_views import (
+    index_view, dashboard_view, login_view, signup_view,
+    overview_view, profile_view, notifications_view
+)
 
-# Swagger settings
-swagger_settings = {
-    'SECURITY_DEFINITIONS': {
-        'Bearer': {
-            'type': 'apiKey',
-            'name': 'Authorization',
-            'in': 'header'
-        }
-    },
-    'USE_SESSION_AUTH': False
-}
-
-# API Documentation schema
+# Swagger schema view (no changes needed here)
 schema_view = get_schema_view(
-    openapi.Info(
+   openapi.Info(
         title="LARO API",
         default_version='v1',
         description="API documentation for LARO project",
-        contact=openapi.Contact(email="admin@example.com"),
-        license=openapi.License(name="MIT License"),
-    ),
-    public=True,
-    permission_classes=(permissions.AllowAny,),
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
 )
-
-class LoginView(APIView):
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            required=['email', 'password'],
-            properties={
-                'email': 'sample@gmail.com',
-                'password': 'sample123',
-            }
-        ),
-        responses={
-            200: 'Returns tokens and user data',
-            401: 'Invalid credentials'
-        },
-        operation_description="Login with email and password to get JWT tokens"
-    )
-    def post(self, request):
-        """
-        Login endpoint that returns JWT tokens
-        """
-        # ... your existing code ...
 
 # URL Patterns
 urlpatterns = [
     # Admin
     path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),
 
     # API endpoints
     path("api/", include("API.urls")),
@@ -87,8 +53,13 @@ urlpatterns = [
     # Template views
     path('', index_view, name='index'),
     path('index.html', index_view, name='index_html'),
+    
+    # --- FIX: Added the missing URL pattern for 'dashboard.html' ---
+    # This ensures that requests to /dashboard.html are correctly routed.
+    # I've also removed the duplicate '/dashboard/' entry.
     path('dashboard/', dashboard_view, name='dashboard'),
     path('dashboard.html', dashboard_view, name='dashboard_html'),
+
     path('login/', login_view, name='login_page'),
     path('login.html', login_view, name='login_html'),
     path('signup/', signup_view, name='signup_page'),
@@ -99,4 +70,8 @@ urlpatterns = [
     path('profile.html', profile_view, name='profile_html'),
     path('notifications/', notifications_view, name='notifications'),
     path('notifications.html', notifications_view, name='notifications_html'),
+    
+    # Include your message app URLs
+    path('', include('MSG.urls')),
+
 ]

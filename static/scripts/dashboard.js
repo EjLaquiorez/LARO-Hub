@@ -1000,7 +1000,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.querySelector(".btn.change-sport").addEventListener("click", () => {
-        window.location.href = "/change-sport.html";
+        window.location.href = "/change-sport/";
     });
 
     // Highlight Active Nav Link
