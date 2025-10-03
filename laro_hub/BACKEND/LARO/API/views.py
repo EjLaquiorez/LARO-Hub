@@ -17,9 +17,67 @@ import asyncio
 from typing import AsyncGenerator
 
 from .models import User, Game, Team, Court
-from .serializers import UserSerializer, GameMatchSerializer
+from .serializers import UserSerializer, GameMatchSerializer, CourtSerializer
 from datetime import datetime
 from django.db.models import Q
+
+
+class CourtListCreateView(APIView):
+    """
+    GET: List all courts
+    POST: Create a new court
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        courts = Court.objects.all()
+        serializer = CourtSerializer(courts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = CourtSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(owner=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CourtDetailView(APIView):
+    """
+    GET: Retrieve a specific court
+    PUT: Update a court
+    DELETE: Delete a court
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, pk):
+        try:
+            return Court.objects.get(pk=pk)
+        except Court.DoesNotExist:
+            return None
+
+    def get(self, request, pk):
+        court = self.get_object(pk)
+        if not court:
+            return Response({'error': 'Court not found'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = CourtSerializer(court)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        court = self.get_object(pk)
+        if not court:
+            return Response({'error': 'Court not found'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = CourtSerializer(court, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save(owner=request.user)  # ensure ownership stays consistent
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        court = self.get_object(pk)
+        if not court:
+            return Response({'error': 'Court not found'}, status=status.HTTP_404_NOT_FOUND)
+        court.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 # CRUD Operations for User Management
 class UserCreate(APIView):

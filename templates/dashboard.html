@@ -266,132 +266,99 @@
         </div>
     </div>
 
-    <!-- Create Game Popup -->
-    <div id="create-game-popup" class="popup-overlay" style="display: none;">
-        <div class="popup-content">
-            <!-- Header with Title and Close Button -->
-            <div class="modal-header">
-                <div class="modal-title">
-                    <i class="bi bi-plus-circle"></i>
-                    <h2>CREATE GAME</h2>
-                </div>
-                <button id="close-create-game-popup" class="close-btn" title="Close">
-                    <i class="bi bi-x-lg"></i>
-                </button>
+<!-- Create Game Popup -->
+<div id="create-game-popup" class="popup-overlay" style="display: none;">
+    <div class="popup-content">
+        <!-- Header with Title and Close Button -->
+        <div class="modal-header">
+            <div class="modal-title">
+                <i class="bi bi-plus-circle"></i>
+                <h2>CREATE GAME</h2>
             </div>
+            <button id="close-create-game-popup" class="close-btn" title="Close">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
 
-            <!-- Game Creation Form -->
-            <div class="modal-body create-game-form-container">
-                <div class="location-selection">
-                    <h3>SELECT LOCATION</h3>
-                    <div class="location-carousel-container">
-                        <button class="carousel-nav prev" id="carousel-prev">
-                            <i class="bi bi-chevron-left"></i>
-                        </button>
+        <!-- Game Creation Form -->
+        <div class="modal-body create-game-form-container">
+            <div class="location-selection">
+                <h3>SELECT LOCATION</h3>
+                <div class="location-carousel-container">
+                    <button class="carousel-nav prev" id="carousel-prev">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
 
-                        <div class="location-carousel">
-                            <div class="location-cards">
-                                <div class="location-card" data-location="Brgy. Palumco">
-                                    <img src="/static/img/palumco.jpg" alt="Brgy. Palumco">
-                                    <div class="location-info">
-                                        <h4>Brgy. Palumco</h4>
-                                        <p>Outdoor Basketball Court</p>
-                                        <div class="location-details">
-                                            <span><i class="bi bi-geo-alt"></i> 2.5 km away</span>
-                                            <span><i class="bi bi-star-fill"></i> 4.5</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="location-card" data-location="Quezon City Circle">
-                                    <img src="/static/img/qc-circle.jpg" alt="Quezon City Circle">
-                                    <div class="location-info">
-                                        <h4>Quezon City Circle</h4>
-                                        <p>Public Basketball Court</p>
-                                        <div class="location-details">
-                                            <span><i class="bi bi-geo-alt"></i> 5.1 km away</span>
-                                            <span><i class="bi bi-star-fill"></i> 4.2</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="location-card" data-location="UP Diliman">
-                                    <img src="/static/img/up-diliman.jpg" alt="UP Diliman">
-                                    <div class="location-info">
-                                        <h4>UP Diliman</h4>
-                                        <p>University Basketball Court</p>
-                                        <div class="location-details">
-                                            <span><i class="bi bi-geo-alt"></i> 7.3 km away</span>
-                                            <span><i class="bi bi-star-fill"></i> 4.8</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="location-carousel">
+                        <div class="location-cards" id="location-cards">
+                            <!-- Court cards will be injected here dynamically -->
                         </div>
-
-                        <button class="carousel-nav next" id="carousel-next">
-                            <i class="bi bi-chevron-right"></i>
-                        </button>
                     </div>
 
-                    <div class="carousel-indicators">
-                        <span class="indicator active" data-index="0"></span>
-                        <span class="indicator" data-index="1"></span>
-                        <span class="indicator" data-index="2"></span>
+                    <button class="carousel-nav next" id="carousel-next">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
+
+                <div class="carousel-indicators" id="carousel-indicators">
+                    <!-- Indicators will be injected dynamically -->
+                </div>
+            </div>
+
+            <form id="invitation-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="invitation-date">Date</label>
+                        <input type="date" id="invitation-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="invitation-time">Time</label>
+                        <input type="time" id="invitation-time" required>
                     </div>
                 </div>
 
-                <form id="invitation-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="invitation-date">Date</label>
-                            <input type="date" id="invitation-date" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="invitation-time">Time</label>
-                            <input type="time" id="invitation-time" required>
-                        </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="game-type">Game Type</label>
+                        <select id="game-type" required>
+                            <option value="" disabled selected>Select game type</option>
+                            <option value="basketball">Basketball</option>
+                            <option value="volleyball">Volleyball</option>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="form-row">
-                        <div class="form-group full-width">
-                            <label for="game-type">Game Type</label>
-                            <select id="game-type" required>
-                                <option value="" disabled selected>Select game type</option>
-                                <option value="basketball">Basketball</option>
-                                <option value="volleyball">Volleyball</option>
-                            </select>
-                        </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="event-name">Event Name</label>
+                        <input type="text" id="event-name" placeholder="Give your game a name" required>
                     </div>
+                </div>
 
-                    <div class="form-row">
-                        <div class="form-group full-width">
-                            <label for="event-name">Event Name</label>
-                            <input type="text" id="event-name" placeholder="Give your game a name" required>
-                        </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="event-notes">Notes (Optional)</label>
+                        <textarea id="event-notes" placeholder="Add any additional information"></textarea>
                     </div>
+                </div>
+            </form>
+        </div>
 
-                    <div class="form-row">
-                        <div class="form-group full-width">
-                            <label for="event-notes">Notes (Optional)</label>
-                            <textarea id="event-notes" placeholder="Add any additional information"></textarea>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Footer with action buttons -->
-            <div class="modal-footer">
-                <button type="button" id="share-options-btn" class="action-btn secondary">
-                    <i class="bi bi-share"></i> Sharing Options
-                </button>
-                <button type="button" id="invite-players-btn" class="action-btn secondary">
-                    <i class="bi bi-person-plus"></i> Invite Players
-                </button>
-                <button type="submit" id="create-game-submit-btn" class="action-btn primary">
-                    <i class="bi bi-plus-circle"></i> Create Game
-                </button>
-            </div>
+        <!-- Footer with action buttons -->
+        <div class="modal-footer">
+            <button type="button" id="share-options-btn" class="action-btn secondary">
+                <i class="bi bi-share"></i> Sharing Options
+            </button>
+            <button type="button" id="invite-players-btn" class="action-btn secondary">
+                <i class="bi bi-person-plus"></i> Invite Players
+            </button>
+            <button type="submit" id="create-game-submit-btn" class="action-btn primary">
+                <i class="bi bi-plus-circle"></i> Create Game
+            </button>
         </div>
     </div>
+</div>
+
 
     <!-- Quick Join Overlay -->
     <div id="quick-join-overlay" class="popup-overlay" style="display: none;">
@@ -553,6 +520,7 @@
     <script src="/static/scripts/basketball-sidebar.js"></script>
     <script src="/static/scripts/responsive-nav.js"></script>
     <script src="/static/scripts/location-carousel.js"></script>
+    <script src="/static/scripts/creategame.js"></script>
     <!-- Testing utility for clearing localStorage -->
     <script src="/static/scripts/clear-storage.js"></script>
     <script src="/static/scripts/messages.js"></script>

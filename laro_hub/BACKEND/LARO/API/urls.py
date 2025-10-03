@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UserCreate, UserRetrieveUpdateDestroy, RegisterView, LoginView, LogoutView, GameMatchView, current_user_view, set_csrf_token_view
+from .views import UserCreate, UserRetrieveUpdateDestroy, RegisterView, LoginView, LogoutView, GameMatchView, current_user_view, set_csrf_token_view, CourtListCreateView, CourtDetailView
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -11,5 +11,7 @@ urlpatterns = [
     path('set-csrf-token/', set_csrf_token_view, name='set-csrf-token'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('games/', GameMatchView.as_view(), name='game-matches-list'),
-    path('games/<int:game_id>/', GameMatchView.as_view(), name='game-match-detail')
+    path('games/<int:game_id>/', GameMatchView.as_view(), name='game-match-detail'),
+    path('courts/', CourtListCreateView.as_view(), name='court-list-create'),
+    path('courts/<int:pk>/', CourtDetailView.as_view(), name='court-detail'),
 ]

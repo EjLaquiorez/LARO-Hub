@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from .models import User, Game, Team, Court
 
+class CourtSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Court
+        fields = '__all__'
+
 class UserSerializer(serializers.ModelSerializer):
     """
     UserSerializer handles the conversion of User model instances to/from JSON format.
@@ -74,11 +79,6 @@ class TeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
         fields = ['id', 'team_name', 'captain_name']
-
-class CourtSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Court
-        fields = ['id', 'name', 'location']
 
 class GameMatchSerializer(serializers.ModelSerializer):
     team1 = TeamSerializer(read_only=True)
