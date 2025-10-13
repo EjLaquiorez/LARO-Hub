@@ -89,8 +89,8 @@ const currentPage = window.location.pathname.split('/').pop();
 
 // Handle authentication for all protected pages including profile.html
 // Don't redirect on login.html, signup.html, index.html, or empty path
-if (currentPage !== 'login.html' &&
-    currentPage !== 'signup.html' &&
+if (currentPage !== 'login/' &&
+    currentPage !== 'signup/' &&
     currentPage !== 'index.html' &&
     currentPage !== '') {
 
@@ -105,7 +105,7 @@ if (currentPage !== 'login.html' &&
 
             if (!isAuthenticated) {
                 console.log("Not authenticated, redirecting to login...");
-                window.location.href = "/login.html";
+                window.location.href = "/login/";
             }
         } catch (error) {
             console.error("Authentication check failed:", error);

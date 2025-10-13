@@ -1,3 +1,4 @@
+.env/
 laroenv/
 *.pyc
 __pycache__/

@@ -6,16 +6,78 @@ from django.contrib.auth import authenticate, login, logout
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import TokenError
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.decorators import method_decorator
 
 import asyncio
 from typing import AsyncGenerator
 
-from .models import User, Game, Team, Court, Conversation, Message
-from .serializers import UserSerializer, GameMatchSerializer, ConversationSerializer, MessageSerializer
+from .models import User, Game, Team, Court
+from .serializers import UserSerializer, GameMatchSerializer, CourtSerializer
 from datetime import datetime
 from django.db.models import Q
+
+
+class CourtListCreateView(APIView):
+    """
+    GET: List all courts
+    POST: Create a new court
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        courts = Court.objects.all()
+        serializer = CourtSerializer(courts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = CourtSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(owner=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CourtDetailView(APIView):
+    """
+    GET: Retrieve a specific court
+    PUT: Update a court
+    DELETE: Delete a court
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, pk):
+        try:
+            return Court.objects.get(pk=pk)
+        except Court.DoesNotExist:
+            return None
+
+    def get(self, request, pk):
+        court = self.get_object(pk)
+        if not court:
+            return Response({'error': 'Court not found'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = CourtSerializer(court)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        court = self.get_object(pk)
+        if not court:
+            return Response({'error': 'Court not found'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = CourtSerializer(court, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save(owner=request.user)  # ensure ownership stays consistent
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        court = self.get_object(pk)
+        if not court:
+            return Response({'error': 'Court not found'}, status=status.HTTP_404_NOT_FOUND)
+        court.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 # CRUD Operations for User Management
 class UserCreate(APIView):
@@ -88,6 +150,7 @@ class UserCreate(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UserRetrieveUpdateDestroy(APIView):
     """
@@ -232,6 +295,18 @@ class UserRetrieveUpdateDestroy(APIView):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+@ensure_csrf_cookie
+def set_csrf_token_view(request):
+    """
+    This view doesn't return any data but ensures that the CSRF
+    token cookie is set on the client's browser when they visit
+    the login page.
+    """
+    return Response({"detail": "CSRF cookie set."})
+
 # Authentication Views
 class RegisterView(APIView):
     """
@@ -276,6 +351,7 @@ class RegisterView(APIView):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
+            login(request, user)
             refresh = RefreshToken.for_user(user)
             return Response({
                 'user': serializer.data,
@@ -286,6 +362,7 @@ class RegisterView(APIView):
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@method_decorator(ensure_csrf_cookie, name='dispatch')
 class LoginView(APIView):
     """
     Handles user authentication:
@@ -322,22 +399,29 @@ class LoginView(APIView):
         },
         operation_description="Login with email and password"
     )
+   
+    def get(self, request):
+        """Render the login page"""
+        return render(request, 'login.html')
+
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
         user = authenticate(email=email, password=password)
 
-        if user is not None:
+        if user:
+            # WebSocket/Chat authentication
+            login(request, user)
+            
             refresh = RefreshToken.for_user(user)
-            serializer = UserSerializer(user)
+            user_serializer = UserSerializer(user)
             return Response({
-                'user': serializer.data,
-                'tokens': {
-                    'refresh': str(refresh),
-                    'access': str(refresh.access_token),
-                }
-            }, status=status.HTTP_200_OK)
-        return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+                'user': user_serializer.data,
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+            })
+        else:
+            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class LogoutView(APIView):
     """
@@ -350,26 +434,34 @@ class LogoutView(APIView):
     @swagger_auto_schema(
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
-            required=['refresh'],
             properties={
-                'refresh': openapi.Schema(type=openapi.TYPE_STRING, description='Refresh token to blacklist'),
-            }
+                'refresh': openapi.Schema(type=openapi.TYPE_STRING, description='User refresh token')
+            },
+            required=['refresh']
         ),
         responses={
-            200: 'Successfully logged out',
-            400: 'Invalid token',
+            200: 'Logout successful',
+            400: 'Bad Request (e.g., token is invalid or missing)',
             401: 'Unauthorized'
-        },
-        operation_description="Logout and blacklist the refresh token"
+        }
     )
     def post(self, request):
+        logout(request)
         try:
             refresh_token = request.data["refresh"]
+            if not refresh_token:
+                return Response({'error': 'Refresh token is required.'}, status=status.HTTP_400_BAD_REQUEST)
+            
             token = RefreshToken(refresh_token)
             token.blacklist()
-            return Response({'message': 'Successfully logged out'}, status=status.HTTP_200_OK)
-        except Exception:
-            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            return Response({'detail': 'Logout successful.'}, status=status.HTTP_200_OK)
+        except TokenError as e:
+            # This can happen if the token is already invalid or malformed
+            return Response({'error': f'Token error: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            # Catch any other unexpected errors
+            return Response({'error': f'An unexpected error occurred: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
 
 class GameMatchView(APIView):
     """
@@ -590,263 +682,45 @@ def current_user_view(request):
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
 
-class ConversationAPI(APIView):
+
+def index_view(request):
     """
-    API endpoints for managing conversations
+    View function for the home page of the site.
     """
-    permission_classes = [IsAuthenticated]
+    return render(request, 'index.html')
 
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter(
-                'Authorization',
-                openapi.IN_HEADER,
-                description="Token format: Bearer <token>",
-                type=openapi.TYPE_STRING,
-                required=True
-            )
-        ],
-        responses={
-            200: ConversationSerializer(many=True),
-            401: 'Unauthorized'
-        },
-        security=[{'Bearer': []}],
-        operation_description="Get all conversations for the current user"
-    )
-    def get(self, request):
-        """Get all conversations for current user"""
-        conversations = Conversation.objects.filter(participants=request.user)
-        serializer = ConversationSerializer(
-            conversations,
-            many=True,
-            context={'request': request}  # Add request context here
-        )
-        return Response(serializer.data)
-
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter(
-                'Authorization',
-                openapi.IN_HEADER,
-                description="Token format: Bearer <token>",
-                type=openapi.TYPE_STRING,
-                required=True
-            )
-        ],
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            required=['participant_id'],
-            properties={
-                'participant_id': openapi.Schema(
-                    type=openapi.TYPE_INTEGER,
-                    description='ID of the user to start conversation with'
-                )
-            }
-        ),
-        responses={
-            201: ConversationSerializer,
-            400: 'Bad Request',
-            404: 'User not found',
-            401: 'Unauthorized'
-        },
-        security=[{'Bearer': []}],
-        operation_description="Create a new conversation with another user"
-    )
-    def post(self, request):
-        """Create a new conversation"""
-        participant_id = request.data.get('participant_id')
-
-        try:
-            participant = User.objects.get(id=participant_id)
-
-            # Check if conversation already exists
-            existing_conversation = Conversation.objects.filter(
-                participants=request.user
-            ).filter(
-                participants=participant
-            ).first()
-
-            if existing_conversation:
-                serializer = ConversationSerializer(
-                    existing_conversation,
-                    context={'request': request}  # Add request context here
-                )
-                return Response(serializer.data)
-
-            # Create new conversation
-            conversation = Conversation.objects.create()
-            conversation.participants.add(request.user, participant)
-
-            serializer = ConversationSerializer(
-                conversation,
-                context={'request': request}  # Add request context here
-            )
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        except User.DoesNotExist:
-            return Response(
-                {'error': 'User not found'},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter(
-                'conversation_id',
-                openapi.IN_PATH,
-                description="ID of conversation to delete",
-                type=openapi.TYPE_INTEGER,
-                required=True
-            ),
-            openapi.Parameter(
-                'Authorization',
-                openapi.IN_HEADER,
-                description="Token format: Bearer <token>",
-                type=openapi.TYPE_STRING,
-                required=True
-            )
-        ],
-        responses={
-            204: 'Conversation deleted successfully',
-            404: 'Conversation not found',
-            401: 'Unauthorized'
-        },
-        security=[{'Bearer': []}],
-        operation_description="Delete a conversation"
-    )
-    def delete(self, request, conversation_id):
-        """Delete a conversation"""
-        try:
-            conversation = Conversation.objects.get(
-                id=conversation_id,
-                participants=request.user
-            )
-            conversation.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except Conversation.DoesNotExist:
-            return Response(
-                {'error': 'Conversation not found'},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-class MessageAPI(APIView):
+def dashboard_view(request):
     """
-    API endpoints for managing messages within conversations
+    View function for the dashboard page.
     """
-    permission_classes = [IsAuthenticated]
+    return render(request, 'dashboard.html')
 
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter(
-                'conversation_id',
-                openapi.IN_PATH,
-                description="ID of the conversation",
-                type=openapi.TYPE_INTEGER,
-                required=True
-            ),
-            openapi.Parameter(
-                'Authorization',
-                openapi.IN_HEADER,
-                description="Token format: Bearer <token>",
-                type=openapi.TYPE_STRING,
-                required=True
-            )
-        ],
-        responses={
-            200: MessageSerializer(many=True),
-            404: 'Conversation not found',
-            401: 'Unauthorized'
-        },
-        security=[{'Bearer': []}],
-        operation_description="Get all messages in a conversation"
-    )
-    def get(self, request, conversation_id):
-        """Get all messages in a conversation"""
-        try:
-            conversation = Conversation.objects.get(
-                id=conversation_id,
-                participants=request.user
-            )
-            messages = Message.objects.filter(conversation=conversation)
-            serializer = MessageSerializer(messages, many=True)
+def login_view(request):
+    """
+    View function for the login page.
+    """
+    return render(request, 'login.html')
 
-            # Mark unread messages as read
-            messages.filter(
-                sender=request.user
-            ).update(is_read=True)
+def signup_view(request):
+    """
+    View function for the signup page.
+    """
+    return render(request, 'signup.html')
 
-            return Response(serializer.data)
+def overview_view(request):
+    """
+    View function for the overview page.
+    """
+    return render(request, 'overview.html')
 
-        except Conversation.DoesNotExist:
-            return Response(
-                {'error': 'Conversation not found'},
-                status=status.HTTP_404_NOT_FOUND
-            )
+def profile_view(request):
+    """
+    View function for the profile page.
+    """
+    return render(request, 'profile.html')
 
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter(
-                'conversation_id',
-                openapi.IN_PATH,
-                description="ID of the conversation",
-                type=openapi.TYPE_INTEGER,
-                required=True
-            ),
-            openapi.Parameter(
-                'Authorization',
-                openapi.IN_HEADER,
-                description="Token format: Bearer <token>",
-                type=openapi.TYPE_STRING,
-                required=True
-            )
-        ],
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            required=['content'],
-            properties={
-                'content': openapi.Schema(
-                    type=openapi.TYPE_STRING,
-                    description='Message content'
-                )
-            }
-        ),
-        responses={
-            201: MessageSerializer,
-            400: 'Bad Request',
-            404: 'Conversation not found',
-            401: 'Unauthorized'
-        },
-        security=[{'Bearer': []}],
-        operation_description="Send a new message in the conversation"
-    )
-    def post(self, request, conversation_id):
-        """Send a new message"""
-        try:
-            conversation = Conversation.objects.get(
-                id=conversation_id,
-                participants=request.user
-            )
-
-            serializer = MessageSerializer(data={
-                'conversation': conversation.id,
-                'sender': request.user.id,
-                'content': request.data.get('content'),
-                'is_read': False
-            })
-
-            if serializer.is_valid():
-                serializer.save()
-                # Update conversation timestamp
-                conversation.save()  # This triggers auto_now update
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-            return Response(
-                serializer.errors,
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        except Conversation.DoesNotExist:
-            return Response(
-                {'error': 'Conversation not found'},
-                status=status.HTTP_404_NOT_FOUND
-            )
+def notifications_view(request):
+    """
+    View function for the notifications page.
+    """
+    return render(request, 'notifications.html')

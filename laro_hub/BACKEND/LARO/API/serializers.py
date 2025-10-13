@@ -1,5 +1,10 @@
 from rest_framework import serializers
-from .models import User, Game, Team, Court, Conversation, Message
+from .models import User, Game, Team, Court
+
+class CourtSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Court
+        fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
     """
@@ -75,11 +80,6 @@ class TeamSerializer(serializers.ModelSerializer):
         model = Team
         fields = ['id', 'team_name', 'captain_name']
 
-class CourtSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Court
-        fields = ['id', 'name', 'location']
-
 class GameMatchSerializer(serializers.ModelSerializer):
     team1 = TeamSerializer(read_only=True)
     team2 = TeamSerializer(read_only=True)
@@ -90,32 +90,3 @@ class GameMatchSerializer(serializers.ModelSerializer):
         fields = ['id', 'date', 'time', 'location', 'game_type', 
                  'team1', 'team2', 'status', 'court']
 
-class MessageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Message
-        fields = ['id', 'conversation', 'sender', 'content', 'timestamp', 'is_read']
-        read_only_fields = ['id', 'timestamp']
-
-class ConversationSerializer(serializers.ModelSerializer):
-    last_message = serializers.SerializerMethodField()
-    unread_count = serializers.SerializerMethodField()
-    
-    class Meta:
-        model = Conversation
-        fields = ['id', 'participants', 'created_at', 'updated_at', 'last_message', 'unread_count']
-        read_only_fields = ['id', 'created_at', 'updated_at']
-
-    def get_last_message(self, obj):
-        last_message = obj.messages.last()
-        if (last_message):
-            return MessageSerializer(last_message).data
-        return None
-
-    def get_unread_count(self, obj):
-        try:
-            request = self.context.get('request')
-            if not request or not hasattr(request, 'user'):
-                return 0
-            return obj.messages.filter(is_read=False).exclude(sender=request.user).count()
-        except AttributeError:
-            return 0

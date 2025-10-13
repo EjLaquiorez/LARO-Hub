@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!token) {
             console.error("No access token found in localStorage");
             // Redirect to login page
-            window.location.href = "/login.html";
+            window.location.href = "/login/";
             return;
         }
 
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             } catch (error) {
                 console.error("Token refresh failed:", error);
                 // Redirect to login page
-                window.location.href = "/login.html";
+                window.location.href = "/login/";
                 return;
             }
         }
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error("Error fetching user data:", err);
             // Redirect to login page if authentication failed
             if (err.message === "Authentication failed.") {
-                window.location.href = "/login.html";
+                window.location.href = "/login/";
             } else {
                 // For other errors, show an error message
                 document.getElementById("full-name").textContent = "Error loading profile";
@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error("Profile initialization error:", error);
         // Redirect to login for authentication errors
         if (error.message && error.message.includes("authentication")) {
-            window.location.href = "/login.html";
+            window.location.href = "/login/";
         } else {
             // For other errors, show an error message
             document.getElementById("full-name").textContent = "Error loading profile";
@@ -176,7 +176,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.log("User logged out successfully");
 
         // Redirect to login page
-        window.location.href = "/login.html";
+        window.location.href = "/login/";
     });
 
     // Share Profile button

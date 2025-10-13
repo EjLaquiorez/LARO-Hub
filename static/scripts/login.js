@@ -1,148 +1,145 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // This part is fine, no changes needed here.
     const token = localStorage.getItem("access");
     if (token && isTokenValid(token)) {
-        window.location.replace("dashboard.html");
+        window.location.replace("/dashboard/");
     }
 
     attachLoginFormEvents();
-    attachPasswordToggleEvents(); // Attach password toggle events
+    attachPasswordToggleEvents();
 });
 
+
+function attachLoginFormEvents() {
+    const loginForm = document.getElementById("login-form");
+    if (!loginForm) return;
+
+    loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        displayError("", "login-form", true);
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        if (!isValidEmail(email)) {
+            displayError("Please enter a valid email address.", "login-form");
+            return;
+        }
+
+        if (!password) {
+            displayError("Please enter your password.", "login-form");
+            return;
+        }
+
+        // --- FIX: Get the CSRF token from the browser's cookies ---
+        const csrfToken = getCookie('csrftoken');
+
+        try {
+            // --- FIX: Use the correct API endpoint ---
+            const response = await fetch("/api/login/", { 
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrfToken,
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            if (!response.ok) {
+                let errorMessage = "An unexpected error occurred. Please try again.";
+                try {
+                    const data = await response.json();
+                    // Use the specific error message from the API if it exists
+                    errorMessage = data.error || data.detail || "Invalid credentials provided.";
+                } catch (e) {
+                    // This catches network errors or if the server response isn't JSON
+                    errorMessage = `Server error (Status ${response.status}). Please try again later.`;
+                }
+                displayError(errorMessage, "login-form");
+                throw new Error(errorMessage); // Stop the function from proceeding
+            }
+            
+            // --- Successful Login ---
+            const data = await response.json();
+            
+            if (data.access && data.refresh) {
+                localStorage.setItem("access", data.access);
+                localStorage.setItem("refresh", data.refresh);
+                window.location.replace("/dashboard/");
+            } else {
+                displayError("Login successful, but no authentication tokens were received.", "login-form");
+            }
+
+        } catch (error) {
+            console.error("Login request failed:", error.message);
+            // The error is already displayed on the page by the logic above.
+        }
+    });
+}
+
+// --- NEW HELPER FUNCTION: To read a cookie by name ---
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
+// --- Utility and Helper Functions (No changes needed below) ---
 function attachPasswordToggleEvents() {
     const passwordInput = document.getElementById("password");
-    const confirmPasswordInput = document.getElementById("confirm-password");
     const togglePasswordIcon = document.getElementById("toggle-password");
-    const toggleConfirmPasswordIcon = document.getElementById("toggle-confirm-password");
 
-    // Toggle main password visibility
     if (togglePasswordIcon && passwordInput) {
         togglePasswordIcon.addEventListener("click", () => {
             const isHidden = passwordInput.type === "password";
             passwordInput.type = isHidden ? "text" : "password";
-            togglePasswordIcon.className = isHidden ? "fas fa-eye-slash" : "fas fa-eye"; // Change icon
-        });
-    }
-
-    // Toggle confirm password visibility
-    if (toggleConfirmPasswordIcon && confirmPasswordInput) {
-        toggleConfirmPasswordIcon.addEventListener("click", () => {
-            const isHidden = confirmPasswordInput.type === "password";
-            confirmPasswordInput.type = isHidden ? "text" : "password";
-            toggleConfirmPasswordIcon.className = isHidden ? "fas fa-eye-slash" : "fas fa-eye"; // Change icon
+            togglePasswordIcon.className = isHidden ? "fas fa-eye-slash" : "fas fa-eye";
         });
     }
 }
 
-function attachLoginFormEvents() {
-    const loginForm = document.getElementById("login-form");
-    const googleLoginButton = document.querySelector(".google-login");
-    const signupLink = document.querySelector(".signup-text a");
 
-    loginForm.addEventListener("submit", handleLoginSubmit);
-
-    googleLoginButton?.addEventListener("click", () => {
-        console.log("Google login clicked");
-        alert("Redirecting to Google login...");
-    });
-
-    signupLink?.addEventListener("click", (event) => {
-        // Instead of showing inline form, redirect to the dedicated signup page
-        window.location.href = "/signup.html";
-    });
-}
-
-function handleLoginSubmit(event) {
-    event.preventDefault();
-
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
-
-    if (!isValidEmail(email)) {
-        displayError("Invalid email format.", "login-form");
-        return;
-    }
-
-    if (!password) {
-        displayError("Password cannot be empty.", "login-form");
-        return;
-    }
-
-    fetch("/api/login/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-    })
-        .then(response => {
-            if (!response.ok) {
-                displayError("Invalid credentials.", "login-form");
-                throw new Error("Login failed");
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.tokens && data.user) {
-                localStorage.setItem("access", data.tokens.access);
-                localStorage.setItem("refresh", data.tokens.refresh);
-                localStorage.setItem("user", JSON.stringify(data.user));
-                localStorage.setItem("currentUser", JSON.stringify(data.user));
-                if (data.id) {
-                    localStorage.setItem("id", JSON.stringify(data.id));
-                }
-                window.location.href = "/dashboard.html";
-            }
-        })
-        .catch(console.error);
-}
-
-// These functions have been removed as we now redirect to signup.html
-// instead of showing an inline registration form
-
-function togglePasswordVisibility() {
-    const passwordInput = document.getElementById("password");
-    const toggleIcon = document.getElementById("toggle-icon");
-
-    if (passwordInput) {
-        const isHidden = passwordInput.type === "password";
-        passwordInput.type = isHidden ? "text" : "password";
-        toggleIcon.className = isHidden ? "fas fa-eye-slash" : "fas fa-eye";  // Change icon
+function isTokenValid(token) {
+    try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        const now = Math.floor(Date.now() / 1000);
+        return payload && payload.exp > now;
+    } catch (e) {
+        return false;
     }
 }
-
 
 function isValidEmail(email) {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
 }
 
-function displayError(message, formId) {
+function displayError(message, formId, clear = false) {
     const form = document.getElementById(formId);
-    let errorMsg = document.getElementById("error-msg");
+    let errorContainer = form.querySelector(".error-message-container");
 
-    if (!errorMsg) {
-        errorMsg = document.createElement("p");
-        errorMsg.id = "error-msg";
-        errorMsg.style.color = "red";
-        form.prepend(errorMsg);
+    if (!errorContainer) {
+        errorContainer = document.createElement("div");
+        errorContainer.className = "error-message-container";
+        errorContainer.style.color = "#AD2831";
+        errorContainer.style.marginBottom = "15px";
+        errorContainer.style.textAlign = "center";
+        errorContainer.style.fontWeight = "bold";
+        form.insertBefore(errorContainer, form.children[1]);
     }
 
-    errorMsg.textContent = message;
+    errorContainer.textContent = message;
+    errorContainer.style.display = (clear || !message) ? "none" : "block";
 }
 
-function isTokenValid(token) {
-    const payload = parseJwt(token);
-    const now = Math.floor(Date.now() / 1000);
-    return payload && payload.exp > now;
-}
-
-function parseJwt(token) {
-    try {
-        const base64Url = token.split(".")[1];
-        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-        const jsonPayload = decodeURIComponent(atob(base64).split("").map(c =>
-            "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)
-        ).join(""));
-        return JSON.parse(jsonPayload);
-    } catch (e) {
-        return null;
-    }
-}
