@@ -168,11 +168,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",  # project-level static folder
+]
+STATIC_ROOT = BASE_DIR / "staticfiles"  # for deployment
+
 LOGIN_URL = '/login/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, '../../../static'),
-]
 
 # For development only - allows Django to serve static files directly
 # In production, you should use a proper web server to serve static files
